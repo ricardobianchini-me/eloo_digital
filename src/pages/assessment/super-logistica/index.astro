@@ -2,13 +2,13 @@
 import '../../../styles/global.css';
 
 const modulos = [
-  { slug: "seguranca-da-informacao", id: "seguranca", nome: "Segurança da Informação", interlocutor: "Fernanda Costa · Gerente de TI" },
-  { slug: "infraestrutura-e-redes", id: "infraestrutura", nome: "Infraestrutura e Redes", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "cloud-e-licenciamento", id: "cloud", nome: "Cloud e Licenciamento", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "arquitetura-corporativa", id: "arquitetura", nome: "Arquitetura Corporativa", interlocutor: "Fernanda Costa · Gerente de TI" },
-  { slug: "endpoint-management", id: "endpoint", nome: "Endpoint Management", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "backup-e-continuidade", id: "backup", nome: "Backup e Continuidade", interlocutor: "pendente de indicação" },
-  { slug: "governanca-de-ti", id: "governanca", nome: "Governança de TI", interlocutor: "Fernanda Costa · Gerente de TI" },
+  { slug: "seguranca-da-informacao", id: "seguranca", nome: "Segurança da Informação" },
+  { slug: "infraestrutura-e-redes", id: "infraestrutura", nome: "Infraestrutura e Redes" },
+  { slug: "cloud-e-licenciamento", id: "cloud", nome: "Cloud e Licenciamento" },
+  { slug: "arquitetura-corporativa", id: "arquitetura", nome: "Arquitetura Corporativa" },
+  { slug: "endpoint-management", id: "endpoint", nome: "Endpoint Management" },
+  { slug: "backup-e-continuidade", id: "backup", nome: "Backup e Continuidade" },
+  { slug: "governanca-de-ti", id: "governanca", nome: "Governança de TI" },
 ];
 ---
 
@@ -83,7 +83,6 @@ const modulos = [
           {modulos.map((m) => (
             <div class="card-modulo">
               <strong>{m.nome}</strong>
-              <span>{m.interlocutor}</span>
               <div class="card-modulo-acoes">
                 <a href={`/assessment/super-logistica/questionario-${m.slug}`}>Ver roteiro</a>
                 <a href={`/assessment/super-logistica/responder/ir/${m.id}`}>Responder ao vivo</a>
