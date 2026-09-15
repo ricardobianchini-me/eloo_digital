@@ -113,6 +113,40 @@
     background:var(--amber-soft); color:var(--amber); padding:3px 9px; border-radius:20px;
   }
 
+  /* Cronograma / Gantt */
+  .gantt-legenda{display:flex; gap:20px; flex-wrap:wrap; margin:20px 0 4px; font-size:12.5px; color:var(--texto-suave);}
+  .gantt-legenda span{display:inline-flex; align-items:center; gap:6px;}
+  .dot{width:10px; height:10px; border-radius:3px; display:inline-block;}
+  .dot.presencial{background:var(--amber);}
+  .dot.remoto{background:var(--accent);}
+  .dot.interno{background:var(--azul-2);}
+  .dot.marcador{width:8px; height:8px; border-radius:50%; background:var(--accent);}
+  .gantt-wrap{overflow-x:auto; margin-top:14px; padding-bottom:6px;}
+  .gantt{
+    display:grid; grid-template-columns:190px repeat(16,minmax(38px,1fr));
+    grid-auto-rows:28px; gap:4px; min-width:900px; align-items:center;
+  }
+  .gantt-cell.label{font-size:12px; color:var(--texto-suave); padding-right:8px;}
+  .gantt-cell.head{font-size:10.5px; color:var(--texto-fraco); text-align:center; font-weight:700;}
+  .gantt-bar{
+    border-radius:5px; height:24px; display:flex; align-items:center; padding:0 8px;
+    font-size:10.5px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden;
+  }
+  .gantt-bar.presencial{background:var(--amber);}
+  .gantt-bar.remoto{background:var(--accent);}
+  .gantt-bar.interno{background:var(--azul-2);}
+  .gantt-marker{width:9px; height:9px; border-radius:50%; background:var(--accent); justify-self:center;}
+  .tag-presencial, .tag-remoto{
+    display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px;
+  }
+  .tag-presencial{background:var(--amber-soft); color:var(--amber);}
+  .tag-remoto{background:var(--accent-soft); color:var(--accent);}
+
+  /* Escopo e Premissas */
+  .premissas-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:22px;}
+  .premissa{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:13.5px; color:var(--texto-suave);}
+  .premissa b{color:var(--texto); display:block; font-size:14px; margin-bottom:5px;}
+
   /* Esforco */
   .esforco-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:28px; margin-top:24px;}
   @media (max-width:760px){ .esforco-grid{grid-template-columns:1fr;} }
@@ -166,7 +200,7 @@
   <p class="sub">Super Logística — base COBIT 2019 + ITIL 4</p>
   <div class="meta">
     <span>Porte: <b>M (Médio)</b></span>
-    <span>Prazo estimado: <b>8+ semanas</b></span>
+    <span>Prazo estimado: <b>16 semanas (~4 meses)</b></span>
     <span>Frentes: <b>A + B + C</b></span>
     <span>Data: <b>14/09/2026</b></span>
   </div>
@@ -211,12 +245,112 @@
   <table class="ocq">
     <tr><th>Etapa</th><th>O quê</th><th>Como</th><th>Quando</th></tr>
     <tr><td>1. Kickoff</td><td>Escopo, interlocutores, criticidade dos ativos</td><td>Reunião estruturada + termo de abertura</td><td>Semana 1</td></tr>
-    <tr><td>2. Levantamento</td><td>Situação atual (As-Is) por domínio, contra o framework de referência</td><td>Entrevistas + questionário por capítulo + evidências</td><td>Sem. 2-4 · Segurança → Infra → Cloud primeiro</td></tr>
-    <tr><td>3. Avaliação de Controles</td><td>Gap entre o As-Is e o controle esperado pelo framework</td><td>Classificação Adequado → Não aplicável, sempre com evidência</td><td>Semanas 4-5</td></tr>
-    <tr><td>4. Avaliação de Risco</td><td>Probabilidade x impacto x criticidade</td><td>Classificação Crítico → Baixo</td><td>Semanas 5-6</td></tr>
-    <tr><td>5. Avaliação de Maturidade</td><td>Capacidade real do processo (lógica CMMI)</td><td>Consolidação por domínio + visão executiva</td><td>Semanas 6-7</td></tr>
-    <tr><td>Roadmap</td><td>Priorização de ação sobre gaps e riscos</td><td>Impacto x esforço, 4 horizontes</td><td>Semana 8</td></tr>
+    <tr><td>2. Levantamento</td><td>Situação atual (As-Is) por domínio, contra o framework de referência</td><td>Entrevistas + questionário por capítulo + evidências</td><td>Sem. 2-9 · Segurança → Infra → Cloud primeiro</td></tr>
+    <tr><td>3. Avaliação de Controles</td><td>Gap entre o As-Is e o controle esperado pelo framework</td><td>Classificação Adequado → Não aplicável, sempre com evidência</td><td>Semanas 9-11</td></tr>
+    <tr><td>4. Avaliação de Risco</td><td>Probabilidade x impacto x criticidade</td><td>Classificação Crítico → Baixo</td><td>Semanas 11-12</td></tr>
+    <tr><td>5. Avaliação de Maturidade</td><td>Capacidade real do processo (lógica CMMI)</td><td>Consolidação por domínio + visão executiva</td><td>Semanas 12-13</td></tr>
+    <tr><td>Roadmap</td><td>Priorização de ação sobre gaps e riscos</td><td>Impacto x esforço, 4 horizontes</td><td>Semanas 13-15</td></tr>
+    <tr><td>Encerramento</td><td>Validação de achados + apresentação executiva</td><td>Sessão de contraditório (remota) + apresentação final (presencial)</td><td>Semanas 15-16</td></tr>
   </table>
+</section>
+
+<section class="cronograma">
+  <div class="eyebrow" style="color:var(--accent)">Cronograma</div>
+  <h2>16 semanas (~4 meses) — sessões presenciais e remotas</h2>
+  <p style="max-width:74ch; font-size:14.5px; color:var(--texto-suave); margin-top:6px;">
+    Prazo inicial de referência para este porte, ajustável conforme a disponibilidade real do time
+    Super Logística ao longo do projeto. Kickoff, a visita técnica de infraestrutura e a apresentação
+    executiva final acontecem presencialmente; entrevistas e alinhamentos de acompanhamento são remotos.
+  </p>
+
+  <div class="gantt-legenda">
+    <span><i class="dot presencial"></i> Presencial</span>
+    <span><i class="dot remoto"></i> Remoto</span>
+    <span><i class="dot interno"></i> Trabalho interno da consultoria</span>
+    <span><i class="dot marcador"></i> Alinhamento quinzenal (remoto, 1h)</span>
+  </div>
+
+  <div class="gantt-wrap">
+    <div class="gantt">
+      <div class="gantt-cell label" style="grid-row:1; grid-column:1;"></div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:2;">1</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:3;">2</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:4;">3</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:5;">4</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:6;">5</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:7;">6</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:8;">7</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:9;">8</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:10;">9</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:11;">10</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:12;">11</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:13;">12</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:14;">13</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:15;">14</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:16;">15</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:17;">16</div>
+
+      <div class="gantt-cell label" style="grid-row:2; grid-column:1;">Kickoff</div>
+      <div class="gantt-bar presencial" style="grid-row:2; grid-column:2/3;">Kickoff</div>
+
+      <div class="gantt-cell label" style="grid-row:3; grid-column:1;">Levantamento (entrevistas)</div>
+      <div class="gantt-bar remoto" style="grid-row:3; grid-column:3/11;">7 domínios · Segurança → Infra → Cloud primeiro</div>
+
+      <div class="gantt-cell label" style="grid-row:4; grid-column:1;">Visita técnica (infra local)</div>
+      <div class="gantt-bar presencial" style="grid-row:4; grid-column:4/5;">Site principal</div>
+
+      <div class="gantt-cell label" style="grid-row:5; grid-column:1;">Avaliação de Controles</div>
+      <div class="gantt-bar interno" style="grid-row:5; grid-column:10/13;">Gap vs. framework</div>
+
+      <div class="gantt-cell label" style="grid-row:6; grid-column:1;">Avaliação de Risco</div>
+      <div class="gantt-bar interno" style="grid-row:6; grid-column:12/14;">Probabilidade x impacto</div>
+
+      <div class="gantt-cell label" style="grid-row:7; grid-column:1;">Avaliação de Maturidade</div>
+      <div class="gantt-bar interno" style="grid-row:7; grid-column:13/15;">Escala 0-5</div>
+
+      <div class="gantt-cell label" style="grid-row:8; grid-column:1;">Consolidação e Roadmap</div>
+      <div class="gantt-bar interno" style="grid-row:8; grid-column:14/17;">Relatório executivo + plano de ação</div>
+
+      <div class="gantt-cell label" style="grid-row:9; grid-column:1;">Validação de achados</div>
+      <div class="gantt-bar remoto" style="grid-row:9; grid-column:16/17;">Contraditório com especialistas</div>
+
+      <div class="gantt-cell label" style="grid-row:10; grid-column:1;">Apresentação executiva final</div>
+      <div class="gantt-bar presencial" style="grid-row:10; grid-column:17/18;">Entrega</div>
+
+      <div class="gantt-cell label" style="grid-row:11; grid-column:1;">Alinhamento quinzenal</div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:2/3;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:4/5;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:6/7;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:8/9;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:10/11;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:12/13;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:14/15;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:16/17;"></div>
+    </div>
+  </div>
+
+  <table class="ocq" style="margin-top:28px;">
+    <tr><th>Sessão</th><th>Formato</th><th>Quando</th><th>Duração</th></tr>
+    <tr><td>Kickoff</td><td><span class="tag-presencial">Presencial</span></td><td>Semana 1</td><td>~3h</td></tr>
+    <tr><td>Visita técnica (infraestrutura, site principal)</td><td><span class="tag-presencial">Presencial</span></td><td>Semana 3</td><td>~4h</td></tr>
+    <tr><td>Entrevistas por domínio (7)</td><td><span class="tag-remoto">Remoto</span></td><td>Semanas 2-9</td><td>~1h cada</td></tr>
+    <tr><td>Alinhamento quinzenal (Gerente de TI + gerente do projeto)</td><td><span class="tag-remoto">Remoto</span></td><td>Quinzenal, 8x</td><td>~1h cada</td></tr>
+    <tr><td>Validação de achados preliminares (contraditório)</td><td><span class="tag-remoto">Remoto</span></td><td>Semana 15</td><td>~2h</td></tr>
+    <tr><td>Apresentação executiva final</td><td><span class="tag-presencial">Presencial</span></td><td>Semana 16</td><td>~3h</td></tr>
+  </table>
+</section>
+
+<section class="escopo-premissas">
+  <div class="eyebrow" style="color:var(--accent)">Escopo e Premissas</div>
+  <h2>Para o cronograma acima se sustentar</h2>
+  <div class="premissas-grid">
+    <div class="premissa"><b>Disponibilidade do time do cliente</b>Interlocutores técnicos e o Gestor de TI disponíveis nas janelas de entrevista e nos alinhamentos quinzenais combinados — é a premissa mais crítica do cronograma.</div>
+    <div class="premissa"><b>Continuidade dos interlocutores</b>As mesmas pessoas indicadas no kickoff acompanham o projeto até o fim, evitando retrabalho de nivelamento.</div>
+    <div class="premissa"><b>Acesso a documentação e evidências</b>Inventários, contratos, prints e relatórios solicitados são entregues em até 5 dias úteis após o pedido.</div>
+    <div class="premissa"><b>Sem senha administrativa em texto aberto</b>Verificações de acesso são feitas acompanhadas por um responsável interno, nunca com credencial repassada por e-mail/chat.</div>
+    <div class="premissa"><b>Espaço para as sessões presenciais</b>Sala reservada e, quando aplicável, acesso físico acompanhado ao site visitado (kickoff, visita técnica e apresentação final).</div>
+    <div class="premissa"><b>Mudança de escopo via aditivo</b>Inclusão de novos sites, sistemas ou frentes durante a execução é tratada como aditivo de escopo, com impacto em prazo e horas revisado antes de iniciar.</div>
+  </div>
 </section>
 
 <section class="lastro">
@@ -283,28 +417,34 @@
 
 <section class="esforco">
   <div class="eyebrow" style="color:var(--accent)">Esforço e Prazo</div>
-  <h2>224h de consultoria · 46h do lado Super Logística</h2>
+  <h2>242h de consultoria · 56h do lado Super Logística</h2>
+  <p style="max-width:74ch; font-size:13.5px; color:var(--texto-suave); margin-top:4px;">
+    Horas de especialista por domínio inalteradas em relação ao porte M — o que muda com os 4 meses
+    de calendário é a governança do projeto (mais alinhamentos, kickoff e apresentação final
+    presenciais) e o tempo do Gestor de TI acompanhando essas sessões.
+  </p>
   <div class="esforco-grid">
     <table>
       <tr><th>Especialista</th><th>Horas</th></tr>
       <tr><td>Governança de TI (COBIT/ITIL)</td><td>32h</td></tr>
       <tr><td>Arquitetura de Sistemas e Aplicações</td><td>32h</td></tr>
-      <tr><td>Infraestrutura e Redes</td><td>28h</td></tr>
+      <tr><td>Infraestrutura e Redes <span style="color:var(--texto-fraco); font-weight:400;">(inclui visita técnica presencial)</span></td><td>28h</td></tr>
       <tr><td>Segurança da Informação</td><td>28h</td></tr>
       <tr><td>Endpoint e Device Management</td><td>20h</td></tr>
       <tr><td>Backup e Disaster Recovery</td><td>18h</td></tr>
       <tr><td>Cloud e Licenciamento</td><td>16h</td></tr>
-      <tr><td>Gestão do Projeto, Consolidação e Revisão Técnica</td><td>50h</td></tr>
-      <tr class="total"><td>Total consultoria</td><td>224h</td></tr>
+      <tr><td>Gestão do Projeto <span style="color:var(--texto-fraco); font-weight:400;">(inclui 8 alinhamentos quinzenais + sessões presenciais)</span></td><td>36h</td></tr>
+      <tr><td>Consolidação, Roadmap e Revisão Técnica</td><td>32h</td></tr>
+      <tr class="total"><td>Total consultoria</td><td>242h</td></tr>
     </table>
     <div class="prazo-card">
       <div class="eyebrow">Prazo calendário</div>
-      <div class="num">8+ sem.</div>
-      <span class="status-pill">Green — folga sobre a referência de porte M (4–7 sem.)</span>
+      <div class="num">16 sem.</div>
+      <span class="status-pill">~4 meses — sujeito a ajuste conforme disponibilidade real do time</span>
       <hr style="width:100%; border:none; border-top:1px solid var(--linha); margin:6px 0;">
       <div class="eyebrow">Lado Super Logística</div>
-      <div class="num" style="font-size:26px;">46h</div>
-      <span style="font-size:13px; color:var(--texto-suave);">Gestor de TI, responsáveis técnicos e analistas N2</span>
+      <div class="num" style="font-size:26px;">56h</div>
+      <span style="font-size:13px; color:var(--texto-suave);">Gestor de TI (inclui alinhamentos quinzenais), responsáveis técnicos e analistas N2</span>
     </div>
   </div>
 </section>
@@ -314,7 +454,7 @@
   <h2>Estimativa comercial</h2>
   <div class="investimento-box">
     <div class="valor">A definir após aprovação técnica desta proposta</div>
-    <p style="font-size:13px; color:var(--texto-fraco); margin:8px 0 0;">Baseado nas 224h de consultoria estimadas — proposta comercial formal enviada em anexo separado.</p>
+    <p style="font-size:13px; color:var(--texto-fraco); margin:8px 0 0;">Baseado nas 242h de consultoria estimadas — proposta comercial formal enviada em anexo separado.</p>
   </div>
 </section>
 
