@@ -134,6 +134,12 @@ def formulario(request: Request, cliente: str, modulo_id: str, token: str = ""):
         1 for g in grupos for p in g["perguntas"] if p.get("Resposta do Entrevistado", "").strip()
     )
 
+    try:
+        metadados = sheets_client.ler_metadados(dados_cliente["spreadsheet_id"], modulo["aba"])
+    except Exception:
+        logger.exception("Falha ao ler metadados do módulo")
+        metadados = {"responsavel": "", "apoio": ""}
+
     return templates.TemplateResponse(
         "modulo.html",
         {
@@ -147,6 +153,7 @@ def formulario(request: Request, cliente: str, modulo_id: str, token: str = ""):
             "grupos": grupos,
             "total": total,
             "respondidas": respondidas,
+            "metadados": metadados,
         },
     )
 
@@ -180,6 +187,41 @@ async def salvar_campo(
         sheets_client.atualizar_campo(dados_cliente["spreadsheet_id"], modulo["aba"], linha, campo, valor)
     except Exception:
         logger.exception("Falha ao salvar campo")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+
+    return JSONResponse({"ok": True})
+
+
+@router.post("/m/{modulo_id}/metadado")
+async def salvar_metadado(
+    request: Request,
+    cliente: str,
+    modulo_id: str,
+    token: str = Form(...),
+    campo: str = Form(...),
+    valor: str = Form(""),
+):
+    """Quem respondeu (responsável) e quem apoiou nas respostas — identificação
+    do lado do cliente por módulo, gravada direto na planilha (colunas K/L,
+    fora da tabela de perguntas)."""
+    if not _autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão interna expirada — atualize a página e faça login de novo")
+
+    dados_cliente = _cliente_ou_404(cliente)
+    modulo = MODULOS_POR_ID.get(modulo_id)
+    if not modulo:
+        raise HTTPException(status_code=404, detail="Módulo não encontrado")
+
+    if not validar_token(cliente, modulo_id, token):
+        raise HTTPException(status_code=403, detail="Token inválido para este módulo")
+
+    if campo not in ("responsavel", "apoio"):
+        raise HTTPException(status_code=400, detail="Campo inválido")
+
+    try:
+        sheets_client.salvar_metadado(dados_cliente["spreadsheet_id"], modulo["aba"], campo, valor)
+    except Exception:
+        logger.exception("Falha ao salvar metadado")
         raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
 
     return JSONResponse({"ok": True})

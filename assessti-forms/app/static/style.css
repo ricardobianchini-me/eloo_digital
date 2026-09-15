@@ -73,6 +73,18 @@ h1, h2, .sans-title{
 
 main{max-width:900px; margin:0 auto; padding:24px clamp(14px,3vw,32px) 60px;}
 .interlocutor{font-size:13px; color:var(--ink-muted); margin-bottom:6px;}
+.quem-respondeu{
+  display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  padding:14px 16px; margin-top:14px;
+}
+.quem-respondeu > div{flex:1 1 220px; display:flex; flex-direction:column; gap:4px;}
+.quem-respondeu label{font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint);}
+.quem-respondeu input{
+  font:inherit; font-size:14px; padding:6px 8px; border:1px solid var(--border); border-radius:6px;
+  background:var(--bg); color:var(--ink);
+}
+
 .rigor-note{
   margin:14px 0 4px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent-fill);
   border-radius:0 6px 6px 0; padding:10px 14px; font-size:12.5px; color:var(--ink-muted);

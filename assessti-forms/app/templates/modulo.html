@@ -18,6 +18,18 @@
 </div>
 
 <main>
+  <div class="quem-respondeu">
+    <div>
+      <label>Responsável pelo módulo</label>
+      <input type="text" id="meta-responsavel" data-meta="responsavel" placeholder="Nome e cargo" value="{{ metadados.responsavel }}">
+    </div>
+    <div>
+      <label>Quem apoiou nas respostas</label>
+      <input type="text" id="meta-apoio" data-meta="apoio" placeholder="Nome(s), se houve apoio de outra pessoa" value="{{ metadados.apoio }}">
+    </div>
+    <span class="save-state" id="meta-save-state"></span>
+  </div>
+
   <div class="rigor-note">
     Toda pergunta tem um Ref único e um Método de Verificação Exigido. Perguntas "Testado por amostragem"
     só são válidas se a resposta trouxer população total, amostra verificada e critério de seleção —
@@ -126,6 +138,29 @@ async function salvarCampo(card, campo, valor){
 }
 
 const salvarDebounced = debounce(salvarCampo, 600);
+
+async function salvarMetadado(campo, valor){
+  const estado = document.getElementById("meta-save-state");
+  estado.textContent = "Salvando...";
+  try{
+    const resp = await fetch(`${BASE_URL}/m/${MODULO_ID}/metadado`, {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: new URLSearchParams({token: TOKEN, campo, valor}),
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    estado.textContent = "Salvo ✓";
+    setTimeout(() => { estado.textContent = ""; }, 1500);
+  }catch(e){
+    estado.textContent = "Erro ao salvar — tente de novo";
+  }
+}
+
+const salvarMetadadoDebounced = debounce(salvarMetadado, 600);
+
+document.querySelectorAll("[data-meta]").forEach(el => {
+  el.addEventListener("input", () => salvarMetadadoDebounced(el.dataset.meta, el.value));
+});
 
 document.querySelectorAll(".qcard").forEach(card => {
   card.querySelectorAll("textarea[data-campo], select[data-campo], input[data-campo]").forEach(el => {

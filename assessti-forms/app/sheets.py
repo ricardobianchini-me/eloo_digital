@@ -62,3 +62,33 @@ def atualizar_campo(spreadsheet_id: str, aba: str, numero_linha: int, campo: str
     ws = worksheet(spreadsheet_id, aba)
     ws.update_cell(numero_linha, _COL_INDEX[campo], valor)
     logger.info(f"Atualizado {aba}!L{numero_linha} campo={campo}")
+
+
+# Metadados do módulo (quem respondeu, quem apoiou) — vivem fora da tabela
+# de perguntas, nas colunas K/L (a tabela usa só A-I), pra não interferir
+# com `ler_linhas`/`COLUNAS`. K1/K2 são os rótulos (escritos na primeira
+# gravação), L1/L2 os valores.
+_META_CAMPOS = {
+    "responsavel": {"linha": 1, "rotulo": "Responsável pelo módulo"},
+    "apoio": {"linha": 2, "rotulo": "Quem apoiou nas respostas"},
+}
+
+
+def ler_metadados(spreadsheet_id: str, aba: str) -> dict[str, str]:
+    ws = worksheet(spreadsheet_id, aba)
+    valores = ws.get("K1:L2")
+    resultado = {}
+    for campo, info in _META_CAMPOS.items():
+        i = info["linha"] - 1
+        linha = valores[i] if i < len(valores) else []
+        resultado[campo] = linha[1] if len(linha) > 1 else ""
+    return resultado
+
+
+def salvar_metadado(spreadsheet_id: str, aba: str, campo: str, valor: str) -> None:
+    if campo not in _META_CAMPOS:
+        raise ValueError(f"Metadado desconhecido: {campo}")
+    info = _META_CAMPOS[campo]
+    ws = worksheet(spreadsheet_id, aba)
+    ws.update(f"K{info['linha']}:L{info['linha']}", [[info["rotulo"], valor]])
+    logger.info(f"Atualizado {aba}!L{info['linha']} metadado={campo}")
