@@ -1,0 +1,157 @@
+---
+import '../../../styles/global.css';
+
+const marcos = [
+  { data: "2026-09-14", titulo: "Aceite da Proposta", desc: "Proposta técnica e comercial aceita formalmente pelo cliente.", cor: "verde" },
+  { data: "2026-09-14", titulo: "Kickoff Formal", desc: "Interlocutores indicados, acessos confirmados, agenda de entrevistas fechada para 22–26/09.", cor: "amber" },
+  { data: "22–26 set", titulo: "Levantamento (Fase 3)", desc: "Entrevistas por domínio, aplicação dos questionários working paper.", cor: "pendente" },
+  { data: "—", titulo: "Diagnóstico (Fase 4)", desc: "Avaliação de maturidade por domínio, com base em evidência coletada.", cor: "pendente" },
+  { data: "—", titulo: "Relatório Executivo e Roadmap", desc: "Consolidação, ranking de riscos, quick-wins e plano de evolução.", cor: "pendente" },
+];
+
+const interlocutores = [
+  { modulo: "Segurança da Informação", pessoa: "Fernanda Costa, Gerente de TI" },
+  { modulo: "Infraestrutura e Redes", pessoa: "Bruno Alves, Coordenador de Infraestrutura" },
+  { modulo: "Cloud e Licenciamento", pessoa: "Bruno Alves, Coordenador de Infraestrutura" },
+  { modulo: "Arquitetura de Sistemas", pessoa: "Fernanda Costa, Gerente de TI" },
+  { modulo: "Endpoint Management", pessoa: "Bruno Alves, Coordenador de Infraestrutura" },
+  { modulo: "Backup e Continuidade", pessoa: "Não indicado ainda", pendente: true },
+  { modulo: "Governança de TI", pessoa: "Fernanda Costa, Gerente de TI" },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Status do Projeto — Super Logística | eloo Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="confid">Documento confidencial — uso exclusivo Super Logística · não indexado, não distribuir</div>
+
+    <header class="topo">
+      <a href="/assessment/super-logistica/" class="voltar">&larr; Voltar ao painel do projeto</a>
+      <a href="/" class="wordmark" aria-label="eloo.digital">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+    </header>
+
+    <main class="painel">
+      <div class="cabecalho">
+        <span class="eyebrow">Status do Projeto</span>
+        <h1>Super Logística</h1>
+        <div class="status status-amber">
+          <span class="status-dot"></span>
+          Fase 3 — Levantamento em andamento
+        </div>
+        <p class="status-detalhe">
+          6 de 7 domínios liberados para entrevista. O domínio de Backup e Continuidade
+          aguarda indicação de interlocutor pelo cliente — a pendência trava apenas a
+          coleta desse domínio específico, não o restante do projeto.
+          Próximo passo: cobrança da indicação até 19/09/2026.
+        </p>
+      </div>
+
+      <section class="bloco">
+        <h2>Linha do tempo</h2>
+        <div class="timeline">
+          {marcos.map((m) => (
+            <div class={`marco marco-${m.cor}`}>
+              <span class="marco-data">{m.data}</span>
+              <div>
+                <strong>{m.titulo}</strong>
+                <span>{m.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>Interlocutores por módulo</h2>
+        <table class="tabela">
+          <thead>
+            <tr><th>Módulo</th><th>Interlocutor(a)</th></tr>
+          </thead>
+          <tbody>
+            {interlocutores.map((i) => (
+              <tr class={i.pendente ? "linha-pendente" : ""}>
+                <td>{i.modulo}</td>
+                <td>{i.pessoa}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="bloco">
+        <h2>Acessos e agenda</h2>
+        <p class="nota">
+          Acessos aos sistemas necessários para inspeção de evidência: confirmados.
+          Entrevistas agendadas para a semana de 22 a 26 de setembro de 2026,
+          1 hora por domínio.
+        </p>
+      </section>
+    </main>
+
+    <footer class="rodape">eloo Assessment — Super Logística · Documento confidencial, uso exclusivo do destinatário</footer>
+  </body>
+</html>
+
+<style is:global>
+  body { background: var(--parchment); margin: 0; }
+  .confid {
+    background: var(--dourado); color: var(--deep); text-align: center;
+    font-size: 0.78rem; font-weight: 700; padding: 0.45rem 1rem; letter-spacing: 0.02em;
+  }
+  .topo {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 2rem; border-bottom: 1px solid var(--line);
+  }
+  .voltar { font-size: 0.85rem; font-weight: 600; text-decoration: none; color: var(--ink-muted); }
+  .voltar:hover { color: var(--ink); }
+  .wordmark {
+    display: inline-flex; align-items: baseline; font-family: var(--font-brand);
+    font-weight: 800; letter-spacing: -0.02em; text-decoration: none; color: var(--deep); font-size: 1rem;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+
+  .painel { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .cabecalho { margin-bottom: 3rem; }
+  .eyebrow { font-size: 0.8rem; font-weight: 700; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.05em; }
+  .cabecalho h1 { font-family: var(--font-title); color: var(--deep); font-size: 2.2rem; margin: 0.3rem 0 1rem; }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-title);
+    font-weight: 700; font-size: 0.88rem; padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 0.6rem;
+  }
+  .status-amber { background: #fbf0d9; color: #8a5a00; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #d99a00; }
+  .status-detalhe { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.9rem; max-width: 62ch; }
+
+  .bloco { margin-top: 3rem; }
+  .bloco h2 { font-family: var(--font-title); color: var(--deep); font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+  .nota { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.9rem; max-width: 68ch; margin-top: 0.8rem; }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 1.2rem; }
+  .marco {
+    display: flex; gap: 1.2rem; padding: 1rem 0; border-left: 2px solid var(--line); position: relative; padding-left: 1.5rem;
+  }
+  .marco::before {
+    content: ""; position: absolute; left: -7px; top: 1.3rem; width: 12px; height: 12px; border-radius: 50%; background: var(--line);
+  }
+  .marco-verde::before { background: #3f8a5a; }
+  .marco-amber::before { background: #d99a00; }
+  .marco-pendente::before { background: var(--line); }
+  .marco-data { font-family: var(--font-title); font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); min-width: 70px; }
+  .marco strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .marco span { display: block; font-family: var(--font-body); font-size: 0.86rem; color: var(--ink-muted); margin-top: 0.2rem; max-width: 56ch; }
+
+  .tabela { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.88rem; }
+  .tabela th, .tabela td { border: 1px solid var(--line); padding: 0.6rem 0.8rem; text-align: left; }
+  .tabela th { background: var(--deep); color: var(--parchment); font-family: var(--font-title); font-weight: 600; }
+  .tabela tr:nth-child(even) td { background: #fbfaf4; }
+  .linha-pendente td { color: #8a5a00; font-weight: 600; }
+</style>
