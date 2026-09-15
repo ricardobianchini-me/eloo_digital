@@ -1,0 +1,416 @@
+---
+import '../styles/global.css';
+
+const CONTATO_URL = "mailto:contato@eloo.digital?subject=Assessment%20de%20TI%20—%20quero%20conversar";
+
+const frentes = [
+  {
+    letra: "A",
+    nome: "Infraestrutura de TI",
+    desc: "Redes, servidores, virtualização, endpoints, backup e disaster recovery.",
+  },
+  {
+    letra: "B",
+    nome: "Sistemas e Aplicações",
+    desc: "Portfólio de sistemas, bancos de dados, versionamento, integrações e segurança de aplicações.",
+  },
+  {
+    letra: "C",
+    nome: "Governança e Processos de TI",
+    desc: "Incidentes, mudanças, ativos, CMDB, fornecedores e documentação — COBIT 2019 e ITIL 4.",
+  },
+];
+
+const etapas = [
+  { n: "1", nome: "Kickoff", desc: "Interlocutores, acessos e agenda confirmados." },
+  { n: "2", nome: "Levantamento", desc: "Entrevistas e evidências, capítulo por capítulo." },
+  { n: "3", nome: "Avaliação de Controles", desc: "Adequado a Não aplicável — sempre com evidência." },
+  { n: "4", nome: "Avaliação de Risco", desc: "Crítico a Baixo, por probabilidade e impacto." },
+  { n: "5", nome: "Avaliação de Maturidade", desc: "Escala 0 a 5 — diagnóstico executivo, não certificação." },
+];
+
+const metodologias = [
+  { nome: "COBIT 2019 Assessment Programme", base: "ISACA · base ISO/IEC 33001", desc: "Como pontuar capacidade de processo com rigor, não por percepção." },
+  { nome: "SCAMPI", base: "SEI/CMMI Institute", desc: "Como coletar e validar evidência antes de atribuir maturidade." },
+  { nome: "NIST SP 800-30 & ISO/IEC 27005", base: "NIST · ISO", desc: "O método de cálculo de risco em si." },
+  { nome: "TOGAF ADM", base: "The Open Group", desc: "Diagnóstico e evolução de arquitetura, fases A a H." },
+  { nome: "ITIL 4 Continual Improvement", base: "AXELOS", desc: "Estrutura do roadmap em quatro horizontes." },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assessment de TI — eloo.digital</title>
+    <meta
+      name="description"
+      content="Assessment de Governança, Infraestrutura e Sistemas de TI — diagnóstico técnico com rigor de working paper, baseado em COBIT 2019 e ITIL 4, para empresas que precisam saber onde estão antes de investir em evolução tecnológica."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <nav>
+      <a href="/" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <div class="navlinks">
+        <a href="#o-que-e">O que é</a>
+        <a href="#metodologia">Metodologia</a>
+        <a href="#lastro">Lastro técnico</a>
+        <a href="#entregaveis">Entregáveis</a>
+      </div>
+      <a class="btn btn-nav" href={CONTATO_URL}>Falar com um especialista</a>
+    </nav>
+
+    <header class="hero reveal" id="topo">
+      <div class="hero-inner">
+        <span class="badge">Um sub-produto eloo.digital — governança de TI para empresas, não para instituições espiritualistas</span>
+        <h1>Antes de investir em TI, <span class="accent">saiba onde ela está</span>.</h1>
+        <p class="hero-sub">
+          Assessment de Governança, Infraestrutura e Sistemas de TI: diagnóstico técnico
+          com rigor de auditoria — evidência, não achismo — sobre o que existe, como está
+          e onde estão os riscos, antes de qualquer plano de evolução tecnológica.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={CONTATO_URL}>Falar com um especialista</a>
+          <a class="btn btn-ghost" href="#metodologia">Ver a metodologia</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="section" id="o-que-e">
+      <h2>Não é auditoria de conformidade. É um raio-x operacional.</h2>
+      <p class="lede">
+        A maioria das empresas descobre um gap crítico de TI só quando ele já virou incidente —
+        um backup que nunca foi testado, uma senha administrativa que ninguém sabe quem mais conhece,
+        um sistema fora de suporte sustentando uma operação inteira. O Assessment identifica isso antes,
+        com evidência documentada, não com uma lista de boas práticas genéricas.
+      </p>
+
+      <div class="split">
+        <div class="split-col">
+          <span class="split-label">O que normalmente existe</span>
+          <ul>
+            <li>Inventário de TI incompleto ou desatualizado, sem dono claro por ativo</li>
+            <li>Backup que "existe", mas nunca teve teste de restauração comprovado</li>
+            <li>Decisão de investimento em TI baseada em percepção, não em risco medido</li>
+          </ul>
+        </div>
+        <div class="split-col split-col-accent">
+          <span class="split-label">Com o Assessment</span>
+          <ul>
+            <li>Cada controle classificado com evidência — nunca por declaração isolada</li>
+            <li>Matriz de riscos e matriz de gaps, priorizadas por impacto real</li>
+            <li>Roadmap de evolução em 4 horizontes, começando pelos quick-wins de 30 dias</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-deep" id="metodologia">
+      <h2>Três frentes, cinco etapas</h2>
+      <p class="lede">
+        O ciclo clássico de consultoria de governança de TI — Diagnóstico → Avaliação → Priorização
+        → Roadmap — aplicado a cada uma das três frentes do ambiente tecnológico.
+      </p>
+
+      <dl class="dim-list">
+        {frentes.map((f) => (
+          <div class="dim-row">
+            <dt><span class="letra-badge">{f.letra}</span> {f.nome}</dt>
+            <dd>{f.desc}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="etapas-row">
+        {etapas.map((e) => (
+          <div class="etapa-card">
+            <span class="etapa-n">{e.n}</span>
+            <strong>{e.nome}</strong>
+            <span>{e.desc}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="lastro">
+      <h2>Como avaliamos, não só o que avaliamos</h2>
+      <p class="lede">
+        Frameworks como COBIT e ITIL definem o padrão de controle esperado. O método de conduzir
+        o assessment em si — como pontuar, como validar evidência, como calcular risco — vem de
+        metodologias formais próprias, públicas e amplamente adotadas por firmas de consultoria de
+        TI de primeira linha.
+      </p>
+
+      <div class="metodo-grid">
+        {metodologias.map((m) => (
+          <div class="metodo-card">
+            <span class="metodo-origem">{m.base}</span>
+            <strong>{m.nome}</strong>
+            <span>{m.desc}</span>
+          </div>
+        ))}
+      </div>
+      <p class="metodo-nota">
+        Nenhuma destas metodologias é propriedade de uma firma de consultoria específica — são
+        normas e modelos públicos (ISACA, SEI/CMMI Institute, NIST, ISO, The Open Group, AXELOS),
+        o que dá rigor auditável ao diagnóstico sem depender de licenciamento de terceiros.
+      </p>
+    </section>
+
+    <section class="band" id="entregaveis">
+      <div class="band-inner">
+        <h2>O que fica com você ao final</h2>
+        <p class="lede">
+          Relatório Executivo, Relatório Técnico detalhado, Matriz de Riscos, Matriz de Gaps
+          (situação atual → recomendada → ação), Inventário Consolidado, Mapa de Maturidade e
+          Plano de Ação Priorizado com Roadmap de Evolução em quatro horizontes — de quick-wins
+          de 30 dias a estruturação de 12 meses.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta-final">
+      <p class="cta-kicker">Comece pelo diagnóstico</p>
+      <h2 class="cta-big">Descubra onde sua operação de TI está hoje.</h2>
+      <p class="lede">Escopo e esforço dimensionados pelo porte da sua empresa antes de qualquer compromisso.</p>
+      <a class="btn btn-primary" href={CONTATO_URL}>Falar com um especialista</a>
+    </section>
+
+    <footer>
+      <a href="/" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <p>eloo.digital · Assessment de TI</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 2rem;
+    background: color-mix(in srgb, var(--parchment) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-wordmark { text-decoration: none; color: var(--deep); font-size: 1.15rem; }
+  .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
+  .navlinks a { text-decoration: none; color: var(--ink-muted); }
+  .navlinks a:hover { color: var(--ink); }
+  @media (max-width: 780px) { .navlinks { display: none; } }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.85rem 1.7rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
+  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--deep); color: var(--parchment); }
+  .btn-nav:hover { background: var(--deep-2); }
+  .btn-primary { background: var(--dourado); color: var(--deep); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--dourado) 88%, white); }
+  .btn-ghost { background: transparent; color: var(--mint); border-color: color-mix(in srgb, var(--mint) 40%, transparent); }
+  .btn-ghost:hover { border-color: var(--mint); }
+
+  .hero {
+    background: var(--deep);
+    color: var(--mint);
+    padding: 7rem 2rem 6rem;
+    text-align: center;
+  }
+  .hero-inner { max-width: 760px; margin: 0 auto; }
+  .badge {
+    display: inline-block;
+    max-width: 50ch;
+    border: 1px solid color-mix(in srgb, var(--mint) 30%, transparent);
+    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--mint);
+    margin-bottom: 2rem;
+    line-height: 1.4;
+  }
+  h1 {
+    font-family: var(--font-title);
+    font-size: clamp(2.4rem, 5.6vw, 4.1rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 1.3rem;
+    text-wrap: balance;
+    color: var(--mint);
+  }
+  h1 .accent { color: var(--dourado); }
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%);
+    max-width: 56ch;
+    margin: 0 auto 2.4rem;
+    line-height: 1.6;
+  }
+  .hero-actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+
+  .section { max-width: 1000px; margin: 0 auto; padding: 6rem 2rem; }
+  .section-deep { max-width: none; background: var(--deep-2); color: var(--mint); }
+  .section-deep > * { max-width: 1000px; margin-left: auto; margin-right: auto; }
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(1.6rem, 3.6vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.1rem;
+    text-wrap: balance;
+    max-width: 34ch;
+  }
+  .section-deep h2 { color: var(--mint); }
+  .lede {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    max-width: 64ch;
+    margin: 0 0 2.5rem;
+  }
+  .section-deep .lede { color: color-mix(in srgb, var(--mint) 78%, var(--parchment) 22%); }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+  .split-col { background: #fbfaf4; padding: 2rem 1.9rem; }
+  .split-col-accent { background: var(--deep); color: var(--mint); }
+  .split-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+  .split-col-accent .split-label { color: var(--dourado); }
+  .split-col ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  .dim-list { margin: 0 0 2.5rem; }
+  .dim-row {
+    display: grid;
+    grid-template-columns: minmax(0, 17rem) 1fr;
+    gap: 2rem;
+    padding: 1.4rem 0;
+    border-top: 1px solid var(--line-deep);
+  }
+  .dim-row:last-child { border-bottom: 1px solid var(--line-deep); }
+  @media (max-width: 640px) { .dim-row { grid-template-columns: 1fr; gap: 0.4rem; } }
+  .dim-row dt {
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--mint);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .letra-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.6rem; height: 1.6rem; border-radius: 6px;
+    background: var(--dourado); color: var(--deep); font-size: 0.85rem; font-weight: 800;
+    flex: none;
+  }
+  .dim-row dd {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.96rem;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--mint) 75%, var(--parchment) 25%);
+  }
+
+  .etapas-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.9rem;
+  }
+  @media (max-width: 900px) { .etapas-row { grid-template-columns: repeat(2, 1fr); } }
+  .etapa-card {
+    background: color-mix(in srgb, var(--parchment) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mint) 22%, transparent);
+    border-top: 3px solid var(--dourado);
+    border-radius: 10px;
+    padding: 1.1rem 1rem;
+    display: flex; flex-direction: column; gap: 0.35rem;
+  }
+  .etapa-n { font-family: var(--font-title); font-size: 0.78rem; font-weight: 700; color: var(--dourado); }
+  .etapa-card strong { font-size: 0.98rem; color: var(--mint); }
+  .etapa-card span { font-family: var(--font-body); font-size: 0.86rem; line-height: 1.45; color: color-mix(in srgb, var(--mint) 75%, var(--parchment) 25%); }
+
+  .metodo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+  }
+  .metodo-card {
+    background: #fbfaf4;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.3rem 1.2rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  .metodo-origem { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: color-mix(in srgb, var(--dourado) 70%, var(--ink) 30%); }
+  .metodo-card strong { font-size: 1rem; color: var(--ink); }
+  .metodo-card span { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.5; color: var(--ink-muted); }
+  .metodo-nota { font-family: var(--font-body); font-size: 0.88rem; color: var(--ink-muted); font-style: italic; max-width: 68ch; }
+
+  .band { background: var(--parchment-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .band-inner { max-width: 760px; margin: 0 auto; padding: 5.5rem 2rem; text-align: center; }
+  .band-inner h2 { max-width: none; margin-left: auto; margin-right: auto; }
+  .band-inner .lede { margin-left: auto; margin-right: auto; }
+
+  .cta-final { text-align: center; padding: 6.5rem 2rem; }
+  .cta-kicker { font-weight: 700; color: var(--dourado); margin: 0 0 0.6rem; font-size: 0.95rem; }
+  .cta-big {
+    font-family: var(--font-title);
+    font-size: clamp(1.9rem, 4.6vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 auto 0.8rem;
+    max-width: 28ch;
+    text-wrap: balance;
+  }
+  .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+  }
+  footer .wordmark { color: var(--deep); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
+  footer p { margin: 0; }
+</style>
