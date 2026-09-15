@@ -6,6 +6,9 @@ precisa de novo deploy de infraestrutura, novo container nem novo secret.
 
 O slug (chave do dicionário) vira parte da URL:
 eloo.digital/assessment/{slug}/responder/...
+
+Primeiro deploy real: 2026-09-16, depois que os secrets ASSESSMENT_SECRET_KEY
+e ASSESSMENT_GOOGLE_CREDENTIALS_B64 foram cadastrados no GitHub.
 """
 
 CLIENTES = {
