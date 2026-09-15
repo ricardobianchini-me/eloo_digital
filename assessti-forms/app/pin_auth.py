@@ -6,6 +6,8 @@ num cookie assinado.
 
 Não é por-cliente nem por-módulo (isso já é o `auth.py`) — é um gate único,
 de uso interno da equipe, na frente de toda a ferramenta de preenchimento.
+
+ASSESSMENT_INTERNAL_PIN cadastrado no GitHub Actions em 2026-09-16.
 """
 import hashlib
 import hmac
