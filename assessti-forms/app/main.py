@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from urllib.parse import quote
 
 from fastapi import APIRouter, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -9,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
+import pin_auth
 import sheets as sheets_client
 
 logging.basicConfig(level=logging.INFO)
@@ -21,6 +23,7 @@ BASE_DIR = Path(__file__).parent
 # /assessment/{cliente}/responder/ — assim nenhum client novo exige editar
 # o nginx de novo, e estáticos/saúde também não precisam de location à parte.
 STATIC_PATH = "/assessment/_shared/responder/static"
+LOGIN_PATH = "/assessment/_shared/responder/entrar"
 
 app = FastAPI(title="eloo Assessment")
 app.mount(STATIC_PATH, StaticFiles(directory=BASE_DIR / "static"), name="static")
@@ -62,8 +65,48 @@ def _cliente_ou_404(cliente: str) -> dict:
     return dados
 
 
+def _autenticado(request: Request) -> bool:
+    return pin_auth.cookie_valido(request.cookies.get(pin_auth.COOKIE_NOME))
+
+
+def _exigir_pin_ou_redirecionar(request: Request) -> RedirectResponse | None:
+    """Pra rotas GET: se não estiver logado, manda pra tela de PIN, com
+    ?next=<url original> pra voltar direto pra onde a pessoa queria ir."""
+    if _autenticado(request):
+        return None
+    destino = quote(str(request.url.path) + (f"?{request.url.query}" if request.url.query else ""))
+    return RedirectResponse(url=f"{LOGIN_PATH}?next={destino}")
+
+
+@app.get("/assessment/_shared/responder/entrar", response_class=HTMLResponse)
+def tela_login(request: Request, next: str = "/assessment/_shared/responder/saude", erro: bool = False):
+    return templates.TemplateResponse("entrar.html", {"request": request, "next": next, "erro": erro})
+
+
+@app.post("/assessment/_shared/responder/entrar")
+def processar_login(pin: str = Form(...), next: str = Form("/assessment/_shared/responder/saude")):
+    if not pin_auth.pin_correto(pin):
+        return RedirectResponse(
+            url=f"{LOGIN_PATH}?erro=1&next={quote(next)}", status_code=303
+        )
+    resposta = RedirectResponse(url=next, status_code=303)
+    resposta.set_cookie(
+        pin_auth.COOKIE_NOME,
+        pin_auth.valor_cookie(),
+        httponly=True,
+        samesite="lax",
+        secure=True,
+        max_age=60 * 60 * 12,  # 12h — dura uma sessão de trabalho, não precisa logar de novo entre módulos
+    )
+    return resposta
+
+
 @router.get("/m/{modulo_id}", response_class=HTMLResponse)
 def formulario(request: Request, cliente: str, modulo_id: str, token: str = ""):
+    redir = _exigir_pin_ou_redirecionar(request)
+    if redir:
+        return redir
+
     dados_cliente = _cliente_ou_404(cliente)
     modulo = MODULOS_POR_ID.get(modulo_id)
     if not modulo:
@@ -110,6 +153,7 @@ def formulario(request: Request, cliente: str, modulo_id: str, token: str = ""):
 
 @router.post("/m/{modulo_id}/salvar")
 async def salvar_campo(
+    request: Request,
     cliente: str,
     modulo_id: str,
     token: str = Form(...),
@@ -117,6 +161,9 @@ async def salvar_campo(
     campo: str = Form(...),
     valor: str = Form(""),
 ):
+    if not _autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão interna expirada — atualize a página e faça login de novo")
+
     dados_cliente = _cliente_ou_404(cliente)
     modulo = MODULOS_POR_ID.get(modulo_id)
     if not modulo:
@@ -139,7 +186,10 @@ async def salvar_campo(
 
 
 @router.post("/m/{modulo_id}/status")
-async def marcar_status(cliente: str, modulo_id: str, token: str = Form(...), linha: int = Form(...), status: str = Form(...)):
+async def marcar_status(request: Request, cliente: str, modulo_id: str, token: str = Form(...), linha: int = Form(...), status: str = Form(...)):
+    if not _autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão interna expirada — atualize a página e faça login de novo")
+
     dados_cliente = _cliente_ou_404(cliente)
     modulo = MODULOS_POR_ID.get(modulo_id)
     if not modulo:
@@ -160,19 +210,24 @@ async def marcar_status(cliente: str, modulo_id: str, token: str = Form(...), li
 
 @router.get("/", response_class=HTMLResponse)
 def raiz(request: Request, cliente: str):
+    redir = _exigir_pin_ou_redirecionar(request)
+    if redir:
+        return redir
     _cliente_ou_404(cliente)
     return templates.TemplateResponse("sem_acesso.html", {"request": request}, status_code=200)
 
 
 @router.get("/ir/{modulo_id}")
-def ir_para_modulo(cliente: str, modulo_id: str):
+def ir_para_modulo(request: Request, cliente: str, modulo_id: str):
     """Atalho de uso interno: gera o token de revisor na hora e redireciona
     pro formulário — assim o link "Responder ao vivo" do painel do cliente
     nunca precisa ter um token gravado em nenhum arquivo/página estática
     (o token só existe em memória, gerado a partir do SECRET_KEY do
-    ambiente, nunca commitado). Essa rota só é alcançável depois do PIN
-    interno (auth_basic do host nginx), então continua sendo uso da equipe.
+    ambiente, nunca commitado). Pede o PIN interno antes de gerar o token.
     """
+    redir = _exigir_pin_ou_redirecionar(request)
+    if redir:
+        return redir
     _cliente_ou_404(cliente)
     if modulo_id not in MODULOS_POR_ID:
         raise HTTPException(status_code=404, detail="Módulo não encontrado")

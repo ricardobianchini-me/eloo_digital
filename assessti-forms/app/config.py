@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     # Trocar invalida TODOS os links já distribuídos, de todos os clientes.
     secret_key: str = "troque-esta-chave-no-.env"
 
+    # PIN de acesso interno da equipe (não confundir com o token por
+    # módulo/cliente) — gate único, compartilhado entre todos os clientes,
+    # pra abrir a ferramenta de preenchimento ao vivo. Ver pin_auth.py.
+    internal_pin: str = ""
+
     class Config:
         env_file = ".env"
         extra = "ignore"
