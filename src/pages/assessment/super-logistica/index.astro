@@ -81,8 +81,9 @@ const modulos = [
         </p>
         <div class="grid-modulos">
           {modulos.map((m) => (
-            <div class="card-modulo">
+            <div class="card-modulo" data-modulo-id={m.id}>
               <strong>{m.nome}</strong>
+              <span class="card-responsavel" data-responsavel hidden>Responsável: <b></b></span>
               <div class="card-modulo-acoes">
                 <a href={`/assessment/super-logistica/questionario-${m.slug}`}>Ver roteiro</a>
                 <a href={`/assessment/super-logistica/responder/ir/${m.id}`}>Responder ao vivo</a>
@@ -94,6 +95,25 @@ const modulos = [
     </main>
 
     <footer class="rodape">eloo Assessment — Super Logística · Documento confidencial, uso exclusivo do destinatário</footer>
+
+    <script>
+      // Busca ao vivo quem está cadastrado como responsável de cada módulo
+      // (preenchido no próprio formulário "Responder ao vivo") — nunca
+      // duplicado/hardcoded aqui, pra nunca ficar dessincronizado.
+      fetch("/assessment/super-logistica/responder/quem-respondeu")
+        .then((r) => (r.ok ? r.json() : {}))
+        .then((dados) => {
+          document.querySelectorAll("[data-modulo-id]").forEach((card) => {
+            const id = card.getAttribute("data-modulo-id");
+            const nome = (dados[id] || "").trim();
+            if (!nome) return;
+            const span = card.querySelector("[data-responsavel]");
+            span.querySelector("b").textContent = nome;
+            span.hidden = false;
+          });
+        })
+        .catch(() => {});
+    </script>
   </body>
 </html>
 

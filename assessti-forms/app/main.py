@@ -251,6 +251,24 @@ async def marcar_status(request: Request, cliente: str, modulo_id: str, token: s
     return JSONResponse({"ok": True})
 
 
+@router.get("/quem-respondeu")
+async def quem_respondeu(cliente: str):
+    """Endpoint público (sem PIN, sem token) — devolve só o nome do
+    responsável cadastrado por módulo, pro painel público do cliente
+    mostrar sem duplicar/desincronizar esse dado do formulário. Nunca
+    expõe token, resposta de pergunta nem qualquer outro campo."""
+    dados_cliente = _cliente_ou_404(cliente)
+    resultado: dict[str, str] = {}
+    for modulo_id, modulo in MODULOS_POR_ID.items():
+        try:
+            meta = sheets_client.ler_metadados(dados_cliente["spreadsheet_id"], modulo["aba"])
+            resultado[modulo_id] = meta.get("responsavel", "")
+        except Exception:
+            logger.exception(f"Falha ao ler responsável do módulo {modulo_id}")
+            resultado[modulo_id] = ""
+    return JSONResponse(resultado)
+
+
 @router.get("/", response_class=HTMLResponse)
 def raiz(request: Request, cliente: str):
     redir = _exigir_pin_ou_redirecionar(request)
