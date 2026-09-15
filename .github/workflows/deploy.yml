@@ -22,15 +22,27 @@ jobs:
           echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/oci_key
           chmod 600 ~/.ssh/oci_key
           ssh-keyscan -H "${{ secrets.OCI_HOST }}" >> ~/.ssh/known_hosts
+          # Keepalive so a long docker build doesn't get killed by an idle
+          # connection timeout mid-command (silently leaves the container
+          # "Created" but never started -- happened once, see commit history).
+          cat >> ~/.ssh/config <<EOF
+          Host oci-vm2
+            HostName ${{ secrets.OCI_HOST }}
+            User ${{ secrets.OCI_USER }}
+            IdentityFile ~/.ssh/oci_key
+            ServerAliveInterval 15
+            ServerAliveCountMax 10
+          EOF
 
       - name: Sync files to VM-2
         run: |
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/oci_key" \
+            -e "ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -i ~/.ssh/oci_key" \
             --exclude 'node_modules' --exclude '.git' --exclude 'dist' --exclude '.astro' \
             ./ "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}:~/eloo-digital/"
 
-      - name: Build and restart container
-        run: |
-          ssh -i ~/.ssh/oci_key "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}" \
-            'cd ~/eloo-digital && sudo docker compose build --no-cache && sudo docker compose up -d'
+      - name: Build container image
+        run: ssh oci-vm2 'cd ~/eloo-digital && sudo docker compose build'
+
+      - name: Restart container
+        run: ssh oci-vm2 'cd ~/eloo-digital && sudo docker compose up -d'
