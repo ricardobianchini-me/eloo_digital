@@ -3,6 +3,11 @@ name: Deploy to VM-2 (eloo.digital)
 on:
   push:
     branches: [main]
+    # assessti-forms/ é outro app, outro container, outro workflow
+    # (deploy-assessment-forms.yml) — não precisa rebuildar o site estático
+    # quando só o backend do formulário muda.
+    paths-ignore:
+      - 'assessti-forms/**'
   workflow_dispatch:
 
 concurrency:
@@ -39,6 +44,7 @@ jobs:
           rsync -avz --delete \
             -e "ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -i ~/.ssh/oci_key" \
             --exclude 'node_modules' --exclude '.git' --exclude 'dist' --exclude '.astro' \
+            --exclude 'assessti-forms' \
             ./ "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}:~/eloo-digital/"
 
       - name: Build container image

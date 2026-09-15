@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}{{ modulo.nome }} — eloo Assessment{% endblock %}
+{% block body %}
+
+<div class="topbar">
+  <div>
+    <div class="eyebrow"><span class="brandmark">eloo</span> Assessment · {{ modulo.prefixo }}</div>
+    <h1>{{ modulo.nome }}</h1>
+    <div class="sub">
+      <span class="badge-papel">{{ "Revisor" if pode_revisar else "Entrevistado" }}</span>
+    </div>
+  </div>
+  <div class="prog">
+    <span id="prog-label">{{ respondidas }} / {{ total }} respondidas</span>
+    <div class="prog-bar"><div style="width:{{ (respondidas / total * 100) if total else 0 }}%"></div></div>
+  </div>
+</div>
+
+<main>
+  <div class="rigor-note">
+    Toda pergunta tem um Ref único e um Método de Verificação Exigido. Perguntas "Testado por amostragem"
+    só são válidas se a resposta trouxer população total, amostra verificada e critério de seleção —
+    sem isso, o especialista classifica o item como "Não evidenciado" na avaliação, independente do
+    percentual informado. A Maturidade (0-5) não é preenchida aqui — é atribuída depois pelo especialista,
+    com base na evidência anexada.
+  </div>
+
+  {% for grupo in grupos %}
+  <div class="subtema">
+    <h3>{{ grupo.titulo }}</h3>
+    {% for p in grupo.perguntas %}
+    {% set metodo_classe = p["Método de Verificação Exigido"] | lower | replace(" ", "") %}
+    {% set respondida = p["Resposta do Entrevistado"] and p["Resposta do Entrevistado"].strip() %}
+    <div class="qcard {{ 'answered' if respondida else '' }}" data-linha="{{ p['_row'] }}">
+      <div class="qtop">
+        <span class="ref">{{ p['Ref'] }}</span>
+        <span class="metodo metodo-{{ metodo_classe }}">{{ p['Método de Verificação Exigido'] }}</span>
+        {% if pode_revisar %}
+        <span class="metodo status-badge status-{{ (p['Status'] or 'pendente') | lower }}" style="margin-left:auto;">{{ p['Status'] or 'Pendente' }}</span>
+        {% endif %}
+      </div>
+      <div class="pergunta">{{ p['Pergunta'] }}</div>
+      <div class="evidencia"><b>Evidência esperada:</b> {{ p['Evidência Esperada'] }}</div>
+
+      <div class="qrow">
+        <div>
+          <label>Resposta do Entrevistado</label>
+          <textarea data-campo="Resposta do Entrevistado" placeholder="Resposta registrada na entrevista...">{{ p['Resposta do Entrevistado'] }}</textarea>
+        </div>
+        {% if pode_revisar %}
+        <div>
+          <label>Complemento do Entrevistador</label>
+          <textarea data-campo="Complemento do Entrevistador" placeholder="Observações, ressalvas, contexto adicional...">{{ p['Complemento do Entrevistador'] }}</textarea>
+        </div>
+        {% else %}
+        <div>
+          <label>Complemento do Entrevistador</label>
+          <textarea disabled placeholder="Preenchido pelo entrevistador na revisão">{{ p['Complemento do Entrevistador'] }}</textarea>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="qrow2">
+        <div>
+          <label>Evidência Anexada</label>
+          <select data-campo="Evidência Anexada (Sim/Não/Parcial)">
+            <option value="" {{ 'selected' if not p['Evidência Anexada (Sim/Não/Parcial)'] else '' }}>—</option>
+            <option value="Sim" {{ 'selected' if p['Evidência Anexada (Sim/Não/Parcial)']=='Sim' else '' }}>Sim</option>
+            <option value="Parcial" {{ 'selected' if p['Evidência Anexada (Sim/Não/Parcial)']=='Parcial' else '' }}>Parcial</option>
+            <option value="Não" {{ 'selected' if p['Evidência Anexada (Sim/Não/Parcial)']=='Não' else '' }}>Não</option>
+          </select>
+        </div>
+        <div>
+          <label>Referência do arquivo/evidência</label>
+          <input type="text" data-campo="Referência da Evidência" placeholder="ex.: print_console_edr_2026-09-22.png" value="{{ p['Referência da Evidência'] }}">
+        </div>
+        {% if pode_revisar %}
+        <div>
+          <label>Status</label>
+          <button type="button" class="status-btn {{ 'marcado' if p['Status']=='Revisado' else '' }}" data-status-btn>
+            {{ 'Revisado ✓' if p['Status']=='Revisado' else 'Marcar revisado' }}
+          </button>
+        </div>
+        {% endif %}
+      </div>
+      <div class="save-state"></div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</main>
+
+<footer class="rodape-marca">eloo Assessment · eloo.digital</footer>
+
+<script>
+const TOKEN = {{ token | tojson }};
+const MODULO_ID = {{ modulo.id | tojson }};
+const CLIENTE = {{ cliente | tojson }};
+const BASE_URL = `/assessment/${CLIENTE}/responder`;
+
+function debounce(fn, ms){
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+async function salvarCampo(card, campo, valor){
+  const linha = card.dataset.linha;
+  const estado = card.querySelector(".save-state");
+  estado.textContent = "Salvando...";
+  try{
+    const resp = await fetch(`${BASE_URL}/m/${MODULO_ID}/salvar`, {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: new URLSearchParams({token: TOKEN, linha, campo, valor}),
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    estado.textContent = "Salvo ✓";
+    setTimeout(() => { estado.textContent = ""; }, 1500);
+    if(campo === "Resposta do Entrevistado"){
+      card.classList.toggle("answered", valor.trim() !== "");
+    }
+  }catch(e){
+    estado.textContent = "Erro ao salvar — tente de novo";
+  }
+}
+
+const salvarDebounced = debounce(salvarCampo, 600);
+
+document.querySelectorAll(".qcard").forEach(card => {
+  card.querySelectorAll("textarea[data-campo], select[data-campo], input[data-campo]").forEach(el => {
+    if(el.disabled) return;
+    const evento = el.tagName === "SELECT" ? "change" : "input";
+    el.addEventListener(evento, () => salvarDebounced(card, el.dataset.campo, el.value));
+  });
+
+  const statusBtn = card.querySelector("[data-status-btn]");
+  if(statusBtn){
+    statusBtn.addEventListener("click", async () => {
+      const jaMarcado = statusBtn.classList.contains("marcado");
+      const novoStatus = jaMarcado ? "Pendente" : "Revisado";
+      const resp = await fetch(`${BASE_URL}/m/${MODULO_ID}/status`, {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: new URLSearchParams({token: TOKEN, linha: card.dataset.linha, status: novoStatus}),
+      });
+      if(resp.ok){
+        statusBtn.classList.toggle("marcado", !jaMarcado);
+        statusBtn.textContent = !jaMarcado ? "Revisado ✓" : "Marcar revisado";
+        const badge = card.querySelector(".status-badge");
+        if(badge){
+          badge.textContent = novoStatus;
+          badge.className = "metodo status-badge status-" + novoStatus.toLowerCase();
+        }
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

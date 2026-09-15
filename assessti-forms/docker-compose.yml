@@ -1,0 +1,18 @@
+version: '3.8'
+
+# eloo Assessment (eloo.digital). Stack isolada: rede, volumes e
+# credenciais próprios, sem dependência de hlera-bot, Fraternidade do Amor
+# ou do site institucional da eloo.digital.
+services:
+  app:
+    build: ./app
+    container_name: eloo_assessment
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    environment:
+      - TZ=America/Sao_Paulo
+    volumes:
+      - ./credentials:/app/credentials
+    restart: unless-stopped

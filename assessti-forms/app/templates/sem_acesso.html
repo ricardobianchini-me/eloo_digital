@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Link inválido — eloo Assessment{% endblock %}
+{% block body %}
+<div class="card-simples">
+  <div class="eyebrow" style="text-align:center;">eloo Assessment</div>
+  <h2>Link inválido ou incompleto</h2>
+  <p style="color:var(--ink-muted); font-size:14px;">
+    Este link de formulário não é válido, expirou ou não corresponde a este módulo.
+    Confirme com quem enviou o link que ele foi copiado por completo (incluindo o parâmetro <code>token</code>).
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+name: Deploy to VM-2 (eloo Assessment forms)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assessti-forms/**'
+      - '.github/workflows/deploy-assessment-forms.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-eloo-assessment
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/oci_key
+          chmod 600 ~/.ssh/oci_key
+          ssh-keyscan -H "${{ secrets.OCI_HOST }}" >> ~/.ssh/known_hosts
+          cat >> ~/.ssh/config <<EOF
+          Host oci-vm2
+            HostName ${{ secrets.OCI_HOST }}
+            User ${{ secrets.OCI_USER }}
+            IdentityFile ~/.ssh/oci_key
+            ServerAliveInterval 15
+            ServerAliveCountMax 10
+          EOF
+
+      # Mesmo repositório do site institucional, mas outro app/container:
+      # só a subpasta assessti-forms/ é sincronizada, e vai para um
+      # diretório e container próprios na VM (~/eloo-assessment-forms/),
+      # sem relação com ~/eloo-digital/.
+      #
+      # .env e credentials/ NUNCA vêm do repositório (gitignored dentro de
+      # assessti-forms/) — são secrets do GitHub, escritos direto na VM a
+      # cada deploy. O --exclude garante que o rsync --delete não os apague.
+      - name: Sync files to VM-2
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -i ~/.ssh/oci_key" \
+            --exclude '.env' --exclude 'credentials' --exclude '__pycache__' \
+            ./assessti-forms/ "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}:~/eloo-assessment-forms/"
+
+      # Clientes/planilhas ficam em app/clientes.py (versionado, não é
+      # secret) — só SECRET_KEY e as credenciais do Google são segredo de
+      # verdade, e são as mesmas pra todos os clientes (não crescem por
+      # engajamento novo). Reaproveita OCI_HOST/OCI_USER/OCI_SSH_KEY, já
+      # configurados neste repositório para o deploy do site institucional.
+      - name: Write .env and credentials on VM-2
+        run: |
+          ssh oci-vm2 "cat > ~/eloo-assessment-forms/.env" <<EOF
+          GOOGLE_CREDENTIALS_FILE=/app/credentials/credentials.json
+          SECRET_KEY=${{ secrets.ASSESSMENT_SECRET_KEY }}
+          EOF
+          ssh oci-vm2 'mkdir -p ~/eloo-assessment-forms/credentials'
+          echo "${{ secrets.ASSESSMENT_GOOGLE_CREDENTIALS_B64 }}" | base64 -d | \
+            ssh oci-vm2 'cat > ~/eloo-assessment-forms/credentials/credentials.json'
+
+      - name: Build container image
+        run: ssh oci-vm2 'cd ~/eloo-assessment-forms && sudo docker compose build'
+
+      - name: Restart container
+        run: ssh oci-vm2 'cd ~/eloo-assessment-forms && sudo docker compose up -d'

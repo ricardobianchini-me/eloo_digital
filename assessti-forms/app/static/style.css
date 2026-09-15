@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* Paleta e tipografia — marca eloo.digital (pacce-co/DESIGN.md).
+   Regra de governança da marca: um único acento (dourado) — nunca
+   acentos rotativos. Cores semânticas (good/amber/red) são estado
+   funcional da UI, não acento de marca, e ficam à parte dessa regra. */
+:root{
+  --bg:#F4F2EA;            /* parchment */
+  --surface:#FFFFFF;
+  --surface-2:#EAE6D9;     /* parchment shade */
+  --ink:#23261F;           /* ink */
+  --ink-muted:#5C6B5F;     /* sálvia escurecida p/ leitura */
+  --ink-faint:#8CA79B;     /* sálvia clara */
+  --border:#DDE3DA; --border-strong:#C7D0C4;
+  --accent:#8A661E;        /* dourado escurecido — texto/foco legível sobre parchment */
+  --accent-fill:#D4AF37;   /* dourado puro — preenchimentos, botão */
+  --accent-ink:#3A2E0C;    /* texto sobre preenchimento dourado */
+  --accent-soft:#F3E9C8;   /* dourado suave — chips, fundo de destaque */
+  --amber:#A6631F; --amber-soft:#F1E2CC;
+  --good:#3F7A5C; --good-soft:#DCEEE2;
+  --red:#9C4B3A; --red-soft:#F3E0D9;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1A2421;          /* deep */
+    --surface:#212D28;
+    --surface-2:#283630;
+    --ink:#C2E7D9;         /* mint — elemento primário sobre fundo escuro */
+    --ink-muted:#8FAA9E;   /* sálvia clareada */
+    --ink-faint:#6B8E81;   /* sálvia */
+    --border:#2C3A34; --border-strong:#3A4B43;
+    --accent:#D4AF37;      /* dourado — único acento, funciona direto sobre fundo escuro */
+    --accent-fill:#D4AF37;
+    --accent-ink:#2A210A;
+    --accent-soft:#3A2F14;
+    --amber:#D0A468; --amber-soft:#332A1C;
+    --good:#7FC4A0; --good-soft:#1D3327;
+    --red:#D08E80; --red-soft:#332320;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box;}
+
+/* Tipografia (DESIGN.md): sans humanista de sistema para títulos ≥24px,
+   serifada de sistema para corpo/UI <24px. Mono (IBM Plex Mono) é exceção
+   funcional para Refs e rótulos técnicos, como a exceção já aberta pro
+   wordmark do logo. */
+body{
+  margin:0; background:var(--bg); color:var(--ink); line-height:1.55;
+  font-family:Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1, h2, .sans-title{
+  font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight:700;
+}
+
+.topbar{
+  position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border-strong);
+  padding:14px clamp(14px,3vw,28px); display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:10px;}
+.topbar h1{font-size:24px; margin:0;}
+.topbar .brandmark{color:var(--accent-fill);}
+.topbar .sub{font-size:12.5px; color:var(--ink-muted); font-family:Georgia,serif;}
+.topbar .prog{margin-left:auto; display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--ink-muted);}
+.prog-bar{width:120px; height:6px; border-radius:4px; background:var(--surface-2); overflow:hidden; border:1px solid var(--border);}
+.prog-bar > div{height:100%; background:var(--good); width:0%;}
+.badge-papel{font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; padding:2px 8px; border-radius:10px; background:var(--accent-soft); color:var(--accent);}
+
+main{max-width:900px; margin:0 auto; padding:24px clamp(14px,3vw,32px) 60px;}
+.interlocutor{font-size:13px; color:var(--ink-muted); margin-bottom:6px;}
+.rigor-note{
+  margin:14px 0 4px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent-fill);
+  border-radius:0 6px 6px 0; padding:10px 14px; font-size:12.5px; color:var(--ink-muted);
+}
+
+.subtema{margin-top:30px;}
+.subtema h3{
+  font-size:16px; margin:0 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border-strong);
+  font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight:600;
+}
+
+.qcard{
+  background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:16px 18px; margin-bottom:12px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.qcard.answered{border-left:3px solid var(--good);}
+.qtop{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;}
+.ref{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; color:var(--accent-ink); background:var(--accent-soft); padding:2px 7px; border-radius:4px;}
+.metodo{font-size:10.5px; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.03em; padding:2px 7px; border-radius:10px;}
+.metodo-declarado{background:var(--surface-2); color:var(--ink-faint);}
+.metodo-inspecionado{background:var(--surface-2); color:var(--ink-muted);}
+.metodo-testadoporamostragem{background:var(--amber-soft); color:var(--amber);}
+.status-pendente{background:var(--surface-2); color:var(--ink-faint);}
+.status-revisado{background:var(--good-soft); color:var(--good);}
+.pergunta{font-size:14.5px; font-weight:700; line-height:1.5;}
+.evidencia{font-size:12.5px; color:var(--ink-muted); background:var(--surface-2); border-radius:6px; padding:6px 10px;}
+.evidencia b{color:var(--ink); font-weight:700;}
+
+.qrow{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.qrow2{display:grid; grid-template-columns:140px 1fr 110px; gap:10px; margin-top:2px; align-items:end;}
+@media (max-width:640px){ .qrow{grid-template-columns:1fr;} .qrow2{grid-template-columns:1fr;} }
+label{
+  font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); display:block; margin-bottom:3px;
+  font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+textarea, select, input[type=text]{
+  width:100%; font-family:Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-size:13.5px; padding:8px 10px;
+  border:1px solid var(--border-strong); border-radius:6px; background:var(--bg); color:var(--ink);
+}
+textarea{min-height:52px; resize:vertical;}
+textarea:focus, select:focus, input:focus{outline:2px solid var(--accent-fill); outline-offset:1px;}
+.status-btn{
+  font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size:12.5px; font-weight:600;
+  padding:8px 10px; border-radius:6px; border:1px solid var(--border-strong);
+  background:var(--surface); color:var(--ink); cursor:pointer;
+}
+.status-btn.marcado{background:var(--good-soft); color:var(--good); border-color:var(--good);}
+.save-state{font-size:11px; color:var(--ink-faint); min-height:14px;}
+
+.card-simples{max-width:520px; margin:80px auto; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:32px; text-align:center;}
+.card-simples h2{margin-top:0; font-size:24px;}
+
+footer.rodape-marca{
+  text-align:center; padding:24px; font-size:11.5px; color:var(--ink-faint);
+  font-family:'IBM Plex Mono',monospace; letter-spacing:.04em;
+}
