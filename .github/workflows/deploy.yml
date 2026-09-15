@@ -1,53 +1,36 @@
-name: Deploy to GitHub Pages
+name: Deploy to VM-2 (eloo.digital)
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: pages
+  group: deploy-eloo-digital
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/oci_key
+          chmod 600 ~/.ssh/oci_key
+          ssh-keyscan -H "${{ secrets.OCI_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Sync files to VM-2
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/oci_key" \
+            --exclude 'node_modules' --exclude '.git' --exclude 'dist' --exclude '.astro' \
+            ./ "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}:~/eloo-digital/"
 
-      - name: Build
-        run: npm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Build and restart container
+        run: |
+          ssh -i ~/.ssh/oci_key "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}" \
+            'cd ~/eloo-digital && sudo docker compose build --no-cache && sudo docker compose up -d'
