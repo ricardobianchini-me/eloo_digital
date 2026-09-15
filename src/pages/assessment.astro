@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
 
-const CONTATO_URL = "mailto:contato@eloo.digital?subject=Assessment%20de%20TI%20—%20quero%20conversar";
-
 const frentes = [
   {
     letra: "A",
@@ -59,7 +57,7 @@ const metodologias = [
         <a href="#lastro">Lastro técnico</a>
         <a href="#entregaveis">Entregáveis</a>
       </div>
-      <a class="btn btn-nav" href={CONTATO_URL}>Falar com um especialista</a>
+      <a class="btn btn-nav" href="#contato">Falar com um especialista</a>
     </nav>
 
     <header class="hero reveal" id="topo">
@@ -72,7 +70,7 @@ const metodologias = [
           e onde estão os riscos, antes de qualquer plano de evolução tecnológica.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href={CONTATO_URL}>Falar com um especialista</a>
+          <a class="btn btn-primary" href="#contato">Falar com um especialista</a>
           <a class="btn btn-ghost" href="#metodologia">Ver a metodologia</a>
         </div>
       </div>
@@ -171,11 +169,27 @@ const metodologias = [
       </div>
     </section>
 
-    <section class="cta-final">
+    <section class="cta-final" id="contato">
       <p class="cta-kicker">Comece pelo diagnóstico</p>
       <h2 class="cta-big">Descubra onde sua operação de TI está hoje.</h2>
       <p class="lede">Escopo e esforço dimensionados pelo porte da sua empresa antes de qualquer compromisso.</p>
-      <a class="btn btn-primary" href={CONTATO_URL}>Falar com um especialista</a>
+
+      <form class="form-contato" method="POST" action="https://eloo.digital/assessment/leads/enviar">
+        <div style="position:absolute; left:-9999px;" aria-hidden="true">
+          <label for="site">Deixe em branco</label>
+          <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="form-row">
+          <input type="text" name="nome" placeholder="Seu nome" required>
+          <input type="text" name="empresa" placeholder="Empresa" required>
+        </div>
+        <div class="form-row">
+          <input type="email" name="email" placeholder="E-mail" required>
+          <input type="tel" name="telefone" placeholder="Telefone (opcional)">
+        </div>
+        <textarea name="mensagem" placeholder="Conte um pouco do cenário — porte, o que te preocupa hoje (opcional)" rows="3"></textarea>
+        <button type="submit" class="btn btn-primary">Falar com um especialista</button>
+      </form>
     </section>
 
     <footer>
@@ -403,6 +417,32 @@ const metodologias = [
     text-wrap: balance;
   }
   .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
+
+  .form-contato {
+    max-width: 520px;
+    margin: 2rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .form-row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .form-row input { flex: 1 1 200px; }
+  .form-contato input, .form-contato textarea {
+    font: inherit;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    width: 100%;
+  }
+  .form-contato input:focus, .form-contato textarea:focus {
+    outline: 2px solid var(--dourado);
+    outline-offset: 1px;
+  }
+  .form-contato textarea { resize: vertical; font-family: var(--font-body); }
+  .form-contato .btn { align-self: center; margin-top: 0.4rem; border: none; cursor: pointer; }
 
   footer {
     border-top: 1px solid var(--line);

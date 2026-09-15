@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 
 from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
+import leads
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
 import pin_auth
 import sheets as sheets_client
@@ -280,6 +281,36 @@ def ir_para_modulo(request: Request, cliente: str, modulo_id: str):
 @app.get("/assessment/_shared/responder/saude")
 def saude():
     return {"status": "ok"}
+
+
+@app.post("/assessment/leads/enviar", response_class=HTMLResponse)
+async def enviar_lead(
+    request: Request,
+    nome: str = Form(...),
+    empresa: str = Form(...),
+    email: str = Form(...),
+    telefone: str = Form(""),
+    mensagem: str = Form(""),
+    site: str = Form(""),  # honeypot — campo escondido no form; bot preenche, humano não
+):
+    if site.strip():
+        # Some it: finge sucesso pro bot, não grava nada.
+        return templates.TemplateResponse("lead_obrigado.html", {"request": request})
+
+    if not nome.strip() or not empresa.strip() or "@" not in email:
+        return templates.TemplateResponse(
+            "lead_erro.html", {"request": request}, status_code=400
+        )
+
+    try:
+        leads.salvar_lead(nome.strip(), empresa.strip(), email.strip(), telefone.strip(), mensagem.strip())
+    except Exception:
+        logger.exception("Falha ao salvar lead")
+        return templates.TemplateResponse(
+            "lead_erro.html", {"request": request}, status_code=502
+        )
+
+    return templates.TemplateResponse("lead_obrigado.html", {"request": request})
 
 
 app.include_router(router)
