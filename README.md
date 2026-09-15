@@ -1,8 +1,21 @@
 # eloo.digital
 
-Site institucional da Eloo (`eloo.digital`) — landing page única, feita em [Astro](https://astro.build), construída em `pacce-co` (playbook estratégico da empresa) e migrada pra esse repositório próprio em 13/08/2026.
+Site institucional da Eloo, feito em [Astro](https://astro.build), construído em `pacce-co` (playbook estratégico da empresa) e migrado pra esse repositório próprio em 13/08/2026.
 
 **No ar:** https://eloo.digital
+
+## Páginas
+
+| Rota | Arquivo | O quê |
+|---|---|---|
+| `/` | `src/pages/index.astro` | Landing institucional — funil PACCE (Diagnóstico Digital → Site/CMS → PACCE), público espiritualista/terceiro setor |
+| `/assessment` | `src/pages/assessment.astro` | Landing do **eloo Assessment** — vertical B2B separada (Assessment de Governança/Infraestrutura/Sistemas de TI, COBIT 2019 + ITIL 4), adicionada 15/09/2026 |
+
+As duas páginas importam o mesmo `src/styles/global.css` (paleta e tokens
+únicos da marca) mas não compartilham nav nem funil — são ofertas e públicos
+distintos. Dados de cliente do eloo Assessment **não** ficam neste
+repositório — vivem em `pacce-co/assessment/{cliente}/`, privado (ver
+`pacce-co/assessment/CLIENTES.md`).
 
 ---
 
@@ -74,13 +87,18 @@ npm run preview   # serve ./dist localmente, simula produção
 
 Estrutura:
 ```
-src/pages/index.astro   — a página inteira (single-page site)
-src/styles/global.css   — tokens de design (cores, tipografia) + wordmark
-public/                 — favicon, assets estáticos
-Dockerfile              — build Astro + serve via nginx:alpine
-docker-compose.yml       — como o container roda na VM
-nginx.conf              — config do nginx *dentro* do container (não confundir com o nginx do host)
+src/pages/index.astro        — landing institucional (funil PACCE)
+src/pages/assessment.astro   — landing do eloo Assessment (vertical B2B)
+src/styles/global.css        — tokens de design (cores, tipografia) + wordmark, compartilhado pelas duas páginas
+public/                      — favicon, assets estáticos
+Dockerfile                   — build Astro + serve via nginx:alpine
+docker-compose.yml            — como o container roda na VM
+nginx.conf                    — config do nginx *dentro* do container (não confundir com o nginx do host)
 ```
+
+Cada página em `src/pages/` vira uma rota automaticamente (Astro file-based
+routing) — para adicionar uma nova página/vertical, criar um novo arquivo
+`.astro` ali, importando `../styles/global.css` para herdar a paleta.
 
 ## Paleta e tipografia
 
@@ -90,7 +108,7 @@ Ver `pacce-co/DESIGN.md` (fonte da verdade) — resumo:
 
 ## Como mudar algo
 
-Qualquer alteração de conteúdo/estilo: editar `src/pages/index.astro` (ou `src/styles/global.css`), `git push` pra `main`. O deploy é automático — normalmente leva 20-40s do push até o ar (o `docker compose build` reaproveita cache de camadas quando só o conteúdo muda, então é rápido). Acompanhar em [Actions](https://github.com/ricardobianchini-me/eloo_digital/actions).
+Qualquer alteração de conteúdo/estilo: editar a página relevante em `src/pages/` (ou `src/styles/global.css` para mudar tokens globais), `git push` pra `main`. O deploy é automático — normalmente leva 20-40s do push até o ar (o `docker compose build` reaproveita cache de camadas quando só o conteúdo muda, então é rápido). Acompanhar em [Actions](https://github.com/ricardobianchini-me/eloo_digital/actions).
 
 ## Troubleshooting
 
