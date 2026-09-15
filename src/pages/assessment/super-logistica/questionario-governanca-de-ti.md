@@ -94,3 +94,19 @@ Setor: Logística | Porte: Médio | Interlocutor: Fernanda Costa (Gerente de TI)
 | GOV-34 | A organização já foi notificada ou auditada por fabricante quanto a uso de software sem licenciamento adequado? | Relato do entrevistado; se aplicável, correspondência ou registro de notificação/auditoria de fabricante | Declarado | | | |
 | GOV-35 | Existe controle sobre instalação de software não homologado pelos usuários (shadow IT)? | Política de instalação de software e evidência de controle técnico (ex.: restrição de permissão, allowlist) | Inspecionado | | | |
 | GOV-36 | Softwares de sistemas críticos da operação logística (WMS, TMS, roteirização) têm licenciamento formalmente vigente e dimensionado para o volume de uso atual? | Contrato/nota fiscal de licenciamento vigente com quantidade contratada | Inspecionado | | | |
+
+## Políticas de TI (COBIT 2019 — APO01 Managed I&T Management Framework)
+
+| Ref | Pergunta | Evidência Esperada | Método de Verificação Exigido | Resposta do Entrevistado | Evidência Anexada (Sim/Não/Parcial + referência) | Complemento do Entrevistador |
+|---|---|---|---|---|---|---|
+| GOV-37 | Além da política já mapeada, existem outras políticas formais de TI documentadas e aprovadas pela liderança (ex.: uso aceitável, segurança da informação, classificação de dados, backup, acesso remoto)? Quais existem e quais não? | Lista das políticas vigentes, com data de aprovação e aprovador | Inspecionado | | | |
+| GOV-38 | Há quanto tempo cada política vigente foi revisada pela última vez? Existe ciclo formal de revisão periódica? | Registro de datas de revisão por política + processo/periodicidade de revisão | Inspecionado | | | |
+| GOV-39 | Qual o percentual de colaboradores que formalmente confirmaram ciência das políticas de TI vigentes (aceite/assinatura)? | Relatório de aceite/assinatura com população total de colaboradores, amostra verificada conforme a Regra de Amostragem e critério de seleção | Testado por amostragem | | | |
+
+## Gestão de Ativos, Hardware e Leasing (ITIL 4 — Asset Management / COBIT 2019 — BAI09 Managed Assets)
+
+| Ref | Pergunta | Evidência Esperada | Método de Verificação Exigido | Resposta do Entrevistado | Evidência Anexada (Sim/Não/Parcial + referência) | Complemento do Entrevistador |
+|---|---|---|---|---|---|---|
+| GOV-40 | Qual o percentual de ativos de hardware fisicamente auditados (contagem física) nos últimos 12 meses em relação ao inventário/CMDB registrado? | Relatório de auditoria física com população total de ativos, amostra verificada conforme a Regra de Amostragem e critério de seleção | Testado por amostragem | | | |
+| GOV-41 | Quais ativos de TI (hardware ou infraestrutura) estão sob contrato de leasing/arrendamento? Qual o prazo restante e a condição de fim de contrato (devolução, compra, renovação) de cada um? | Lista de contratos de leasing vigentes, com prazo, valor residual e condição de encerramento | Inspecionado | | | |
+| GOV-42 | Existe processo formal de baixa/descarte de ativos de TI (hardware) fora de uso, com registro de sanitização de dados antes do descarte? | Processo documentado + registro de baixa/descarte dos últimos ativos desativados | Inspecionado | | | |

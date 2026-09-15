@@ -1,12 +1,12 @@
 ---
 layout: ../../../layouts/ClientDoc.astro
-title: "Questionário — Arquitetura de Sistemas"
+title: "Questionário — Arquitetura Corporativa"
 cliente: "Super Logística"
 voltarHref: "/assessment/super-logistica/"
 ---
 
-# Questionário — Sistemas, Aplicações e Bancos de Dados
-Cliente: Super Logística | Módulo: Arquitetura de Sistemas
+# Questionário — Arquitetura Corporativa (Sistemas, Aplicações, Bancos de Dados e Integrações)
+Cliente: Super Logística | Módulo: Arquitetura Corporativa
 
 > Padrão de rigor de working paper (`maturity-scales.md` Seção 5). Toda
 > pergunta classificada como "Testado por amostragem" exige, na resposta:

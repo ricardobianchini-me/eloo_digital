@@ -163,6 +163,13 @@
   .status-pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--accent);}
   .status-pill::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--accent);}
 
+  /* Entregáveis */
+  .entregaveis-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:22px;}
+  .entregavel{
+    background:var(--card); border:1px solid var(--linha); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; padding:14px 16px; font-size:14px; color:var(--texto-suave);
+  }
+
   /* Investimento */
   .investimento-box{
     background:var(--card); border:1px dashed var(--linha); border-radius:8px;
@@ -204,6 +211,16 @@
     <span>Frentes: <b>A + B + C</b></span>
     <span>Data: <b>14/09/2026</b></span>
   </div>
+</section>
+
+<section class="quem-somos">
+  <div class="eyebrow" style="color:var(--accent)">Quem Somos</div>
+  <h2>Um especialista por domínio, um gerente do início ao fim</h2>
+  <p>O <b>eloo Assessment</b> é a vertical de consultoria B2B da eloo.digital para governança, infraestrutura e sistemas de TI — um especialista por domínio técnico (Segurança, Infraestrutura, Cloud, Arquitetura Corporativa, Endpoint, Backup/Continuidade e Governança), mais um gerente de projeto do início ao fim. O diagnóstico segue COBIT 2019 e ITIL 4, com o método de avaliação — como pontuar, como validar evidência, como calcular risco — lastreado em metodologias formais públicas (ver Seção "Lastro Metodológico" abaixo), o mesmo padrão técnico usado por firmas de consultoria de TI de primeira linha.</p>
+
+  <div class="eyebrow" style="color:var(--accent); margin-top:28px;">O Que É o Assessment</div>
+  <h2>Não é auditoria de conformidade. É um raio-x operacional.</h2>
+  <p>A maioria das empresas descobre um gap crítico de TI só quando ele já virou incidente — um backup que nunca foi testado, uma senha administrativa que ninguém sabe quem mais conhece, um sistema fora de suporte sustentando uma operação inteira. O Assessment identifica isso antes, com evidência documentada — nunca com uma lista de boas práticas genéricas ou percepção de quem responde à entrevista.</p>
 </section>
 
 <section class="objetivo">
@@ -404,13 +421,13 @@
     </div>
     <div class="frente">
       <div class="letra">B</div>
-      <h3>Sistemas e Aplicações</h3>
-      <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e segurança de aplicações</li></ul>
+      <h3>Arquitetura Corporativa</h3>
+      <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e interfaces entre sistemas</li><li>Segurança de aplicações</li></ul>
     </div>
     <div class="frente">
       <div class="letra">C</div>
       <h3>Governança e Processos de TI</h3>
-      <ul><li>Incidentes, problemas e mudanças</li><li>CMDB e gestão de ativos</li><li>Fornecedores e documentação (COBIT + ITIL)</li></ul>
+      <ul><li>Políticas de TI e documentação</li><li>Incidentes, problemas e mudanças</li><li>CMDB, ativos, hardware e leasing</li><li>Fornecedores e contratos (COBIT + ITIL)</li></ul>
     </div>
   </div>
 </section>
@@ -427,7 +444,7 @@
     <table>
       <tr><th>Especialista</th><th>Horas</th></tr>
       <tr><td>Governança de TI (COBIT/ITIL)</td><td>32h</td></tr>
-      <tr><td>Arquitetura de Sistemas e Aplicações</td><td>32h</td></tr>
+      <tr><td>Arquitetura Corporativa</td><td>32h</td></tr>
       <tr><td>Infraestrutura e Redes <span style="color:var(--texto-fraco); font-weight:400;">(inclui visita técnica presencial)</span></td><td>28h</td></tr>
       <tr><td>Segurança da Informação</td><td>28h</td></tr>
       <tr><td>Endpoint e Device Management</td><td>20h</td></tr>
@@ -449,6 +466,20 @@
   </div>
 </section>
 
+<section class="entregaveis">
+  <div class="eyebrow" style="color:var(--accent)">Entregáveis</div>
+  <h2>O que fica com a Super Logística ao final</h2>
+  <div class="entregaveis-grid">
+    <div class="entregavel">Relatório Executivo</div>
+    <div class="entregavel">Relatório Técnico do Assessment (controles, evidências, riscos, recomendações)</div>
+    <div class="entregavel">Matriz de Riscos de TI</div>
+    <div class="entregavel">Matriz de Gaps (Situação Atual → Recomendada → Ação)</div>
+    <div class="entregavel">Inventário Consolidado</div>
+    <div class="entregavel">Mapa de Maturidade por domínio</div>
+    <div class="entregavel">Plano de Ação Priorizado + Roadmap de Evolução em 4 horizontes (0-30d, 30-90d, 3-6m, 6-12m)</div>
+  </div>
+</section>
+
 <section class="investimento">
   <div class="eyebrow" style="color:var(--accent)">Investimento</div>
   <h2>Estimativa comercial</h2>
@@ -463,7 +494,7 @@
   <h2>Um especialista por domínio, um gerente do início ao fim</h2>
   <div class="equipe-grid">
     <div class="pessoa"><span class="ic">PM</span><div><b>Gerente de Projeto</b><span>Proposta, metodologia e acompanhamento executivo</span></div></div>
-    <div class="pessoa"><span class="ic">AR</span><div><b>Arquitetura de Sistemas</b><span>Sistemas, aplicações e bancos de dados</span></div></div>
+    <div class="pessoa"><span class="ic">AR</span><div><b>Arquitetura Corporativa</b><span>Sistemas, aplicações, bancos de dados e integrações</span></div></div>
     <div class="pessoa"><span class="ic">IN</span><div><b>Infraestrutura e Redes</b><span>Servidores, rede e virtualização</span></div></div>
     <div class="pessoa"><span class="ic">CL</span><div><b>Cloud e Licenciamento</b><span>Ativos e licenciamento em nuvem</span></div></div>
     <div class="pessoa"><span class="ic">SI</span><div><b>Segurança da Informação</b><span>EDR, identidade e segurança de aplicações</span></div></div>

@@ -11,7 +11,7 @@ MODULOS = [
      "arquivo": "questionario-ivo-infraestrutura.md"},
     {"id": "cloud", "nome": "Cloud e Licenciamento", "prefixo": "CLD", "aba": "Cloud e Licenciamento",
      "arquivo": "questionario-caio-cloud.md"},
-    {"id": "arquitetura", "nome": "Arquitetura de Sistemas", "prefixo": "ARQ", "aba": "Arquitetura de Sistemas",
+    {"id": "arquitetura", "nome": "Arquitetura Corporativa", "prefixo": "ARQ", "aba": "Arquitetura Corporativa",
      "arquivo": "questionario-adriana-arquitetura.md"},
     {"id": "endpoint", "nome": "Endpoint Management", "prefixo": "EPT", "aba": "Endpoint Management",
      "arquivo": "questionario-elisa-endpoint.md"},
