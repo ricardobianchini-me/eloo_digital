@@ -2,13 +2,13 @@
 import '../../../styles/global.css';
 
 const modulos = [
-  { slug: "seguranca-da-informacao", nome: "Segurança da Informação", interlocutor: "Fernanda Costa · Gerente de TI" },
-  { slug: "infraestrutura-e-redes", nome: "Infraestrutura e Redes", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "cloud-e-licenciamento", nome: "Cloud e Licenciamento", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "arquitetura-de-sistemas", nome: "Arquitetura de Sistemas", interlocutor: "Fernanda Costa · Gerente de TI" },
-  { slug: "endpoint-management", nome: "Endpoint Management", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
-  { slug: "backup-e-continuidade", nome: "Backup e Continuidade", interlocutor: "pendente de indicação" },
-  { slug: "governanca-de-ti", nome: "Governança de TI", interlocutor: "Fernanda Costa · Gerente de TI" },
+  { slug: "seguranca-da-informacao", id: "seguranca", nome: "Segurança da Informação", interlocutor: "Fernanda Costa · Gerente de TI" },
+  { slug: "infraestrutura-e-redes", id: "infraestrutura", nome: "Infraestrutura e Redes", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
+  { slug: "cloud-e-licenciamento", id: "cloud", nome: "Cloud e Licenciamento", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
+  { slug: "arquitetura-de-sistemas", id: "arquitetura", nome: "Arquitetura de Sistemas", interlocutor: "Fernanda Costa · Gerente de TI" },
+  { slug: "endpoint-management", id: "endpoint", nome: "Endpoint Management", interlocutor: "Bruno Alves · Coord. de Infraestrutura" },
+  { slug: "backup-e-continuidade", id: "backup", nome: "Backup e Continuidade", interlocutor: "pendente de indicação" },
+  { slug: "governanca-de-ti", id: "governanca", nome: "Governança de TI", interlocutor: "Fernanda Costa · Gerente de TI" },
 ];
 ---
 
@@ -74,16 +74,21 @@ const modulos = [
         <h2>Questionários de Levantamento (Fase 3)</h2>
         <p class="nota">
           Um questionário por módulo técnico, com Ref único por pergunta e Método de
-          Verificação Exigido (Declarado / Inspecionado / Testado por amostragem). As
-          respostas reais são coletadas via link individual enviado a cada interlocutor —
-          os documentos abaixo são o roteiro completo de perguntas, para conhecimento prévio.
+          Verificação Exigido (Declarado / Inspecionado / Testado por amostragem). "Ver roteiro"
+          é a lista completa de perguntas, pra conhecimento prévio. "Responder ao vivo" abre a
+          ferramenta de preenchimento em tempo real, usada durante a entrevista com o interlocutor
+          (pede uma senha própria, de uso interno da equipe).
         </p>
         <div class="grid-modulos">
           {modulos.map((m) => (
-            <a class="card card-modulo" href={`/assessment/super-logistica/questionario-${m.slug}`}>
+            <div class="card-modulo">
               <strong>{m.nome}</strong>
               <span>{m.interlocutor}</span>
-            </a>
+              <div class="card-modulo-acoes">
+                <a href={`/assessment/super-logistica/questionario-${m.slug}`}>Ver roteiro</a>
+                <a href={`/assessment/super-logistica/responder/ir/${m.id}`}>Responder ao vivo</a>
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -170,4 +175,18 @@ const modulos = [
   .seta { color: var(--dourado); font-size: 1.2rem; }
 
   .grid-modulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; }
+  .card-modulo {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+  }
+  .card-modulo strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .card-modulo > span { display: block; font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .card-modulo-acoes { display: flex; gap: 0.9rem; margin-top: 0.8rem; padding-top: 0.7rem; border-top: 1px solid var(--line); }
+  .card-modulo-acoes a { font-family: var(--font-title); font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+  .card-modulo-acoes a:first-child { color: var(--ink-muted); }
+  .card-modulo-acoes a:first-child:hover { color: var(--ink); }
+  .card-modulo-acoes a:last-child { color: var(--salvia); }
+  .card-modulo-acoes a:last-child:hover { color: var(--deep); }
 </style>

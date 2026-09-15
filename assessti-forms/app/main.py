@@ -2,11 +2,11 @@ import logging
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from auth import PAPEL_REVISOR, validar_token
+from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
 import sheets as sheets_client
@@ -162,6 +162,22 @@ async def marcar_status(cliente: str, modulo_id: str, token: str = Form(...), li
 def raiz(request: Request, cliente: str):
     _cliente_ou_404(cliente)
     return templates.TemplateResponse("sem_acesso.html", {"request": request}, status_code=200)
+
+
+@router.get("/ir/{modulo_id}")
+def ir_para_modulo(cliente: str, modulo_id: str):
+    """Atalho de uso interno: gera o token de revisor na hora e redireciona
+    pro formulário — assim o link "Responder ao vivo" do painel do cliente
+    nunca precisa ter um token gravado em nenhum arquivo/página estática
+    (o token só existe em memória, gerado a partir do SECRET_KEY do
+    ambiente, nunca commitado). Essa rota só é alcançável depois do PIN
+    interno (auth_basic do host nginx), então continua sendo uso da equipe.
+    """
+    _cliente_ou_404(cliente)
+    if modulo_id not in MODULOS_POR_ID:
+        raise HTTPException(status_code=404, detail="Módulo não encontrado")
+    token = gerar_token(cliente, modulo_id, PAPEL_REVISOR)
+    return RedirectResponse(url=f"/assessment/{cliente}/responder/m/{modulo_id}?token={token}")
 
 
 @app.get("/assessment/_shared/responder/saude")
