@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Assessment TI — Super Logística</title>
+<style>
+  :root{
+    --azul:#0B3350; --azul-2:#123E63; --azul-ink:#082639;
+    --cinza:#F3F5F7; --card:#FFFFFF; --linha:#DDE3E8;
+    --texto:#152230; --texto-suave:#54626F; --texto-fraco:#8996A2;
+    --accent:#2E9E6D; --accent-soft:#E1F3EA;
+    --amber:#B8752E; --amber-soft:#F5E7D3;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --azul:#12405F; --azul-2:#1A4E73; --azul-ink:#0A2C41;
+      --cinza:#10161C; --card:#181F26; --linha:#2A333B;
+      --texto:#E7ECEF; --texto-suave:#A6B1BA; --texto-fraco:#6E7A84;
+      --accent:#5FC79A; --accent-soft:#1B3329;
+      --amber:#D6A468; --amber-soft:#332A1B;
+      color-scheme: dark;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--cinza); color:var(--texto);
+    font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height:1.55;
+  }
+  section{padding:56px clamp(20px,6vw,80px);}
+  h1,h2,h3{margin:0; font-weight:700; text-wrap:balance;}
+  .eyebrow{font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; opacity:.75; margin-bottom:10px;}
+
+  /* Capa */
+  .capa{
+    background:linear-gradient(160deg,var(--azul-ink),var(--azul) 65%,var(--azul-2));
+    color:#F2F6F9; padding:88px clamp(20px,6vw,80px) 64px; text-align:center;
+  }
+  .capa .eyebrow{color:#BFD6E6;}
+  .capa h1{font-size:clamp(28px,4.2vw,42px); max-width:16ch; margin-inline:auto; line-height:1.15;}
+  .capa .sub{margin-top:14px; font-size:18px; color:#CFE0EC;}
+  .capa .meta{
+    margin-top:34px; display:flex; justify-content:center; gap:28px; flex-wrap:wrap;
+    font-size:13.5px; color:#BFD6E6; border-top:1px solid rgba(255,255,255,.18); padding-top:20px;
+  }
+  .capa .meta b{color:#fff;}
+
+  /* Objetivo */
+  .objetivo p{max-width:70ch; font-size:16.5px; color:var(--texto-suave);}
+  .objetivo .destaques{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:24px;}
+  .destaque{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:14.5px; color:var(--texto-suave);}
+  .destaque b{color:var(--texto); display:block; font-size:14.5px; margin-bottom:4px;}
+
+  /* Metodologia */
+  .metodologia{background:var(--card); border-block:1px solid var(--linha);}
+  .ciclo{text-align:center; font-size:15px; color:var(--accent); font-weight:600; margin-bottom:28px;}
+  .timeline{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+  @media (max-width:820px){ .timeline{grid-template-columns:repeat(2,1fr);} }
+  .fase{
+    background:var(--cinza); border-top:4px solid var(--accent); border-radius:8px;
+    padding:18px 16px; display:flex; flex-direction:column; gap:6px; min-height:128px;
+  }
+  .fase .n{font-size:12px; color:var(--texto-fraco); font-weight:700;}
+  .fase strong{font-size:14.5px;}
+  .fase span{font-size:12.5px; color:var(--texto-suave);}
+
+  .frameworks-label{font-size:13px; color:var(--texto-suave); margin:32px 0 12px;}
+  .selos{display:flex; gap:10px; flex-wrap:wrap;}
+  .selo{
+    background:var(--cinza); border:1px solid var(--linha); border-radius:20px;
+    padding:6px 14px; font-size:12.5px; font-weight:600; color:var(--azul-2);
+  }
+  @media (prefers-color-scheme: dark){ .selo{ color:#9FC3DB; } }
+  .ocq{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:18px; background:var(--card); border:1px solid var(--linha); border-radius:8px; overflow:hidden;}
+  .ocq th,.ocq td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--linha); vertical-align:top;}
+  .ocq th{background:var(--cinza); font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--texto-suave);}
+  .ocq tr:last-child td{border-bottom:none;}
+  /* Lastro Metodológico */
+  .lastro{background:var(--card); border-block:1px solid var(--linha);}
+  .lastro-intro{max-width:74ch; font-size:15.5px; color:var(--texto-suave); margin-top:6px;}
+  .lastro-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:26px;}
+  .metodo-card{
+    background:var(--cinza); border:1px solid var(--linha); border-radius:8px; padding:20px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .metodo-card .origem{font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--accent);}
+  .metodo-card h4{font-size:16px; margin:0;}
+  .metodo-card .oque{font-size:13.5px; color:var(--texto-suave);}
+  .metodo-card .aplicacao{
+    font-size:13px; color:var(--texto); background:var(--card); border-left:3px solid var(--azul-2);
+    padding:10px 12px; border-radius:0 6px 6px 0;
+  }
+  .metodo-card .aplicacao b{color:var(--azul-2);}
+  @media (prefers-color-scheme: dark){ .metodo-card .aplicacao b{ color:#9FC3DB; } }
+  .lastro-rodape{
+    margin-top:24px; font-size:13px; color:var(--texto-suave); font-style:italic;
+  }
+
+  /* Escopo */
+  .frentes{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:24px;}
+  .frente{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:20px;}
+  .frente .letra{
+    width:34px; height:34px; border-radius:6px; background:var(--azul); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:12px;
+  }
+  .frente h3{font-size:16px; margin-bottom:8px;}
+  .frente ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--texto-suave); display:flex; flex-direction:column; gap:4px;}
+  .frente .prioridade{
+    display:inline-block; margin-top:12px; font-size:11.5px; font-weight:700;
+    background:var(--amber-soft); color:var(--amber); padding:3px 9px; border-radius:20px;
+  }
+
+  /* Esforco */
+  .esforco-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:28px; margin-top:24px;}
+  @media (max-width:760px){ .esforco-grid{grid-template-columns:1fr;} }
+  table{width:100%; border-collapse:collapse; font-size:14px; background:var(--card); border:1px solid var(--linha); border-radius:8px; overflow:hidden;}
+  th,td{padding:10px 14px; text-align:left; border-bottom:1px solid var(--linha);}
+  th{background:var(--cinza); font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--texto-suave);}
+  tr:last-child td{border-bottom:none;}
+  tr.total td{font-weight:700; background:var(--accent-soft);}
+  .prazo-card{
+    background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:22px;
+    display:flex; flex-direction:column; gap:10px; align-self:flex-start;
+  }
+  .prazo-card .num{font-size:34px; font-weight:700; color:var(--accent);}
+  .status-pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--accent);}
+  .status-pill::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--accent);}
+
+  /* Investimento */
+  .investimento-box{
+    background:var(--card); border:1px dashed var(--linha); border-radius:8px;
+    padding:28px; text-align:center; max-width:520px; margin-top:20px;
+  }
+  .investimento-box .valor{font-size:20px; font-weight:700; color:var(--texto-suave);}
+
+  /* Equipe */
+  .equipe-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-top:24px;}
+  .pessoa{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px; display:flex; gap:12px; align-items:flex-start;}
+  .pessoa .ic{
+    width:36px; height:36px; flex:none; border-radius:6px; background:var(--azul); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; letter-spacing:.02em;
+  }
+  .pessoa b{display:block; font-size:14.5px;}
+  .pessoa span{font-size:12.5px; color:var(--texto-suave);}
+
+  /* Proximos passos */
+  .proximos-passos{background:linear-gradient(160deg,var(--azul-ink),var(--azul)); color:#F2F6F9;}
+  .proximos-passos h2{color:#fff;}
+  .passos{display:flex; gap:16px; flex-wrap:wrap; margin-top:24px;}
+  .passo{flex:1 1 200px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:18px;}
+  .passo .n{font-size:12px; color:#9FC3DB; font-weight:700;}
+  .passo strong{display:block; margin:6px 0 4px; font-size:15px;}
+  .passo span{font-size:13px; color:#CFE0EC;}
+
+  footer{padding:22px clamp(20px,6vw,80px); font-size:12px; color:var(--texto-fraco); border-top:1px solid var(--linha);}
+</style>
+</head>
+<body>
+
+<section class="capa">
+  <div class="eyebrow">Proposta Técnica e Comercial</div>
+  <h1>Assessment de Governança, Infraestrutura e Sistemas de TI</h1>
+  <p class="sub">Super Logística — base COBIT 2019 + ITIL 4</p>
+  <div class="meta">
+    <span>Porte: <b>M (Médio)</b></span>
+    <span>Prazo estimado: <b>8+ semanas</b></span>
+    <span>Frentes: <b>A + B + C</b></span>
+    <span>Data: <b>14/09/2026</b></span>
+  </div>
+</section>
+
+<section class="objetivo">
+  <div class="eyebrow" style="color:var(--accent)">Objetivo</div>
+  <h2>Diagnosticar o ambiente de TI antes de investir na evolução dele</h2>
+  <p>Avaliar o ambiente tecnológico da Super Logística sob as perspectivas de Infraestrutura, Sistemas, Aplicações, Segurança, Continuidade, Gestão de Ativos, Licenciamento e Processos de TI — identificando cenário atual, controles existentes, lacunas, riscos e dependências críticas que sustentam a operação logística multi-unidade.</p>
+  <div class="destaques">
+    <div class="destaque"><b>Ambientes críticos de logística</b>Redundância e capacidade de recuperação de WMS, TMS e sistemas de rastreamento</div>
+    <div class="destaque"><b>Continuidade entre unidades</b>Rede, backup e DR testados nos 2 a 5 sites da operação</div>
+    <div class="destaque"><b>Acessos e mudanças</b>Controle de credenciais privilegiadas e rastreabilidade de mudanças em produção</div>
+  </div>
+</section>
+
+<section class="metodologia">
+  <div class="eyebrow" style="color:var(--accent)">Metodologia</div>
+  <h2>Diagnóstico → Avaliação → Priorização → Roadmap</h2>
+  <p class="ciclo" style="margin-top:6px; text-align:left; color:var(--texto-suave); font-weight:400;">As 5 etapas formais do assessment, com status de projeto reportado a cada transição.</p>
+  <div class="timeline" style="margin-top:22px;">
+    <div class="fase"><span class="n">ETAPA 1</span><strong>Kickoff</strong><span>Interlocutores, acessos e agenda confirmados</span></div>
+    <div class="fase"><span class="n">ETAPA 2</span><strong>Levantamento</strong><span>Entrevistas e evidências — Segurança → Infra → Cloud primeiro</span></div>
+    <div class="fase"><span class="n">ETAPA 3</span><strong>Avaliação de Controles</strong><span>Adequado a Não aplicável</span></div>
+    <div class="fase"><span class="n">ETAPA 4</span><strong>Avaliação de Risco</strong><span>Crítico a Baixo</span></div>
+    <div class="fase"><span class="n">ETAPA 5</span><strong>Avaliação de Maturidade</strong><span>Escala 0 a 5</span></div>
+  </div>
+
+  <div class="frameworks-label">Cada domínio é avaliado contra um framework de mercado nomeado — a mesma base normativa pública usada por firmas de consultoria de TI de primeira linha:</div>
+  <div class="selos">
+    <span class="selo">COBIT 2019</span>
+    <span class="selo">ITIL 4</span>
+    <span class="selo">ISO/IEC 20000</span>
+    <span class="selo">TOGAF</span>
+    <span class="selo">NIST CSF</span>
+    <span class="selo">ISO/IEC 27001</span>
+    <span class="selo">ISO/IEC 22301</span>
+    <span class="selo">CMMI</span>
+    <span class="selo">ISO/IEC 38500</span>
+  </div>
+
+  <table class="ocq">
+    <tr><th>Etapa</th><th>O quê</th><th>Como</th><th>Quando</th></tr>
+    <tr><td>1. Kickoff</td><td>Escopo, interlocutores, criticidade dos ativos</td><td>Reunião estruturada + termo de abertura</td><td>Semana 1</td></tr>
+    <tr><td>2. Levantamento</td><td>Situação atual (As-Is) por domínio, contra o framework de referência</td><td>Entrevistas + questionário por capítulo + evidências</td><td>Sem. 2-4 · Segurança → Infra → Cloud primeiro</td></tr>
+    <tr><td>3. Avaliação de Controles</td><td>Gap entre o As-Is e o controle esperado pelo framework</td><td>Classificação Adequado → Não aplicável, sempre com evidência</td><td>Semanas 4-5</td></tr>
+    <tr><td>4. Avaliação de Risco</td><td>Probabilidade x impacto x criticidade</td><td>Classificação Crítico → Baixo</td><td>Semanas 5-6</td></tr>
+    <tr><td>5. Avaliação de Maturidade</td><td>Capacidade real do processo (lógica CMMI)</td><td>Consolidação por domínio + visão executiva</td><td>Semanas 6-7</td></tr>
+    <tr><td>Roadmap</td><td>Priorização de ação sobre gaps e riscos</td><td>Impacto x esforço, 4 horizontes</td><td>Semana 8</td></tr>
+  </table>
+</section>
+
+<section class="lastro">
+  <div class="eyebrow" style="color:var(--accent)">Lastro Metodológico</div>
+  <h2>Como avaliamos, não só o que avaliamos</h2>
+  <p class="lastro-intro">Frameworks como COBIT e ITIL definem <em>o padrão de controle</em> esperado. Mas a forma de conduzir o assessment — como pontuar, como validar evidência, como calcular risco — vem de métodos formais próprios, também públicos e amplamente adotados por firmas de consultoria de TI de primeira linha. É esse método, e não apenas o framework, que garante que o diagnóstico da Super Logística seja auditável e defensável.</p>
+  <div class="lastro-grid">
+    <div class="metodo-card">
+      <span class="origem">ISACA · Base ISO/IEC 33001</span>
+      <h4>COBIT 2019 Assessment Programme</h4>
+      <p class="oque">Metodologia oficial para avaliar capacidade de processos de TI, sucessora do padrão internacional ISO/IEC 15504 (SPICE).</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> define a escala 0–5 de maturidade usada nos 7 domínios, distinguindo processo praticado com evidência de processo apenas declarado.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">SEI / CMMI Institute</span>
+      <h4>SCAMPI</h4>
+      <p class="oque">Método formal de apreçamento por trás do CMMI — define como coletar e validar evidências antes de atribuir um nível de maturidade.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> é a razão pela qual toda resposta sem evidência anexada é classificada como "Não evidenciado", nunca aceita como fato só porque foi dita em entrevista.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">NIST (EUA) + ISO</span>
+      <h4>NIST SP 800-30 &amp; ISO/IEC 27005</h4>
+      <p class="oque">Guias para conduzir avaliações de risco de forma estruturada, cruzando probabilidade, impacto e criticidade do ativo.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> usados por Segurança, Backup/DR e na consolidação final para classificar cada risco em Crítico, Alto, Médio ou Baixo.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">The Open Group</span>
+      <h4>TOGAF ADM</h4>
+      <p class="oque">Método de desenvolvimento de arquitetura em fases (A a H), referência mundial para mapear arquitetura atual (As-Is) e arquitetura alvo (To-Be).</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> estrutura o inventário de sistemas, integrações e bancos de dados da Super Logística e a evolução recomendada.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">AXELOS / ITIL 4</span>
+      <h4>Continual Improvement Model</h4>
+      <p class="oque">Modelo de melhoria contínua: onde estamos, onde queremos chegar, como chegamos, chegamos, como sustentamos.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> estrutura o Roadmap final nos quatro horizontes — 0-30 dias, 30-90 dias, 3-6 meses e 6-12 meses.</p>
+    </div>
+  </div>
+  <p class="lastro-rodape">Nenhuma destas metodologias é propriedade de uma firma de consultoria específica — são normas e modelos públicos (ISACA, SEI/CMMI Institute, NIST, ISO, The Open Group, AXELOS), o que dá rigor auditável ao diagnóstico sem depender de licenciamento de metodologia proprietária de terceiros.</p>
+</section>
+
+<section class="escopo">
+  <div class="eyebrow" style="color:var(--accent)">Escopo</div>
+  <h2>Três frentes de avaliação</h2>
+  <div class="frentes">
+    <div class="frente">
+      <div class="letra">A</div>
+      <h3>Infraestrutura de TI</h3>
+      <ul><li>Servidores, rede e virtualização</li><li>Segurança de endpoint e identidade</li><li>Backup, DR e continuidade</li><li>Ativos e licenciamento em nuvem</li></ul>
+      <span class="prioridade">Inicia primeiro</span>
+    </div>
+    <div class="frente">
+      <div class="letra">B</div>
+      <h3>Sistemas e Aplicações</h3>
+      <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e segurança de aplicações</li></ul>
+    </div>
+    <div class="frente">
+      <div class="letra">C</div>
+      <h3>Governança e Processos de TI</h3>
+      <ul><li>Incidentes, problemas e mudanças</li><li>CMDB e gestão de ativos</li><li>Fornecedores e documentação (COBIT + ITIL)</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="esforco">
+  <div class="eyebrow" style="color:var(--accent)">Esforço e Prazo</div>
+  <h2>224h de consultoria · 46h do lado Super Logística</h2>
+  <div class="esforco-grid">
+    <table>
+      <tr><th>Especialista</th><th>Horas</th></tr>
+      <tr><td>Governança de TI (COBIT/ITIL)</td><td>32h</td></tr>
+      <tr><td>Arquitetura de Sistemas e Aplicações</td><td>32h</td></tr>
+      <tr><td>Infraestrutura e Redes</td><td>28h</td></tr>
+      <tr><td>Segurança da Informação</td><td>28h</td></tr>
+      <tr><td>Endpoint e Device Management</td><td>20h</td></tr>
+      <tr><td>Backup e Disaster Recovery</td><td>18h</td></tr>
+      <tr><td>Cloud e Licenciamento</td><td>16h</td></tr>
+      <tr><td>Gestão do Projeto, Consolidação e Revisão Técnica</td><td>50h</td></tr>
+      <tr class="total"><td>Total consultoria</td><td>224h</td></tr>
+    </table>
+    <div class="prazo-card">
+      <div class="eyebrow">Prazo calendário</div>
+      <div class="num">8+ sem.</div>
+      <span class="status-pill">Green — folga sobre a referência de porte M (4–7 sem.)</span>
+      <hr style="width:100%; border:none; border-top:1px solid var(--linha); margin:6px 0;">
+      <div class="eyebrow">Lado Super Logística</div>
+      <div class="num" style="font-size:26px;">46h</div>
+      <span style="font-size:13px; color:var(--texto-suave);">Gestor de TI, responsáveis técnicos e analistas N2</span>
+    </div>
+  </div>
+</section>
+
+<section class="investimento">
+  <div class="eyebrow" style="color:var(--accent)">Investimento</div>
+  <h2>Estimativa comercial</h2>
+  <div class="investimento-box">
+    <div class="valor">A definir após aprovação técnica desta proposta</div>
+    <p style="font-size:13px; color:var(--texto-fraco); margin:8px 0 0;">Baseado nas 224h de consultoria estimadas — proposta comercial formal enviada em anexo separado.</p>
+  </div>
+</section>
+
+<section class="equipe">
+  <div class="eyebrow" style="color:var(--accent)">Equipe</div>
+  <h2>Um especialista por domínio, um gerente do início ao fim</h2>
+  <div class="equipe-grid">
+    <div class="pessoa"><span class="ic">PM</span><div><b>Gerente de Projeto</b><span>Proposta, metodologia e acompanhamento executivo</span></div></div>
+    <div class="pessoa"><span class="ic">AR</span><div><b>Arquitetura de Sistemas</b><span>Sistemas, aplicações e bancos de dados</span></div></div>
+    <div class="pessoa"><span class="ic">IN</span><div><b>Infraestrutura e Redes</b><span>Servidores, rede e virtualização</span></div></div>
+    <div class="pessoa"><span class="ic">CL</span><div><b>Cloud e Licenciamento</b><span>Ativos e licenciamento em nuvem</span></div></div>
+    <div class="pessoa"><span class="ic">SI</span><div><b>Segurança da Informação</b><span>EDR, identidade e segurança de aplicações</span></div></div>
+    <div class="pessoa"><span class="ic">EP</span><div><b>Endpoint Management</b><span>Sistemas operacionais e ciclo de vida de dispositivos</span></div></div>
+    <div class="pessoa"><span class="ic">BC</span><div><b>Backup e Continuidade</b><span>Backup, disaster recovery e continuidade</span></div></div>
+    <div class="pessoa"><span class="ic">GV</span><div><b>Governança de TI</b><span>Processos, CMDB, fornecedores — COBIT/ITIL</span></div></div>
+  </div>
+</section>
+
+<section class="proximos-passos">
+  <div class="eyebrow" style="color:#9FC3DB;">Próximos Passos</div>
+  <h2>Do aceite ao kickoff formal</h2>
+  <div class="passos">
+    <div class="passo"><span class="n">PASSO 1</span><strong>Aceite da proposta</strong><span>Confirmação formal da Super Logística</span></div>
+    <div class="passo"><span class="n">PASSO 2</span><strong>Kickoff formal</strong><span>Interlocutores, acessos e agenda definidos</span></div>
+    <div class="passo"><span class="n">PASSO 3</span><strong>Levantamento</strong><span>Segurança → Infraestrutura → Cloud iniciam primeiro</span></div>
+  </div>
+</section>
+
+<footer>Assessment de Governança, Infraestrutura e Sistemas de TI — Super Logística · Documento confidencial, uso exclusivo do destinatário · 14/09/2026</footer>
+<div style="text-align:center;padding:0 0 30px;"><a href="/assessment/super-logistica/" style="font-family:-apple-system,sans-serif;font-size:13px;color:#5b5f52;text-decoration:none;">&larr; Voltar ao painel do projeto</a></div>
+</body>
+</html>

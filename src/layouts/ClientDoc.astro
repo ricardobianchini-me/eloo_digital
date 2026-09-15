@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+
+const { title, cliente = "Cliente", voltarHref = "." } = Astro.props.frontmatter;
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} — eloo Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="confid">Documento confidencial — uso exclusivo {cliente} · não indexado, não distribuir</div>
+    <header class="topo">
+      <a href={voltarHref} class="voltar">&larr; Voltar ao painel do projeto</a>
+      <a href="/" class="wordmark" aria-label="eloo.digital">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+    </header>
+    <main class="doc">
+      <slot />
+    </main>
+    <footer class="rodape">eloo Assessment — {cliente} · Documento confidencial, uso exclusivo do destinatário</footer>
+  </body>
+</html>
+
+<style is:global>
+  body { background: var(--parchment); }
+  .confid {
+    background: var(--dourado);
+    color: var(--deep);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.45rem 1rem;
+    letter-spacing: 0.02em;
+  }
+  .topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .voltar { font-size: 0.85rem; font-weight: 600; text-decoration: none; color: var(--ink-muted); }
+  .voltar:hover { color: var(--ink); }
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--deep);
+    font-size: 1rem;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+
+  .doc {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    font-family: var(--font-body);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .doc h1 { font-family: var(--font-title); color: var(--deep); font-size: 1.7rem; margin-bottom: 0.3rem; }
+  .doc h2 { font-family: var(--font-title); color: var(--deep); font-size: 1.2rem; margin-top: 2.5rem; border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
+  .doc > blockquote {
+    background: var(--parchment-2);
+    border-left: 3px solid var(--dourado);
+    padding: 0.9rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin: 1.2rem 0 2rem;
+  }
+  .doc table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; font-size: 0.82rem; }
+  .doc th, .doc td { border: 1px solid var(--line); padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+  .doc th { background: var(--deep); color: var(--parchment); font-family: var(--font-title); font-weight: 600; }
+  .doc tr:nth-child(even) td { background: #fbfaf4; }
+  .doc p { color: var(--ink-muted); }
+
+  .rodape {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    padding: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+</style>

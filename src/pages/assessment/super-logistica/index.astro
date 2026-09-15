@@ -1,0 +1,162 @@
+---
+import '../../../styles/global.css';
+
+const modulos = [
+  { slug: "seguranca-da-informacao", nome: "Segurança da Informação", interlocutor: "Fernanda Costa · Gerente de TI" },
+  { slug: "infraestrutura-e-redes", nome: "Infraestrutura e Redes", interlocutor: "a confirmar" },
+  { slug: "cloud-e-licenciamento", nome: "Cloud e Licenciamento", interlocutor: "a confirmar" },
+  { slug: "arquitetura-de-sistemas", nome: "Arquitetura de Sistemas", interlocutor: "a confirmar" },
+  { slug: "endpoint-management", nome: "Endpoint Management", interlocutor: "a confirmar" },
+  { slug: "backup-e-continuidade", nome: "Backup e Continuidade", interlocutor: "pendente de indicação" },
+  { slug: "governanca-de-ti", nome: "Governança de TI", interlocutor: "a confirmar" },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Super Logística — Painel do Projeto | eloo Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="confid">Documento confidencial — uso exclusivo Super Logística · não indexado, não distribuir</div>
+
+    <header class="topo">
+      <a href="/" class="wordmark" aria-label="eloo.digital">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <span class="produto">eloo Assessment</span>
+    </header>
+
+    <main class="painel">
+      <div class="cabecalho">
+        <span class="eyebrow">Painel do Projeto</span>
+        <h1>Super Logística</h1>
+        <p class="resumo">
+          Assessment de Governança, Infraestrutura e Sistemas de TI, com base em
+          COBIT 2019 e ITIL 4, entregue com rigor de working paper — evidência
+          documentada por controle, não percepção.
+        </p>
+        <div class="status status-amber">
+          <span class="status-dot"></span>
+          Fase 3 — Levantamento em andamento
+        </div>
+        <p class="status-detalhe">
+          6 de 7 domínios liberados para entrevista. O domínio de Backup e Continuidade
+          aguarda indicação de interlocutor pelo cliente — a pendência trava apenas a
+          coleta desse domínio, não o restante do projeto.
+        </p>
+      </div>
+
+      <section class="bloco">
+        <h2>Proposta</h2>
+        <a class="card card-link" href="/assessment/super-logistica/proposta.html">
+          <div>
+            <strong>Proposta Técnica e Comercial</strong>
+            <span>Metodologia, escopo, cronograma e investimento — versão aprovada no kickoff (14/09/2026)</span>
+          </div>
+          <span class="seta">&rarr;</span>
+        </a>
+      </section>
+
+      <section class="bloco">
+        <h2>Questionários de Levantamento (Fase 3)</h2>
+        <p class="nota">
+          Um questionário por módulo técnico, com Ref único por pergunta e Método de
+          Verificação Exigido (Declarado / Inspecionado / Testado por amostragem). As
+          respostas reais são coletadas via link individual enviado a cada interlocutor —
+          os documentos abaixo são o roteiro completo de perguntas, para conhecimento prévio.
+        </p>
+        <div class="grid-modulos">
+          {modulos.map((m) => (
+            <a class="card card-modulo" href={`/assessment/super-logistica/questionario-${m.slug}`}>
+              <strong>{m.nome}</strong>
+              <span>{m.interlocutor}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="rodape">eloo Assessment — Super Logística · Documento confidencial, uso exclusivo do destinatário</footer>
+  </body>
+</html>
+
+<style is:global>
+  body { background: var(--parchment); margin: 0; }
+  .confid {
+    background: var(--dourado);
+    color: var(--deep);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.45rem 1rem;
+    letter-spacing: 0.02em;
+  }
+  .topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--deep);
+    font-size: 1.1rem;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+  .produto { font-size: 0.8rem; font-weight: 700; color: var(--salvia); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .painel { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .cabecalho { margin-bottom: 3rem; }
+  .eyebrow { font-size: 0.8rem; font-weight: 700; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.05em; }
+  .cabecalho h1 { font-family: var(--font-title); color: var(--deep); font-size: 2.2rem; margin: 0.3rem 0 1rem; }
+  .resumo { font-family: var(--font-body); color: var(--ink-muted); font-size: 1rem; line-height: 1.6; max-width: 62ch; margin: 0 0 1.5rem; }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
+  .status-amber { background: #fbf0d9; color: #8a5a00; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #d99a00; }
+  .status-detalhe { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.88rem; max-width: 62ch; }
+
+  .bloco { margin-top: 3rem; }
+  .bloco h2 { font-family: var(--font-title); color: var(--deep); font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+  .nota { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.88rem; max-width: 68ch; margin: 0.8rem 0 1.4rem; }
+
+  .card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { border-color: var(--salvia); transform: translateY(-1px); }
+  .card strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .card span { display: block; font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .seta { color: var(--dourado); font-size: 1.2rem; }
+
+  .grid-modulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; }
+</style>
