@@ -4,12 +4,7 @@ App web de coleta das respostas dos 7 módulos do **Assessment TI** (squad Opens
 
 Produto sob a marca **eloo.digital**, chamado **eloo Assessment** — deliberadamente distinto da metodologia **Lumen** (`pacce-co/05_metodologia_lumen.md`), que é o diagnóstico gratuito de outro público-alvo (instituições espiritualistas) e não deve ser reaproveitado aqui para evitar confusão de marca. Identidade visual herdada de `pacce-co/DESIGN.md` (paleta deep/mint/sálvia/dourado/parchment).
 
-Vive no mesmo repositório do site institucional (`eloo_digital`, pasta
-`assessti-forms/`) por conveniência de deploy, mas é um **app separado**:
-container próprio, `docker-compose` próprio, workflow de deploy próprio
-(`.github/workflows/deploy-assessment-forms.yml`, só dispara quando algo
-muda dentro desta pasta) — nada de infraestrutura compartilhada com o site
-estático, o `hlera-bot` ou a Fraternidade do Amor além da mesma VM física.
+Hospedagem própria, separada do `hlera-bot`, da Fraternidade do Amor e do site institucional da eloo.digital — projeto e `docker-compose` isolados, nada de infraestrutura compartilhada.
 
 ## O que faz
 
@@ -69,35 +64,32 @@ exposto via NGINX do host sob o mesmo domínio do portal estático:
 não pede novo deploy de infraestrutura, novo container, nova porta nem
 novo secret do GitHub**, só uma entrada nova nesse arquivo.
 
-**Deploy:** GitHub Actions, mas **no mesmo repositório** do site
-institucional (`eloo_digital`) — workflow próprio,
-`.github/workflows/deploy-assessment-forms.yml` na raiz do repo, com
-`paths: ['assessti-forms/**']` (só dispara quando algo muda aqui dentro;
-o workflow do site, `deploy.yml`, tem o `paths-ignore` complementar). Isso
-significa que os secrets `OCI_HOST`, `OCI_USER` e `OCI_SSH_KEY` **já
-existem** no repositório (usados pelo deploy do site) e são só
-reaproveitados — não precisa cadastrar de novo.
-
-Diferente do site estático (sem segredos), aqui `.env` e
-`credentials/credentials.json` **nunca vão pro repositório** — o workflow
-escreve os dois na VM a cada deploy, a partir de dois secrets extras
-(fixos, não crescem por cliente):
+**Deploy:** GitHub Actions (`.github/workflows/deploy.yml`), disparado por
+push em `main`. Diferente do `eloo_digital` (site estático sem segredos),
+aqui `.env` e `credentials/credentials.json` **nunca vão pro repositório**
+— o workflow escreve os dois na VM a cada deploy, a partir de secrets do
+GitHub (fixos, não crescem por cliente):
 
 | Secret do GitHub | Valor |
 |---|---|
-| `OCI_HOST`, `OCI_USER`, `OCI_SSH_KEY` | já existem neste repo (deploy do site institucional) |
+| `OCI_HOST`, `OCI_USER`, `OCI_SSH_KEY` | mesmos do repo `eloo_digital` (mesma VM) |
 | `ASSESSMENT_SECRET_KEY` | chave dos tokens de todos os clientes/módulos (trocar invalida TODOS os links de TODOS os clientes de uma vez) |
+| `ASSESSMENT_INTERNAL_PIN` | PIN da tela de login interna (`/responder/entrar`), compartilhado entre clientes |
 | `ASSESSMENT_GOOGLE_CREDENTIALS_B64` | JSON da service account em base64 (`base64 -w0 credentials.json`) |
 
-**Camada de acesso extra no host NGINX:** o `location` que expõe este app
-(mirror em `hlera-bot/nginx/vm2-apps/eloo-digital`, regex genérico
+**Acesso interno da equipe:** tela de login própria do app, em
+`/assessment/_shared/responder/entrar` — pede só o PIN (`INTERNAL_PIN`
+no `.env`/secret `ASSESSMENT_INTERNAL_PIN`), não é HTTP Basic Auth do
+nginx (esse era o design original, trocado em 2026-09-16 porque o popup
+nativo do navegador pede usuário+senha, confuso pra quem só esperava
+digitar um PIN — ver `pin_auth.py`). Login bem-sucedido grava um cookie
+assinado (HMAC com `SECRET_KEY`), válido por 12h, compartilhado entre
+todos os clientes. Mesmo passando por esse PIN, cada módulo só abre com
+o token correto daquele cliente (`auth.py`) — duas camadas independentes.
+O `location` no host NGINX (mirror em `hlera-bot/nginx/vm2-apps/eloo-digital`)
+é hoje só um proxy_pass simples, regex genérico
 `^/assessment/[^/]+/responder/` — já cobre qualquer cliente futuro sem
-editar o nginx de novo) tem `auth_basic` com usuário/PIN **interno da
-equipe** (diferente do PIN de cada cliente, que só protege o respectivo
-portal estático) — arquivo `/etc/nginx/.htpasswd-interno` na VM, não
-versionado, compartilhado entre clientes. Mesmo passando dessa camada,
-cada módulo só abre com o token correto daquele cliente (`auth.py`) —
-duas camadas independentes.
+editar o nginx de novo.
 
 **Links de acesso por módulo (revisor/entrevistado)** de cada engajamento
 ativo ficam em `pacce-co/assessment/{cliente}/projeto/links-internos.md`
