@@ -99,6 +99,9 @@
     margin-top:24px; font-size:13px; color:var(--texto-suave); font-style:italic;
   }
 
+  /* RACI */
+  .raci-legenda{font-size:13px; color:var(--texto-suave); margin:6px 0 18px;}
+
   /* Escopo */
   .frentes{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:24px;}
   .frente{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:20px;}
@@ -146,6 +149,9 @@
   .premissas-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:22px;}
   .premissa{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:13.5px; color:var(--texto-suave);}
   .premissa b{color:var(--texto); display:block; font-size:14px; margin-bottom:5px;}
+  .condicoes-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:22px;}
+  .condicao{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:13px; color:var(--texto-suave);}
+  .condicao b{color:var(--texto); display:block; font-size:14px; margin-bottom:5px;}
 
   /* Esforco */
   .esforco-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:28px; margin-top:24px;}
@@ -441,6 +447,24 @@
   </div>
 </section>
 
+<section class="raci">
+  <div class="eyebrow" style="color:var(--accent)">Responsabilidades</div>
+  <h2>Quem faz o quê</h2>
+  <p class="raci-legenda"><b>R</b> Responsável (executa) · <b>A</b> Aprovador · <b>C</b> Consultado · <b>I</b> Informado</p>
+  <table class="ocq">
+    <tr><th>Atividade</th><th>Super Logística</th><th>eloo Assessment</th></tr>
+    <tr><td>Indicar interlocutor por módulo e manter continuidade</td><td>R/A</td><td>I</td></tr>
+    <tr><td>Fornecer acesso a documentação, contratos e evidências</td><td>R</td><td>C</td></tr>
+    <tr><td>Conduzir entrevistas e aplicar os questionários</td><td>C</td><td>R</td></tr>
+    <tr><td>Executar a visita técnica presencial</td><td>C</td><td>R</td></tr>
+    <tr><td>Atribuir maturidade e classificar controles</td><td>I</td><td>R</td></tr>
+    <tr><td>Consolidar riscos, gaps e priorização</td><td>I</td><td>R</td></tr>
+    <tr><td>Validar achados preliminares (contraditório)</td><td>A</td><td>R</td></tr>
+    <tr><td>Elaborar Relatório Executivo e Roadmap</td><td>I</td><td>R</td></tr>
+    <tr><td>Aprovar a entrega final</td><td>A</td><td>I</td></tr>
+  </table>
+</section>
+
 <section class="esforco">
   <div class="eyebrow" style="color:var(--accent)">Esforço e Prazo</div>
   <h2>242h de consultoria · 56h do lado Super Logística</h2>
@@ -542,6 +566,17 @@
     <div class="pessoa"><span class="ic">EP</span><div><b>Endpoint Management</b><span>Sistemas operacionais e ciclo de vida de dispositivos</span></div></div>
     <div class="pessoa"><span class="ic">BC</span><div><b>Backup e Continuidade</b><span>Backup, disaster recovery e continuidade</span></div></div>
     <div class="pessoa"><span class="ic">GV</span><div><b>Governança de TI</b><span>Processos, CMDB, fornecedores — COBIT/ITIL</span></div></div>
+  </div>
+</section>
+
+<section class="condicoes-gerais">
+  <div class="eyebrow" style="color:var(--accent)">Condições Gerais</div>
+  <h2>Validade, confidencialidade e propriedade intelectual</h2>
+  <div class="condicoes-grid">
+    <div class="condicao"><b>Validade da proposta</b>30 dias corridos a partir da data de emissão (14/09/2026). Após esse prazo, valores e cronograma podem ser revisados.</div>
+    <div class="condicao"><b>Confidencialidade</b>Dados operacionais, técnicos e financeiros da Super Logística, e a metodologia/questionários/critérios da eloo.digital, são tratados como confidenciais por ambas as partes.</div>
+    <div class="condicao"><b>Propriedade intelectual</b>A metodologia, os questionários working paper e os modelos de relatório são da eloo.digital, cedidos apenas para uso neste Assessment. Dados e evidências da Super Logística permanecem de sua propriedade exclusiva.</div>
+    <div class="condicao"><b>Prevalência contratual</b>Em caso de conflito entre esta proposta e um contrato formal assinado, prevalecem os termos do contrato.</div>
   </div>
 </section>
 
