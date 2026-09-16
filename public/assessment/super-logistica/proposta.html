@@ -110,7 +110,12 @@
     display:flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:12px;
   }
   .frente h3{font-size:16px; margin-bottom:8px;}
+  .frente h3 .n-dominios{font-size:12px; font-weight:400; color:var(--texto-fraco);}
   .frente ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--texto-suave); display:flex; flex-direction:column; gap:4px;}
+  .frente ul.dominios{list-style:none; padding-left:0; gap:2px;}
+  .frente ul.dominios li{display:flex; justify-content:space-between; gap:10px; padding:4px 0; border-bottom:1px solid var(--linha);}
+  .frente ul.dominios li:last-child{border-bottom:none;}
+  .frente ul.dominios li b{color:var(--texto); font-weight:700;}
   .frente .prioridade{
     display:inline-block; margin-top:12px; font-size:11.5px; font-weight:700;
     background:var(--amber-soft); color:var(--amber); padding:3px 9px; border-radius:20px;
@@ -244,7 +249,7 @@
   <div class="meta">
     <span>Porte: <b>M (Médio)</b></span>
     <span>Prazo estimado: <b>16 semanas (~4 meses)</b></span>
-    <span>Frentes: <b>A + B + C</b></span>
+    <span>Frentes: <b>A + B + C (7 domínios)</b></span>
     <span>Data: <b>14/09/2026</b></span>
   </div>
 </section>
@@ -464,25 +469,31 @@
 
 <section class="escopo" id="escopo">
   <div class="eyebrow" style="color:var(--accent)">Escopo</div>
-  <h2>Três frentes de avaliação — 300 perguntas no total</h2>
+  <h2>Três frentes, 7 domínios técnicos — 300 perguntas no total</h2>
   <div class="frentes">
     <div class="frente">
       <div class="letra">A</div>
       <span class="qtd-perguntas">207 perguntas</span>
-      <h3>Infraestrutura de TI</h3>
-      <ul><li>Servidores, rede e virtualização</li><li>Segurança de endpoint e identidade</li><li>Backup, DR e continuidade</li><li>Ativos e licenciamento em nuvem</li></ul>
+      <h3>Infraestrutura de TI <span class="n-dominios">(5 domínios)</span></h3>
+      <ul class="dominios">
+        <li><span>Segurança da Informação</span><b>55</b></li>
+        <li><span>Infraestrutura e Redes</span><b>43</b></li>
+        <li><span>Endpoint Management</span><b>38</b></li>
+        <li><span>Cloud e Licenciamento</span><b>37</b></li>
+        <li><span>Backup e Continuidade</span><b>34</b></li>
+      </ul>
       <span class="prioridade">Inicia primeiro</span>
     </div>
     <div class="frente">
       <div class="letra">B</div>
       <span class="qtd-perguntas">51 perguntas</span>
-      <h3>Arquitetura Corporativa</h3>
+      <h3>Arquitetura Corporativa <span class="n-dominios">(1 domínio)</span></h3>
       <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e interfaces entre sistemas</li><li>Segurança de aplicações</li></ul>
     </div>
     <div class="frente">
       <div class="letra">C</div>
       <span class="qtd-perguntas">42 perguntas</span>
-      <h3>Governança e Processos de TI</h3>
+      <h3>Governança e Processos de TI <span class="n-dominios">(1 domínio)</span></h3>
       <ul><li>Políticas de TI e documentação</li><li>Incidentes, problemas e mudanças</li><li>CMDB, ativos, hardware e leasing</li><li>Fornecedores e contratos (COBIT + ITIL)</li></ul>
     </div>
   </div>
