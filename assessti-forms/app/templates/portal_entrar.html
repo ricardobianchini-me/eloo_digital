@@ -51,7 +51,7 @@
     {% if erro %}
     <p class="erro">PIN incorreto — tente de novo.</p>
     {% endif %}
-    <form method="post">
+    <form method="post" action="/assessment/{{ cliente }}/portal/entrar">
       <input type="hidden" name="next" value="{{ next }}">
       <input type="password" inputmode="numeric" name="pin" autofocus placeholder="PIN">
       <button type="submit">Entrar</button>
