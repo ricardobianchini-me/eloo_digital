@@ -12,6 +12,7 @@ from clientes import get_cliente
 import leads
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
 import pin_auth
+import portal_auth
 import sheets as sheets_client
 
 logging.basicConfig(level=logging.INFO)
@@ -100,6 +101,53 @@ def processar_login(pin: str = Form(...), next: str = Form("/assessment/_shared/
         max_age=60 * 60 * 12,  # 12h — dura uma sessão de trabalho, não precisa logar de novo entre módulos
     )
     return resposta
+
+
+# Portal do cliente (proposta, status, questionários publicados em
+# eloo.digital/assessment/{cliente}/) — PIN por cliente (clientes.py,
+# campo portal_pin), mesmo padrão de UX do PIN interno acima, no lugar do
+# HTTP Basic Auth do nginx. O gate em si roda no nginx via auth_request
+# contra o endpoint /portal/check abaixo (ver hlera-bot/nginx/vm2-apps/eloo-digital).
+@app.get("/assessment/{cliente}/portal/entrar", response_class=HTMLResponse)
+def portal_tela_login(request: Request, cliente: str, next: str = "", erro: bool = False):
+    dados = _cliente_ou_404(cliente)
+    destino = next or f"/assessment/{cliente}/"
+    return templates.TemplateResponse(
+        "portal_entrar.html",
+        {"request": request, "cliente": cliente, "nome_cliente": dados["nome"], "next": destino, "erro": erro},
+    )
+
+
+@app.post("/assessment/{cliente}/portal/entrar")
+def portal_processar_login(cliente: str, pin: str = Form(...), next: str = Form("")):
+    dados = _cliente_ou_404(cliente)
+    destino = next or f"/assessment/{cliente}/"
+    if not portal_auth.pin_correto(dados, pin):
+        return RedirectResponse(
+            url=f"/assessment/{cliente}/portal/entrar?erro=1&next={quote(destino)}", status_code=303
+        )
+    resposta = RedirectResponse(url=destino, status_code=303)
+    resposta.set_cookie(
+        portal_auth.cookie_nome(cliente),
+        portal_auth.valor_cookie(cliente),
+        httponly=True,
+        samesite="lax",
+        secure=True,
+        max_age=60 * 60 * 24 * 30,  # 30 dias — engajamento dura meses, não precisa logar toda visita
+    )
+    return resposta
+
+
+@app.get("/assessment/{cliente}/portal/check")
+def portal_check(request: Request, cliente: str):
+    """Alvo do auth_request do nginx — 200 destranca, 401 manda pro login."""
+    dados = get_cliente(cliente)
+    if not dados:
+        raise HTTPException(status_code=404)
+    valor = request.cookies.get(portal_auth.cookie_nome(cliente))
+    if not portal_auth.cookie_valido(cliente, valor):
+        raise HTTPException(status_code=401)
+    return {"ok": True}
 
 
 @router.get("/m/{modulo_id}", response_class=HTMLResponse)

@@ -15,6 +15,11 @@ CLIENTES = {
     "super-logistica": {
         "nome": "Super Logística",
         "spreadsheet_id": "1MkV9WrqeAIrHkP9ndTcaAOuvJSnKbOgveJWzQD0VVRU",
+        # PIN de acesso ao portal publicado (proposta, status, questionários).
+        # Substitui o Basic Auth do navegador — mesmo padrão de UX do PIN
+        # interno (ver portal_auth.py). Entregue ao cliente por canal
+        # separado (nunca por e-mail junto com o link).
+        "portal_pin": "131313",
     },
 }
 
