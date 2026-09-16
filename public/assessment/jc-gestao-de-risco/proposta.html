@@ -247,9 +247,23 @@
   section[id]{scroll-margin-top:64px;}
 
   /* Impressão / PDF */
+  .indice-impresso{display:none;}
   @media print{
     .sumario{display:none !important;}
-    section{break-inside:avoid;}
+    .indice-impresso{display:block !important; break-after:page;}
+    .indice-impresso h2{margin-bottom:18px;}
+    .indice-lista{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+    .indice-lista li{display:flex; align-items:baseline; gap:6px; font-size:13.5px;}
+    .indice-lista .titulo{white-space:nowrap;}
+    .indice-lista .pontos{flex:1; border-bottom:1px dotted var(--texto-fraco); margin-bottom:3px;}
+    .indice-lista .pg{color:var(--texto-suave); font-variant-numeric:tabular-nums;}
+
+    /* Evita seção inteira "sumir" pra próxima página deixando um vão em
+       branco — o break-inside:avoid vai nos cartões/linhas, não na seção. */
+    .frente, .metodo-card, .destaque, .premissa, .condicao, .pessoa,
+    .passo, .lider-card, .entregavel, tr, .gantt-wrap { break-inside: avoid; }
+    h1, h2, h3, .eyebrow { break-after: avoid-page; }
+
     .gantt-wrap{overflow:visible !important;}
     .gantt{
       min-width:0 !important;
@@ -274,6 +288,27 @@
     <span>Frentes: <b>A + B + C (7 domínios)</b></span>
     <span>Data: <b>16/09/2026</b></span>
   </div>
+</section>
+
+<section class="indice-impresso">
+  <div class="eyebrow" style="color:var(--accent)">Índice</div>
+  <h2>Sumário</h2>
+  <ul class="indice-lista">
+    <li><span class="titulo">Quem Somos</span><span class="pontos"></span><span class="pg" data-alvo="quem-somos"></span></li>
+    <li><span class="titulo">Objetivo</span><span class="pontos"></span><span class="pg" data-alvo="objetivo"></span></li>
+    <li><span class="titulo">Metodologia</span><span class="pontos"></span><span class="pg" data-alvo="metodologia"></span></li>
+    <li><span class="titulo">Cronograma</span><span class="pontos"></span><span class="pg" data-alvo="cronograma"></span></li>
+    <li><span class="titulo">Escopo e Premissas</span><span class="pontos"></span><span class="pg" data-alvo="escopo-premissas"></span></li>
+    <li><span class="titulo">Lastro Metodológico</span><span class="pontos"></span><span class="pg" data-alvo="lastro"></span></li>
+    <li><span class="titulo">Escopo</span><span class="pontos"></span><span class="pg" data-alvo="escopo"></span></li>
+    <li><span class="titulo">Responsabilidades</span><span class="pontos"></span><span class="pg" data-alvo="raci"></span></li>
+    <li><span class="titulo">Esforço e Prazo</span><span class="pontos"></span><span class="pg" data-alvo="esforco"></span></li>
+    <li><span class="titulo">Entregáveis</span><span class="pontos"></span><span class="pg" data-alvo="entregaveis"></span></li>
+    <li><span class="titulo">Investimento</span><span class="pontos"></span><span class="pg" data-alvo="investimento"></span></li>
+    <li><span class="titulo">Equipe</span><span class="pontos"></span><span class="pg" data-alvo="equipe"></span></li>
+    <li><span class="titulo">Condições Gerais</span><span class="pontos"></span><span class="pg" data-alvo="condicoes-gerais"></span></li>
+    <li><span class="titulo">Próximos Passos</span><span class="pontos"></span><span class="pg" data-alvo="proximos-passos"></span></li>
+  </ul>
 </section>
 
 <nav class="sumario" aria-label="Índice da proposta">
