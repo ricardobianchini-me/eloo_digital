@@ -170,6 +170,15 @@
     border-radius:0 8px 8px 0; padding:14px 16px; font-size:14px; color:var(--texto-suave);
   }
 
+  /* Radar de Maturidade (exemplo) */
+  .radar-exemplo{margin-top:32px; text-align:center;}
+  .radar-nota{font-size:12.5px; color:var(--texto-fraco); font-style:italic; margin-bottom:10px;}
+  .radar-svg{width:100%; max-width:360px; height:auto;}
+  .radar-grid-ring{fill:none; stroke:var(--linha); stroke-width:1;}
+  .radar-axis{stroke:var(--linha); stroke-width:1;}
+  .radar-data{fill:color-mix(in srgb, var(--accent) 28%, transparent); stroke:var(--accent); stroke-width:2;}
+  .radar-label{font-size:11px; fill:var(--texto-suave); font-family:-apple-system, "Segoe UI", sans-serif;}
+
   /* Investimento */
   .investimento-box{
     background:var(--card); border:1px dashed var(--linha); border-radius:8px;
@@ -475,8 +484,34 @@
     <div class="entregavel">Matriz de Riscos de TI</div>
     <div class="entregavel">Matriz de Gaps (Situação Atual → Recomendada → Ação)</div>
     <div class="entregavel">Inventário Consolidado</div>
-    <div class="entregavel">Mapa de Maturidade por domínio</div>
+    <div class="entregavel">Mapa de Maturidade por domínio — com gráfico radar (exemplo abaixo)</div>
     <div class="entregavel">Plano de Ação Priorizado + Roadmap de Evolução em 4 horizontes (0-30d, 30-90d, 3-6m, 6-12m)</div>
+  </div>
+
+  <div class="radar-exemplo">
+    <p class="radar-nota">Exemplo ilustrativo do formato de entrega — dados fictícios, o real é gerado ao final da Fase 4 com base em evidência coletada.</p>
+    <svg viewBox="-40 -10 440 360" class="radar-svg" role="img" aria-label="Exemplo de gráfico radar de maturidade por módulo">
+      <polygon points="180.0,40.0 281.6,88.9 306.7,198.9 236.4,287.1 123.6,287.1 53.3,198.9 78.4,88.9" class="radar-grid-ring" />
+      <polygon points="180.0,66.0 261.3,105.2 281.4,193.1 225.1,263.7 134.9,263.7 78.6,193.1 98.7,105.2" class="radar-grid-ring" />
+      <polygon points="180.0,92.0 241.0,121.4 256.0,187.4 213.8,240.3 146.2,240.3 104.0,187.4 119.0,121.4" class="radar-grid-ring" />
+      <polygon points="180.0,118.0 220.7,137.6 230.7,181.6 202.6,216.9 157.4,216.9 129.3,181.6 139.3,137.6" class="radar-grid-ring" />
+      <polygon points="180.0,144.0 200.3,153.8 205.3,175.8 191.3,193.4 168.7,193.4 154.7,175.8 159.7,153.8" class="radar-grid-ring" />
+      <line x1="180" y1="170" x2="180.0" y2="40.0" class="radar-axis" />
+      <line x1="180" y1="170" x2="281.6" y2="88.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="306.7" y2="198.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="236.4" y2="287.1" class="radar-axis" />
+      <line x1="180" y1="170" x2="123.6" y2="287.1" class="radar-axis" />
+      <line x1="180" y1="170" x2="53.3" y2="198.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="78.4" y2="88.9" class="radar-axis" />
+      <polygon points="180.0,118.0 230.8,129.5 256.0,187.4 219.5,252.0 157.4,216.9 142.0,178.7 129.2,129.5" class="radar-data" />
+      <text x="180.0" y="26" class="radar-label" text-anchor="middle">Segurança</text>
+      <text x="303.5" y="71.5" class="radar-label" text-anchor="start">Infraestrutura</text>
+      <text x="334.0" y="205.2" class="radar-label" text-anchor="start">Cloud</text>
+      <text x="248.6" y="316" class="radar-label" text-anchor="middle">Arquitetura</text>
+      <text x="111.4" y="316" class="radar-label" text-anchor="middle">Endpoint</text>
+      <text x="26.0" y="205.2" class="radar-label" text-anchor="end">Backup</text>
+      <text x="56.5" y="71.5" class="radar-label" text-anchor="end">Governança</text>
+    </svg>
   </div>
 </section>
 

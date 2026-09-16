@@ -70,6 +70,14 @@ Interlocutor de referência: Bruno Alves, Coordenador de Infraestrutura (acumula
 | CLD-33 | Qual o percentual de testes de restauração de backup planejados nos últimos 12 meses que foram efetivamente realizados, com registro de resultado? | Registro de testes de restore com data e resultado, informando população total de testes planejados, amostra/total verificado e critério de seleção | Testado por amostragem | | | |
 | CLD-34 | Em caso de indisponibilidade de uma região/zona do provedor, existe plano de continuidade definido para os recursos hospedados em nuvem? | Plano de continuidade/DR documentado com escopo de recursos cloud | Inspecionado | | | |
 
+## Contratado x Provisionado x Utilizado (Auditoria de Contratos Cloud)
+
+| Ref | Pergunta | Evidência Esperada | Método de Verificação Exigido | Resposta do Entrevistado | Evidência Anexada (Sim/Não/Parcial + referência) | Complemento do Entrevistador |
+|---|---|---|---|---|---|---|
+| CLD-35 | Qual o volume de recursos cloud contratados (vCPU, memória, storage, licenças SaaS/PaaS) junto a cada provedor, comparado ao volume efetivamente provisionado (instâncias/recursos realmente criados) hoje? | Fatura/contrato vigente por provedor + relatório do console com o volume provisionado, por serviço | Inspecionado | | | |
+| CLD-36 | Desse volume provisionado, qual o percentual efetivamente utilizado (CPU/memória média de utilização, storage ocupado, licenças SaaS com login ativo nos últimos 90 dias)? | Relatório de utilização/FinOps com população total de recursos provisionados, amostra verificada conforme a Regra de Amostragem e critério de seleção | Testado por amostragem | | | |
+| CLD-37 | Existe processo formal de rightsizing/revisão periódica de gastos cloud (FinOps) para eliminar recursos ociosos ou superdimensionados? | Processo documentado + registro da última revisão de rightsizing, com economia identificada ou realizada | Inspecionado | | | |
+
 ## Notas do Especialista
 
 - Este questionário cobre 5 subtemas — Inventário de Recursos Cloud, Governança de Custo/FinOps, Controle de Acesso e Privilégios, Licenciamento SaaS/PaaS e Continuidade de Recursos Cloud — com foco em governança do que já está contratado. Nenhuma pergunta ou recomendação decorrente deste levantamento deve sugerir troca de provedor de nuvem.
