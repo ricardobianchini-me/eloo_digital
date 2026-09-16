@@ -115,6 +115,10 @@
     display:inline-block; margin-top:12px; font-size:11.5px; font-weight:700;
     background:var(--amber-soft); color:var(--amber); padding:3px 9px; border-radius:20px;
   }
+  .frente .qtd-perguntas{
+    display:inline-block; margin-bottom:10px; font-size:11.5px; font-weight:700;
+    background:var(--accent-soft); color:var(--accent); padding:3px 9px; border-radius:20px;
+  }
 
   /* Cronograma / Gantt */
   .gantt-legenda{display:flex; gap:20px; flex-wrap:wrap; margin:20px 0 4px; font-size:12.5px; color:var(--texto-suave);}
@@ -426,21 +430,24 @@
 
 <section class="escopo">
   <div class="eyebrow" style="color:var(--accent)">Escopo</div>
-  <h2>Três frentes de avaliação</h2>
+  <h2>Três frentes de avaliação — 300 perguntas no total</h2>
   <div class="frentes">
     <div class="frente">
       <div class="letra">A</div>
+      <span class="qtd-perguntas">207 perguntas</span>
       <h3>Infraestrutura de TI</h3>
       <ul><li>Servidores, rede e virtualização</li><li>Segurança de endpoint e identidade</li><li>Backup, DR e continuidade</li><li>Ativos e licenciamento em nuvem</li></ul>
       <span class="prioridade">Inicia primeiro</span>
     </div>
     <div class="frente">
       <div class="letra">B</div>
+      <span class="qtd-perguntas">51 perguntas</span>
       <h3>Arquitetura Corporativa</h3>
       <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e interfaces entre sistemas</li><li>Segurança de aplicações</li></ul>
     </div>
     <div class="frente">
       <div class="letra">C</div>
+      <span class="qtd-perguntas">42 perguntas</span>
       <h3>Governança e Processos de TI</h3>
       <ul><li>Políticas de TI e documentação</li><li>Incidentes, problemas e mudanças</li><li>CMDB, ativos, hardware e leasing</li><li>Fornecedores e contratos (COBIT + ITIL)</li></ul>
     </div>
