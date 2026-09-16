@@ -1,0 +1,186 @@
+---
+import '../../../styles/global.css';
+
+const modulos = [
+  { slug: "seguranca-da-informacao", id: "seguranca", nome: "Segurança da Informação" },
+  { slug: "infraestrutura-e-redes", id: "infraestrutura", nome: "Infraestrutura e Redes" },
+  { slug: "cloud-e-licenciamento", id: "cloud", nome: "Cloud e Licenciamento" },
+  { slug: "arquitetura-corporativa", id: "arquitetura", nome: "Arquitetura Corporativa" },
+  { slug: "endpoint-management", id: "endpoint", nome: "Endpoint Management" },
+  { slug: "backup-e-continuidade", id: "backup", nome: "Backup e Continuidade" },
+  { slug: "governanca-de-ti", id: "governanca", nome: "Governança de TI" },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>JC Gestão de Risco — Painel do Projeto | eloo Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="confid">Documento confidencial — uso exclusivo JC Gestão de Risco · não indexado, não distribuir</div>
+
+    <header class="topo">
+      <a href="/" class="wordmark" aria-label="eloo.digital">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <span class="produto">eloo Assessment</span>
+    </header>
+
+    <main class="painel">
+      <div class="cabecalho">
+        <span class="eyebrow">Painel do Projeto</span>
+        <h1>JC Gestão de Risco</h1>
+        <p class="resumo">
+          Assessment de Governança, Infraestrutura e Sistemas de TI, com base em
+          COBIT 2019 e ITIL 4, entregue com rigor de working paper — evidência
+          documentada por controle, não percepção.
+        </p>
+        <div class="status status-amber">
+          <span class="status-dot"></span>
+          Proposta apresentada — aguardando aceite
+        </div>
+        <p class="status-detalhe">
+          Proposta técnica e comercial apresentada em 16/09/2026. Ainda não é
+          cliente ativo — questionários abaixo estão prontos para uso assim
+          que o aceite for confirmado e o kickoff formal ocorrer.
+        </p>
+      </div>
+
+      <section class="bloco">
+        <h2>Proposta</h2>
+        <a class="card card-link" href="/assessment/jc-gestao-de-risco/proposta.html">
+          <div>
+            <strong>Proposta Técnica e Comercial</strong>
+            <span>Metodologia, escopo, cronograma e investimento — apresentada em 16/09/2026</span>
+          </div>
+          <span class="seta">&rarr;</span>
+        </a>
+      </section>
+
+      <section class="bloco">
+        <h2>Status do Projeto</h2>
+        <a class="card card-link" href="/assessment/jc-gestao-de-risco/status">
+          <div>
+            <strong>Linha do tempo e próximos passos</strong>
+            <span>Aguardando aceite formal da proposta</span>
+          </div>
+          <span class="seta">&rarr;</span>
+        </a>
+      </section>
+
+      <section class="bloco">
+        <h2>Questionários de Levantamento</h2>
+        <p class="nota">
+          Um questionário por módulo técnico, com Ref único por pergunta e Método de
+          Verificação Exigido (Declarado / Inspecionado / Testado por amostragem). Prontos
+          para uso assim que o kickoff formal indicar os interlocutores por domínio —
+          "Ver roteiro" é a lista completa de perguntas, pra conhecimento prévio.
+        </p>
+        <div class="grid-modulos">
+          {modulos.map((m) => (
+            <div class="card-modulo" data-modulo-id={m.id}>
+              <strong>{m.nome}</strong>
+              <div class="card-modulo-acoes">
+                <a href={`/assessment/jc-gestao-de-risco/questionario-${m.slug}`}>Ver roteiro</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="rodape">eloo Assessment — JC Gestão de Risco · Documento confidencial, uso exclusivo do destinatário</footer>
+  </body>
+</html>
+
+<style is:global>
+  body { background: var(--parchment); margin: 0; }
+  .confid {
+    background: var(--dourado);
+    color: var(--deep);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.45rem 1rem;
+    letter-spacing: 0.02em;
+  }
+  .topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-brand);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--deep);
+    font-size: 1.1rem;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+  .produto { font-size: 0.8rem; font-weight: 700; color: var(--salvia); text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .painel { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .cabecalho { margin-bottom: 3rem; }
+  .eyebrow { font-size: 0.8rem; font-weight: 700; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.05em; }
+  .cabecalho h1 { font-family: var(--font-title); color: var(--deep); font-size: 2.2rem; margin: 0.3rem 0 1rem; }
+  .resumo { font-family: var(--font-body); color: var(--ink-muted); font-size: 1rem; line-height: 1.6; max-width: 62ch; margin: 0 0 1.5rem; }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
+  .status-amber { background: #fbf0d9; color: #8a5a00; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #d99a00; }
+  .status-detalhe { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.88rem; max-width: 62ch; }
+
+  .bloco { margin-top: 3rem; }
+  .bloco h2 { font-family: var(--font-title); color: var(--deep); font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+  .nota { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.88rem; max-width: 68ch; margin: 0.8rem 0 1.4rem; }
+
+  .card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { border-color: var(--salvia); transform: translateY(-1px); }
+  .card strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .card span { display: block; font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-muted); margin-top: 0.2rem; }
+  .seta { color: var(--dourado); font-size: 1.2rem; }
+
+  .grid-modulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; }
+  .card-modulo {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+  }
+  .card-modulo strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .card-modulo-acoes { display: flex; gap: 0.9rem; margin-top: 0.8rem; padding-top: 0.7rem; border-top: 1px solid var(--line); }
+  .card-modulo-acoes a { font-family: var(--font-title); font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+  .card-modulo-acoes a:first-child { color: var(--salvia); }
+  .card-modulo-acoes a:first-child:hover { color: var(--deep); }
+</style>

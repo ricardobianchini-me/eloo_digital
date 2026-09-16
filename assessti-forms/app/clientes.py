@@ -21,6 +21,15 @@ CLIENTES = {
         # separado (nunca por e-mail junto com o link).
         "portal_pin": "131313",
     },
+    "jc-gestao-de-risco": {
+        "nome": "JC Gestão de Risco",
+        # Proposta apresentada em 2026-09-16, ainda não aceita — sem planilha
+        # real ainda. Placeholder até o aceite: NÃO habilitar "Responder ao
+        # vivo" nem qualquer rota /responder/ para este cliente enquanto
+        # este valor não for trocado por um spreadsheet_id real.
+        "spreadsheet_id": "PENDENTE_ATE_ACEITE",
+        "portal_pin": "160926",
+    },
 }
 
 

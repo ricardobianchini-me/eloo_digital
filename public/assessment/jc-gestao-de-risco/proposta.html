@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Assessment TI — JC Gestão de Risco</title>
+<style>
+  :root{
+    --azul:#0B3350; --azul-2:#123E63; --azul-ink:#082639;
+    --cinza:#F3F5F7; --card:#FFFFFF; --linha:#DDE3E8;
+    --texto:#152230; --texto-suave:#54626F; --texto-fraco:#8996A2;
+    --accent:#2E9E6D; --accent-soft:#E1F3EA;
+    --amber:#B8752E; --amber-soft:#F5E7D3;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --azul:#12405F; --azul-2:#1A4E73; --azul-ink:#0A2C41;
+      --cinza:#10161C; --card:#181F26; --linha:#2A333B;
+      --texto:#E7ECEF; --texto-suave:#A6B1BA; --texto-fraco:#6E7A84;
+      --accent:#5FC79A; --accent-soft:#1B3329;
+      --amber:#D6A468; --amber-soft:#332A1B;
+      color-scheme: dark;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--cinza); color:var(--texto);
+    font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height:1.55;
+  }
+  section{padding:56px clamp(20px,6vw,80px);}
+  h1,h2,h3{margin:0; font-weight:700; text-wrap:balance;}
+  .eyebrow{font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; opacity:.75; margin-bottom:10px;}
+
+  /* Capa */
+  .capa{
+    background:linear-gradient(160deg,var(--azul-ink),var(--azul) 65%,var(--azul-2));
+    color:#F2F6F9; padding:88px clamp(20px,6vw,80px) 64px; text-align:center;
+  }
+  .capa .eyebrow{color:#BFD6E6;}
+  .capa h1{font-size:clamp(28px,4.2vw,42px); max-width:16ch; margin-inline:auto; line-height:1.15;}
+  .capa .sub{margin-top:14px; font-size:18px; color:#CFE0EC;}
+  .capa .meta{
+    margin-top:34px; display:flex; justify-content:center; gap:28px; flex-wrap:wrap;
+    font-size:13.5px; color:#BFD6E6; border-top:1px solid rgba(255,255,255,.18); padding-top:20px;
+  }
+  .capa .meta b{color:#fff;}
+
+  /* Objetivo */
+  .objetivo p{max-width:70ch; font-size:16.5px; color:var(--texto-suave);}
+  .objetivo .destaques{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:24px;}
+  .destaque{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:14.5px; color:var(--texto-suave);}
+  .destaque b{color:var(--texto); display:block; font-size:14.5px; margin-bottom:4px;}
+
+  /* Liderança */
+  .lideranca-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:22px 0 8px;}
+  .lider-card{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:18px;}
+  .lider-card b{display:block; font-size:15px; margin-bottom:2px;}
+  .lider-card a{font-size:12px; color:var(--accent); text-decoration:none;}
+  .lider-card p{font-size:13.5px; color:var(--texto-suave); margin:8px 0 0;}
+
+  /* Metodologia */
+  .metodologia{background:var(--card); border-block:1px solid var(--linha);}
+  .ciclo{text-align:center; font-size:15px; color:var(--accent); font-weight:600; margin-bottom:28px;}
+  .timeline{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+  @media (max-width:820px){ .timeline{grid-template-columns:repeat(2,1fr);} }
+  .fase{
+    background:var(--cinza); border-top:4px solid var(--accent); border-radius:8px;
+    padding:18px 16px; display:flex; flex-direction:column; gap:6px; min-height:128px;
+  }
+  .fase .n{font-size:12px; color:var(--texto-fraco); font-weight:700;}
+  .fase strong{font-size:14.5px;}
+  .fase span{font-size:12.5px; color:var(--texto-suave);}
+
+  .frameworks-label{font-size:13px; color:var(--texto-suave); margin:32px 0 12px;}
+  .selos{display:flex; gap:10px; flex-wrap:wrap;}
+  .selo{
+    background:var(--cinza); border:1px solid var(--linha); border-radius:20px;
+    padding:6px 14px; font-size:12.5px; font-weight:600; color:var(--azul-2);
+  }
+  @media (prefers-color-scheme: dark){ .selo{ color:#9FC3DB; } }
+  .ocq{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:18px; background:var(--card); border:1px solid var(--linha); border-radius:8px; overflow:hidden;}
+  .ocq th,.ocq td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--linha); vertical-align:top;}
+  .ocq th{background:var(--cinza); font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--texto-suave);}
+  .ocq tr:last-child td{border-bottom:none;}
+  /* Lastro Metodológico */
+  .lastro{background:var(--card); border-block:1px solid var(--linha);}
+  .lastro-intro{max-width:74ch; font-size:15.5px; color:var(--texto-suave); margin-top:6px;}
+  .lastro-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:26px;}
+  .metodo-card{
+    background:var(--cinza); border:1px solid var(--linha); border-radius:8px; padding:20px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .metodo-card .origem{font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--accent);}
+  .metodo-card h4{font-size:16px; margin:0;}
+  .metodo-card .oque{font-size:13.5px; color:var(--texto-suave);}
+  .metodo-card .aplicacao{
+    font-size:13px; color:var(--texto); background:var(--card); border-left:3px solid var(--azul-2);
+    padding:10px 12px; border-radius:0 6px 6px 0;
+  }
+  .metodo-card .aplicacao b{color:var(--azul-2);}
+  @media (prefers-color-scheme: dark){ .metodo-card .aplicacao b{ color:#9FC3DB; } }
+  .lastro-rodape{
+    margin-top:24px; font-size:13px; color:var(--texto-suave); font-style:italic;
+  }
+
+  /* RACI */
+  .raci-legenda{font-size:13px; color:var(--texto-suave); margin:6px 0 18px;}
+
+  /* Escopo */
+  .frentes{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:24px;}
+  .frente{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:20px;}
+  .frente .letra{
+    width:34px; height:34px; border-radius:6px; background:var(--azul); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:12px;
+  }
+  .frente h3{font-size:16px; margin-bottom:8px;}
+  .frente ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--texto-suave); display:flex; flex-direction:column; gap:4px;}
+  .frente .qtd-perguntas{
+    display:inline-block; margin-bottom:10px; font-size:11.5px; font-weight:700;
+    background:var(--accent-soft); color:var(--accent); padding:3px 9px; border-radius:20px;
+  }
+
+  /* Cronograma / Gantt */
+  .gantt-legenda{display:flex; gap:20px; flex-wrap:wrap; margin:20px 0 4px; font-size:12.5px; color:var(--texto-suave);}
+  .gantt-legenda span{display:inline-flex; align-items:center; gap:6px;}
+  .dot{width:10px; height:10px; border-radius:3px; display:inline-block;}
+  .dot.presencial{background:var(--amber);}
+  .dot.remoto{background:var(--accent);}
+  .dot.interno{background:var(--azul-2);}
+  .dot.marcador{width:8px; height:8px; border-radius:50%; background:var(--accent);}
+  .gantt-wrap{overflow-x:auto; margin-top:14px; padding-bottom:6px;}
+  .gantt{
+    display:grid; grid-template-columns:190px repeat(7,minmax(48px,1fr));
+    grid-auto-rows:28px; gap:4px; min-width:700px; align-items:center;
+  }
+  .gantt-cell.label{font-size:12px; color:var(--texto-suave); padding-right:8px;}
+  .gantt-cell.head{font-size:10.5px; color:var(--texto-fraco); text-align:center; font-weight:700;}
+  .gantt-bar{
+    border-radius:5px; height:24px; display:flex; align-items:center; padding:0 8px;
+    font-size:10.5px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden;
+  }
+  .gantt-bar.presencial{background:var(--amber);}
+  .gantt-bar.remoto{background:var(--accent);}
+  .gantt-bar.interno{background:var(--azul-2);}
+  .gantt-marker{width:9px; height:9px; border-radius:50%; background:var(--accent); justify-self:center;}
+  .tag-presencial, .tag-remoto{
+    display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px;
+  }
+  .tag-presencial{background:var(--amber-soft); color:var(--amber);}
+  .tag-remoto{background:var(--accent-soft); color:var(--accent);}
+
+  /* Escopo e Premissas */
+  .premissas-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:22px;}
+  .premissa{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:13.5px; color:var(--texto-suave);}
+  .premissa b{color:var(--texto); display:block; font-size:14px; margin-bottom:5px;}
+  .condicoes-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:22px;}
+  .condicao{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px 18px; font-size:13px; color:var(--texto-suave);}
+  .condicao b{color:var(--texto); display:block; font-size:14px; margin-bottom:5px;}
+
+  /* Esforco */
+  .esforco-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:28px; margin-top:24px;}
+  @media (max-width:760px){ .esforco-grid{grid-template-columns:1fr;} }
+  table{width:100%; border-collapse:collapse; font-size:14px; background:var(--card); border:1px solid var(--linha); border-radius:8px; overflow:hidden;}
+  th,td{padding:10px 14px; text-align:left; border-bottom:1px solid var(--linha);}
+  th{background:var(--cinza); font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--texto-suave);}
+  tr:last-child td{border-bottom:none;}
+  tr.total td{font-weight:700; background:var(--accent-soft);}
+  .prazo-card{
+    background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:22px;
+    display:flex; flex-direction:column; gap:10px; align-self:flex-start;
+  }
+  .prazo-card .num{font-size:34px; font-weight:700; color:var(--accent);}
+  .status-pill{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--accent);}
+  .status-pill::before{content:""; width:9px; height:9px; border-radius:50%; background:var(--accent);}
+
+  /* Entregáveis */
+  .entregaveis-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:22px;}
+  .entregavel{
+    background:var(--card); border:1px solid var(--linha); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; padding:14px 16px; font-size:14px; color:var(--texto-suave);
+  }
+
+  /* Radar de Maturidade (exemplo) */
+  .radar-exemplo{margin-top:32px; text-align:center;}
+  .radar-nota{font-size:12.5px; color:var(--texto-fraco); font-style:italic; margin-bottom:10px;}
+  .radar-svg{width:100%; max-width:360px; height:auto;}
+  .radar-grid-ring{fill:none; stroke:var(--linha); stroke-width:1;}
+  .radar-axis{stroke:var(--linha); stroke-width:1;}
+  .radar-data{fill:color-mix(in srgb, var(--accent) 28%, transparent); stroke:var(--accent); stroke-width:2;}
+  .radar-label{font-size:11px; fill:var(--texto-suave); font-family:-apple-system, "Segoe UI", sans-serif;}
+
+  /* Investimento */
+  .investimento-box{
+    background:var(--card); border:1px dashed var(--linha); border-radius:8px;
+    padding:28px; text-align:center; max-width:520px; margin-top:20px;
+  }
+  .investimento-box .valor{font-size:20px; font-weight:700; color:var(--texto-suave);}
+
+  /* Equipe */
+  .equipe-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-top:24px;}
+  .pessoa{background:var(--card); border:1px solid var(--linha); border-radius:8px; padding:16px; display:flex; gap:12px; align-items:flex-start;}
+  .pessoa .ic{
+    width:36px; height:36px; flex:none; border-radius:6px; background:var(--azul); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; letter-spacing:.02em;
+  }
+  .pessoa b{display:block; font-size:14.5px;}
+  .pessoa span{font-size:12.5px; color:var(--texto-suave);}
+
+  /* Proximos passos */
+  .proximos-passos{background:linear-gradient(160deg,var(--azul-ink),var(--azul)); color:#F2F6F9;}
+  .proximos-passos h2{color:#fff;}
+  .passos{display:flex; gap:16px; flex-wrap:wrap; margin-top:24px;}
+  .passo{flex:1 1 200px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:18px;}
+  .passo .n{font-size:12px; color:#9FC3DB; font-weight:700;}
+  .passo strong{display:block; margin:6px 0 4px; font-size:15px;}
+  .passo span{font-size:13px; color:#CFE0EC;}
+
+  footer{padding:22px clamp(20px,6vw,80px); font-size:12px; color:var(--texto-fraco); border-top:1px solid var(--linha);}
+</style>
+</head>
+<body>
+
+<section class="capa">
+  <div class="eyebrow">Proposta Técnica e Comercial</div>
+  <h1>Assessment de Governança, Infraestrutura e Sistemas de TI</h1>
+  <p class="sub">JC Gestão de Risco — base COBIT 2019 + ITIL 4</p>
+  <div class="meta">
+    <span>Porte: <b>M (Médio)</b></span>
+    <span>Prazo estimado: <b>7 semanas</b></span>
+    <span>Frentes: <b>A + B + C</b></span>
+    <span>Data: <b>16/09/2026</b></span>
+  </div>
+</section>
+
+<section class="quem-somos">
+  <div class="eyebrow" style="color:var(--accent)">Quem Somos</div>
+  <h2>Liderança de mercado, um especialista por domínio</h2>
+  <p>O <b>eloo Assessment</b> é a vertical de consultoria B2B da eloo.digital para governança, infraestrutura e sistemas de TI. A liderança é composta por <b>Alex Julian</b> e <b>Ricardo Bianchini</b>, apoiados por um grupo de especialistas de mercado — um por domínio técnico (Segurança, Infraestrutura, Cloud, Arquitetura Corporativa, Endpoint, Backup/Continuidade e Governança), mais um gerente de projeto do início ao fim.</p>
+
+  <div class="lideranca-grid">
+    <div class="lider-card">
+      <b>Alex Julian</b>
+      <a href="https://www.linkedin.com/in/alexjulian/" target="_blank" rel="noopener">linkedin.com/in/alexjulian</a>
+      <p>CIO e executivo de transformação empresarial e tecnologia, com 25+ anos em Saúde, Serviços Financeiros, Mercado de Capitais e Telecomunicações. Passagens por UnitedHealth Group, Kora Saúde e Sírio-Libanês, com mais de R$93 milhões em otimização recorrente de OPEX. Formação pela FIA Business School e FIAP.</p>
+    </div>
+    <div class="lider-card">
+      <b>Ricardo Bianchini</b>
+      <a href="https://www.linkedin.com/in/ricardobianchini/" target="_blank" rel="noopener">linkedin.com/in/ricardobianchini</a>
+      <p>25 anos liderando TI em multinacionais e grandes grupos de saúde, com mais de R$40 milhões em ganhos documentados em Arquitetura Corporativa, Governança de Tecnologia e Transformação Digital — passagens por PepsiCo, Nestlé, Danone, Stone, UnitedHealth Group, Lactalis e Votorantim. Certificações TOGAF, ITIL e SAFe.</p>
+    </div>
+  </div>
+
+  <p>O diagnóstico segue COBIT 2019 e ITIL 4, com o método de avaliação — como pontuar, como validar evidência, como calcular risco — lastreado em metodologias formais públicas (ver Seção "Lastro Metodológico" abaixo), o mesmo padrão técnico usado por firmas de consultoria de TI de primeira linha.</p>
+
+  <div class="eyebrow" style="color:var(--accent); margin-top:28px;">O Que É o Assessment</div>
+  <h2>Não é auditoria de conformidade. É um raio-x operacional.</h2>
+  <p>A maioria das empresas descobre um gap crítico de TI só quando ele já virou incidente — um backup que nunca foi testado, uma senha administrativa que ninguém sabe quem mais conhece, um sistema fora de suporte sustentando uma operação inteira. Para uma empresa de gestão de risco, essa exposição pesa ainda mais — a credibilidade do negócio depende da própria casa de TI estar em ordem. O Assessment identifica isso antes, com evidência documentada — nunca com uma lista de boas práticas genéricas ou percepção de quem responde à entrevista.</p>
+</section>
+
+<section class="objetivo">
+  <div class="eyebrow" style="color:var(--accent)">Objetivo</div>
+  <h2>Diagnosticar o ambiente de TI antes de investir na evolução dele</h2>
+  <p>Avaliar o ambiente tecnológico da JC Gestão de Risco sob as perspectivas de Infraestrutura, Sistemas, Aplicações, Segurança, Continuidade, Gestão de Ativos, Licenciamento e Processos de TI — identificando cenário atual, controles existentes, lacunas, riscos e dependências críticas que sustentam a operação entre as unidades e o datacenter.</p>
+  <div class="destaques">
+    <div class="destaque"><b>Bancos de dados críticos</b>Redundância e testes de restauração dos ambientes SQL Server espelhados e PostgreSQL</div>
+    <div class="destaque"><b>Continuidade entre unidades</b>Rede, backup e DR testados nas unidades e no datacenter, interligados via VPN site-to-site</div>
+    <div class="destaque"><b>Acessos e mudanças</b>Controle de credenciais privilegiadas — com atenção ao servidor dedicado de autenticação/segurança — e rastreabilidade de mudanças em produção</div>
+  </div>
+</section>
+
+<section class="metodologia">
+  <div class="eyebrow" style="color:var(--accent)">Metodologia</div>
+  <h2>Diagnóstico → Avaliação → Priorização → Roadmap</h2>
+  <p class="ciclo" style="margin-top:6px; text-align:left; color:var(--texto-suave); font-weight:400;">As 5 etapas formais do assessment, com status de projeto reportado a cada transição.</p>
+  <div class="timeline" style="margin-top:22px;">
+    <div class="fase"><span class="n">ETAPA 1</span><strong>Kickoff</strong><span>Interlocutores, acessos e agenda confirmados</span></div>
+    <div class="fase"><span class="n">ETAPA 2</span><strong>Levantamento</strong><span>Entrevistas e evidências — todos os domínios em paralelo</span></div>
+    <div class="fase"><span class="n">ETAPA 3</span><strong>Avaliação de Controles</strong><span>Adequado a Não aplicável</span></div>
+    <div class="fase"><span class="n">ETAPA 4</span><strong>Avaliação de Risco</strong><span>Crítico a Baixo</span></div>
+    <div class="fase"><span class="n">ETAPA 5</span><strong>Avaliação de Maturidade</strong><span>Escala 0 a 5</span></div>
+  </div>
+
+  <div class="frameworks-label">Cada domínio é avaliado contra um framework de mercado nomeado — a mesma base normativa pública usada por firmas de consultoria de TI de primeira linha:</div>
+  <div class="selos">
+    <span class="selo">COBIT 2019</span>
+    <span class="selo">ITIL 4</span>
+    <span class="selo">ISO/IEC 20000</span>
+    <span class="selo">TOGAF</span>
+    <span class="selo">NIST CSF</span>
+    <span class="selo">ISO/IEC 27001</span>
+    <span class="selo">ISO/IEC 22301</span>
+    <span class="selo">CMMI</span>
+    <span class="selo">ISO/IEC 38500</span>
+  </div>
+
+  <table class="ocq">
+    <tr><th>Etapa</th><th>O quê</th><th>Como</th><th>Quando</th></tr>
+    <tr><td>1. Kickoff</td><td>Escopo, interlocutores, criticidade dos ativos</td><td>Reunião estruturada + termo de abertura</td><td>Semana 1</td></tr>
+    <tr><td>2. Levantamento</td><td>Situação atual (As-Is) por domínio, contra o framework de referência</td><td>Entrevistas + questionário por capítulo + evidências</td><td>Sem. 2-4 · todos os domínios em paralelo</td></tr>
+    <tr><td>3. Avaliação de Controles</td><td>Gap entre o As-Is e o controle esperado pelo framework</td><td>Classificação Adequado → Não aplicável, sempre com evidência</td><td>Semana 5</td></tr>
+    <tr><td>4. Avaliação de Risco</td><td>Probabilidade x impacto x criticidade</td><td>Classificação Crítico → Baixo</td><td>Semana 5</td></tr>
+    <tr><td>5. Avaliação de Maturidade</td><td>Capacidade real do processo (lógica CMMI)</td><td>Consolidação por domínio + visão executiva</td><td>Semana 6</td></tr>
+    <tr><td>Roadmap</td><td>Priorização de ação sobre gaps e riscos</td><td>Impacto x esforço, 4 horizontes</td><td>Semana 6-7</td></tr>
+    <tr><td>Encerramento</td><td>Validação de achados + apresentação executiva</td><td>Sessão de contraditório (remota) + apresentação final (presencial)</td><td>Semana 7</td></tr>
+  </table>
+</section>
+
+<section class="cronograma">
+  <div class="eyebrow" style="color:var(--accent)">Cronograma</div>
+  <h2>7 semanas — todas as frentes em paralelo</h2>
+  <p style="max-width:74ch; font-size:14.5px; color:var(--texto-suave); margin-top:6px;">
+    Prazo inicial de referência para este porte, ajustável conforme a disponibilidade real do time
+    JC Gestão de Risco ao longo do projeto. As três frentes (A+B+C) iniciam simultaneamente, sem
+    sequenciamento por prioridade — apenas a visita técnica e a apresentação executiva final
+    acontecem presencialmente; o restante é remoto.
+  </p>
+
+  <div class="gantt-legenda">
+    <span><i class="dot presencial"></i> Presencial</span>
+    <span><i class="dot remoto"></i> Remoto</span>
+    <span><i class="dot interno"></i> Trabalho interno da consultoria</span>
+    <span><i class="dot marcador"></i> Alinhamento semanal (remoto, ~30min)</span>
+  </div>
+
+  <div class="gantt-wrap">
+    <div class="gantt">
+      <div class="gantt-cell label" style="grid-row:1; grid-column:1;"></div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:2;">1</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:3;">2</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:4;">3</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:5;">4</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:6;">5</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:7;">6</div>
+      <div class="gantt-cell head" style="grid-row:1; grid-column:8;">7</div>
+
+      <div class="gantt-cell label" style="grid-row:2; grid-column:1;">Kickoff</div>
+      <div class="gantt-bar remoto" style="grid-row:2; grid-column:2/3;">Kickoff</div>
+
+      <div class="gantt-cell label" style="grid-row:3; grid-column:1;">Levantamento (entrevistas)</div>
+      <div class="gantt-bar remoto" style="grid-row:3; grid-column:3/6;">7 domínios em paralelo</div>
+
+      <div class="gantt-cell label" style="grid-row:4; grid-column:1;">Visita técnica</div>
+      <div class="gantt-bar presencial" style="grid-row:4; grid-column:4/5;">Datacenter/matriz</div>
+
+      <div class="gantt-cell label" style="grid-row:5; grid-column:1;">Avaliação de Controles</div>
+      <div class="gantt-bar interno" style="grid-row:5; grid-column:6/7;">Gap vs. framework</div>
+
+      <div class="gantt-cell label" style="grid-row:6; grid-column:1;">Avaliação de Risco</div>
+      <div class="gantt-bar interno" style="grid-row:6; grid-column:6/7;">Probabilidade x impacto</div>
+
+      <div class="gantt-cell label" style="grid-row:7; grid-column:1;">Avaliação de Maturidade</div>
+      <div class="gantt-bar interno" style="grid-row:7; grid-column:7/8;">Escala 0-5</div>
+
+      <div class="gantt-cell label" style="grid-row:8; grid-column:1;">Consolidação e Roadmap</div>
+      <div class="gantt-bar interno" style="grid-row:8; grid-column:7/9;">Relatório executivo + plano de ação</div>
+
+      <div class="gantt-cell label" style="grid-row:9; grid-column:1;">Validação de achados</div>
+      <div class="gantt-bar remoto" style="grid-row:9; grid-column:8/9;">Contraditório com especialistas</div>
+
+      <div class="gantt-cell label" style="grid-row:10; grid-column:1;">Apresentação executiva final</div>
+      <div class="gantt-bar presencial" style="grid-row:10; grid-column:8/9;">Entrega</div>
+
+      <div class="gantt-cell label" style="grid-row:11; grid-column:1;">Alinhamento semanal</div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:2/3;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:3/4;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:4/5;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:5/6;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:6/7;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:7/8;"></div>
+      <div class="gantt-marker" style="grid-row:11; grid-column:8/9;"></div>
+    </div>
+  </div>
+
+  <table class="ocq" style="margin-top:28px;">
+    <tr><th>Sessão</th><th>Formato</th><th>Quando</th><th>Duração</th></tr>
+    <tr><td>Kickoff</td><td><span class="tag-remoto">Remoto</span></td><td>Semana 1</td><td>~2h</td></tr>
+    <tr><td>Visita técnica (infraestrutura, datacenter/matriz)</td><td><span class="tag-presencial">Presencial</span></td><td>Semana 3</td><td>~4h</td></tr>
+    <tr><td>Entrevistas por domínio (7)</td><td><span class="tag-remoto">Remoto</span></td><td>Semanas 2-4</td><td>~1h cada</td></tr>
+    <tr><td>Alinhamento semanal (Gestor de TI + gerente do projeto)</td><td><span class="tag-remoto">Remoto</span></td><td>Semanal</td><td>~30min cada</td></tr>
+    <tr><td>Validação de achados preliminares (contraditório)</td><td><span class="tag-remoto">Remoto</span></td><td>Semana 7</td><td>~2h</td></tr>
+    <tr><td>Apresentação executiva final</td><td><span class="tag-presencial">Presencial</span></td><td>Semana 7</td><td>~2h</td></tr>
+  </table>
+</section>
+
+<section class="escopo-premissas">
+  <div class="eyebrow" style="color:var(--accent)">Escopo e Premissas</div>
+  <h2>Para o cronograma acima se sustentar</h2>
+  <div class="premissas-grid">
+    <div class="premissa"><b>Disponibilidade do time do cliente</b>Interlocutores técnicos e o Gestor de TI disponíveis nas janelas de entrevista e nos alinhamentos semanais combinados — é a premissa mais crítica do cronograma.</div>
+    <div class="premissa"><b>Continuidade dos interlocutores</b>As mesmas pessoas indicadas no kickoff acompanham o projeto até o fim, evitando retrabalho de nivelamento.</div>
+    <div class="premissa"><b>Acesso a documentação e evidências</b>Inventários, contratos, prints e relatórios solicitados são entregues em até 5 dias úteis após o pedido.</div>
+    <div class="premissa"><b>Sem senha administrativa em texto aberto</b>Verificações de acesso são feitas acompanhadas por um responsável interno, nunca com credencial repassada por e-mail/chat.</div>
+    <div class="premissa"><b>Espaço para as sessões presenciais</b>Sala reservada e acesso físico acompanhado ao site visitado (visita técnica e apresentação final).</div>
+    <div class="premissa"><b>Mudança de escopo via aditivo</b>Inclusão de novas unidades, sistemas ou frentes durante a execução é tratada como aditivo de escopo, com impacto em prazo e horas revisado antes de iniciar.</div>
+  </div>
+</section>
+
+<section class="lastro">
+  <div class="eyebrow" style="color:var(--accent)">Lastro Metodológico</div>
+  <h2>Como avaliamos, não só o que avaliamos</h2>
+  <p class="lastro-intro">Frameworks como COBIT e ITIL definem <em>o padrão de controle</em> esperado. Mas a forma de conduzir o assessment — como pontuar, como validar evidência, como calcular risco — vem de métodos formais próprios, também públicos e amplamente adotados por firmas de consultoria de TI de primeira linha. É esse método, e não apenas o framework, que garante que o diagnóstico da JC Gestão de Risco seja auditável e defensável.</p>
+  <div class="lastro-grid">
+    <div class="metodo-card">
+      <span class="origem">ISACA · Base ISO/IEC 33001</span>
+      <h4>COBIT 2019 Assessment Programme</h4>
+      <p class="oque">Metodologia oficial para avaliar capacidade de processos de TI, sucessora do padrão internacional ISO/IEC 15504 (SPICE).</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> define a escala 0–5 de maturidade usada nos 7 domínios, distinguindo processo praticado com evidência de processo apenas declarado.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">SEI / CMMI Institute</span>
+      <h4>SCAMPI</h4>
+      <p class="oque">Método formal de apreçamento por trás do CMMI — define como coletar e validar evidências antes de atribuir um nível de maturidade.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> é a razão pela qual toda resposta sem evidência anexada é classificada como "Não evidenciado", nunca aceita como fato só porque foi dita em entrevista.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">NIST (EUA) + ISO</span>
+      <h4>NIST SP 800-30 &amp; ISO/IEC 27005</h4>
+      <p class="oque">Guias para conduzir avaliações de risco de forma estruturada, cruzando probabilidade, impacto e criticidade do ativo.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> usados por Segurança, Backup/DR e na consolidação final para classificar cada risco em Crítico, Alto, Médio ou Baixo.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">The Open Group</span>
+      <h4>TOGAF ADM</h4>
+      <p class="oque">Método de desenvolvimento de arquitetura em fases (A a H), referência mundial para mapear arquitetura atual (As-Is) e arquitetura alvo (To-Be).</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> estrutura o inventário de sistemas, integrações e bancos de dados da JC Gestão de Risco e a evolução recomendada.</p>
+    </div>
+    <div class="metodo-card">
+      <span class="origem">AXELOS / ITIL 4</span>
+      <h4>Continual Improvement Model</h4>
+      <p class="oque">Modelo de melhoria contínua: onde estamos, onde queremos chegar, como chegamos, chegamos, como sustentamos.</p>
+      <p class="aplicacao"><b>Nesta proposta:</b> estrutura o Roadmap final nos quatro horizontes — 0-30 dias, 30-90 dias, 3-6 meses e 6-12 meses.</p>
+    </div>
+  </div>
+  <p class="lastro-rodape">Nenhuma destas metodologias é propriedade de uma firma de consultoria específica — são normas e modelos públicos (ISACA, SEI/CMMI Institute, NIST, ISO, The Open Group, AXELOS), o que dá rigor auditável ao diagnóstico sem depender de licenciamento de metodologia proprietária de terceiros.</p>
+</section>
+
+<section class="escopo">
+  <div class="eyebrow" style="color:var(--accent)">Escopo</div>
+  <h2>Três frentes de avaliação — 300 perguntas no total</h2>
+  <div class="frentes">
+    <div class="frente">
+      <div class="letra">A</div>
+      <span class="qtd-perguntas">207 perguntas</span>
+      <h3>Infraestrutura de TI</h3>
+      <ul><li>Servidores, rede e virtualização</li><li>Segurança de endpoint e identidade</li><li>Backup, DR e continuidade</li><li>Ativos e licenciamento em nuvem</li></ul>
+    </div>
+    <div class="frente">
+      <div class="letra">B</div>
+      <span class="qtd-perguntas">51 perguntas</span>
+      <h3>Arquitetura Corporativa</h3>
+      <ul><li>Portfólio de sistemas e bancos de dados</li><li>Versionamento e ambientes</li><li>Integrações e interfaces entre sistemas</li><li>Segurança de aplicações</li></ul>
+    </div>
+    <div class="frente">
+      <div class="letra">C</div>
+      <span class="qtd-perguntas">42 perguntas</span>
+      <h3>Governança e Processos de TI</h3>
+      <ul><li>Políticas de TI e documentação</li><li>Incidentes, problemas e mudanças</li><li>CMDB, ativos, hardware e leasing</li><li>Fornecedores e contratos (COBIT + ITIL)</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="raci">
+  <div class="eyebrow" style="color:var(--accent)">Responsabilidades</div>
+  <h2>Quem faz o quê</h2>
+  <p class="raci-legenda"><b>R</b> Responsável (executa) · <b>A</b> Aprovador · <b>C</b> Consultado · <b>I</b> Informado</p>
+  <table class="ocq">
+    <tr><th>Atividade</th><th>JC Gestão de Risco</th><th>eloo Assessment</th></tr>
+    <tr><td>Indicar interlocutor por módulo e manter continuidade</td><td>R/A</td><td>I</td></tr>
+    <tr><td>Fornecer acesso a documentação, contratos e evidências</td><td>R</td><td>C</td></tr>
+    <tr><td>Conduzir entrevistas e aplicar os questionários</td><td>C</td><td>R</td></tr>
+    <tr><td>Executar a visita técnica presencial</td><td>C</td><td>R</td></tr>
+    <tr><td>Atribuir maturidade e classificar controles</td><td>I</td><td>R</td></tr>
+    <tr><td>Consolidar riscos, gaps e priorização</td><td>I</td><td>R</td></tr>
+    <tr><td>Validar achados preliminares (contraditório)</td><td>A</td><td>R</td></tr>
+    <tr><td>Elaborar Relatório Executivo e Roadmap</td><td>I</td><td>R</td></tr>
+    <tr><td>Aprovar a entrega final</td><td>A</td><td>I</td></tr>
+  </table>
+</section>
+
+<section class="esforco">
+  <div class="eyebrow" style="color:var(--accent)">Esforço e Prazo</div>
+  <h2>224h de consultoria · 46h do lado JC Gestão de Risco</h2>
+  <p style="max-width:74ch; font-size:13.5px; color:var(--texto-suave); margin-top:4px;">
+    Horas de especialista por domínio conforme a referência de porte M — todas as frentes iniciam em
+    paralelo, sem sequenciamento por prioridade, o que permite resultados preliminares em todos os
+    domínios já nas primeiras semanas.
+  </p>
+  <div class="esforco-grid">
+    <table>
+      <tr><th>Especialista</th><th>Horas</th></tr>
+      <tr><td>Governança de TI (COBIT/ITIL)</td><td>32h</td></tr>
+      <tr><td>Arquitetura Corporativa</td><td>32h</td></tr>
+      <tr><td>Infraestrutura e Redes <span style="color:var(--texto-fraco); font-weight:400;">(inclui visita técnica presencial)</span></td><td>28h</td></tr>
+      <tr><td>Segurança da Informação</td><td>28h</td></tr>
+      <tr><td>Endpoint e Device Management</td><td>20h</td></tr>
+      <tr><td>Backup e Disaster Recovery</td><td>18h</td></tr>
+      <tr><td>Cloud e Licenciamento</td><td>16h</td></tr>
+      <tr><td>Gestão do Projeto</td><td>20h</td></tr>
+      <tr><td>Consolidação, Roadmap e Revisão Técnica</td><td>30h</td></tr>
+      <tr class="total"><td>Total consultoria</td><td>224h</td></tr>
+    </table>
+    <div class="prazo-card">
+      <div class="eyebrow">Prazo calendário</div>
+      <div class="num">7 sem.</div>
+      <span class="status-pill">Sujeito a ajuste conforme disponibilidade real do time</span>
+      <hr style="width:100%; border:none; border-top:1px solid var(--linha); margin:6px 0;">
+      <div class="eyebrow">Lado JC Gestão de Risco</div>
+      <div class="num" style="font-size:26px;">46h</div>
+      <span style="font-size:13px; color:var(--texto-suave);">Gestor de TI (inclui alinhamentos semanais), responsáveis técnicos e analistas N2</span>
+    </div>
+  </div>
+</section>
+
+<section class="entregaveis">
+  <div class="eyebrow" style="color:var(--accent)">Entregáveis</div>
+  <h2>O que fica com a JC Gestão de Risco ao final</h2>
+  <div class="entregaveis-grid">
+    <div class="entregavel">Relatório Executivo</div>
+    <div class="entregavel">Relatório Técnico do Assessment (controles, evidências, riscos, recomendações)</div>
+    <div class="entregavel">Matriz de Riscos de TI</div>
+    <div class="entregavel">Matriz de Gaps (Situação Atual → Recomendada → Ação)</div>
+    <div class="entregavel">Inventário Consolidado</div>
+    <div class="entregavel">Mapa de Maturidade por domínio — com gráfico radar (exemplo abaixo)</div>
+    <div class="entregavel">Plano de Ação Priorizado + Roadmap de Evolução em 4 horizontes (0-30d, 30-90d, 3-6m, 6-12m)</div>
+  </div>
+
+  <div class="radar-exemplo">
+    <p class="radar-nota">Exemplo ilustrativo do formato de entrega — dados fictícios, o real é gerado ao final da Fase 4 com base em evidência coletada.</p>
+    <svg viewBox="-40 -10 440 360" class="radar-svg" role="img" aria-label="Exemplo de gráfico radar de maturidade por módulo">
+      <polygon points="180.0,40.0 281.6,88.9 306.7,198.9 236.4,287.1 123.6,287.1 53.3,198.9 78.4,88.9" class="radar-grid-ring" />
+      <polygon points="180.0,66.0 261.3,105.2 281.4,193.1 225.1,263.7 134.9,263.7 78.6,193.1 98.7,105.2" class="radar-grid-ring" />
+      <polygon points="180.0,92.0 241.0,121.4 256.0,187.4 213.8,240.3 146.2,240.3 104.0,187.4 119.0,121.4" class="radar-grid-ring" />
+      <polygon points="180.0,118.0 220.7,137.6 230.7,181.6 202.6,216.9 157.4,216.9 129.3,181.6 139.3,137.6" class="radar-grid-ring" />
+      <polygon points="180.0,144.0 200.3,153.8 205.3,175.8 191.3,193.4 168.7,193.4 154.7,175.8 159.7,153.8" class="radar-grid-ring" />
+      <line x1="180" y1="170" x2="180.0" y2="40.0" class="radar-axis" />
+      <line x1="180" y1="170" x2="281.6" y2="88.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="306.7" y2="198.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="236.4" y2="287.1" class="radar-axis" />
+      <line x1="180" y1="170" x2="123.6" y2="287.1" class="radar-axis" />
+      <line x1="180" y1="170" x2="53.3" y2="198.9" class="radar-axis" />
+      <line x1="180" y1="170" x2="78.4" y2="88.9" class="radar-axis" />
+      <polygon points="180.0,118.0 230.8,129.5 256.0,187.4 219.5,252.0 157.4,216.9 142.0,178.7 129.2,129.5" class="radar-data" />
+      <text x="180.0" y="26" class="radar-label" text-anchor="middle">Segurança</text>
+      <text x="303.5" y="71.5" class="radar-label" text-anchor="start">Infraestrutura</text>
+      <text x="334.0" y="205.2" class="radar-label" text-anchor="start">Cloud</text>
+      <text x="248.6" y="316" class="radar-label" text-anchor="middle">Arquitetura</text>
+      <text x="111.4" y="316" class="radar-label" text-anchor="middle">Endpoint</text>
+      <text x="26.0" y="205.2" class="radar-label" text-anchor="end">Backup</text>
+      <text x="56.5" y="71.5" class="radar-label" text-anchor="end">Governança</text>
+    </svg>
+  </div>
+</section>
+
+<section class="investimento">
+  <div class="eyebrow" style="color:var(--accent)">Investimento</div>
+  <h2>Valor fechado por escopo</h2>
+  <div class="investimento-box" style="text-align:left; max-width:640px;">
+    <div class="valor" style="font-size:32px; text-align:center; color:var(--texto);">R$ 56.000,00</div>
+    <p style="font-size:13px; color:var(--texto-fraco); text-align:center; margin:4px 0 20px;">224h de consultoria · taxa média R$ 250/h · cronograma de 7 semanas</p>
+    <table class="ocq" style="margin-top:0;">
+      <tr><th>Condição</th><th>Detalhe</th></tr>
+      <tr><td>Faturamento</td><td>30% no aceite · 40% na entrega do diagnóstico (Fase 4) · 30% na entrega final</td></tr>
+      <tr><td>Extensão de prazo</td><td>Além de 10 semanas por causa atribuível ao cliente (Premissas 1 e 3): R$ 150/h de gestão, faturado à parte, mensalmente</td></tr>
+      <tr><td>Crédito para implementação</td><td>50% do valor pago é creditado no Plano de Adequação e Evolução Tecnológica, se contratado em até 90 dias da entrega final</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="equipe">
+  <div class="eyebrow" style="color:var(--accent)">Equipe</div>
+  <h2>Um especialista por domínio, um gerente do início ao fim</h2>
+  <div class="equipe-grid">
+    <div class="pessoa"><span class="ic">PM</span><div><b>Gerente de Projeto</b><span>Proposta, metodologia e acompanhamento executivo</span></div></div>
+    <div class="pessoa"><span class="ic">AR</span><div><b>Arquitetura Corporativa</b><span>Sistemas, aplicações, bancos de dados e integrações</span></div></div>
+    <div class="pessoa"><span class="ic">IN</span><div><b>Infraestrutura e Redes</b><span>Servidores, rede e virtualização</span></div></div>
+    <div class="pessoa"><span class="ic">CL</span><div><b>Cloud e Licenciamento</b><span>Ativos e licenciamento em nuvem</span></div></div>
+    <div class="pessoa"><span class="ic">SI</span><div><b>Segurança da Informação</b><span>EDR, identidade e segurança de aplicações</span></div></div>
+    <div class="pessoa"><span class="ic">EP</span><div><b>Endpoint Management</b><span>Sistemas operacionais e ciclo de vida de dispositivos</span></div></div>
+    <div class="pessoa"><span class="ic">BC</span><div><b>Backup e Continuidade</b><span>Backup, disaster recovery e continuidade</span></div></div>
+    <div class="pessoa"><span class="ic">GV</span><div><b>Governança de TI</b><span>Processos, CMDB, fornecedores — COBIT/ITIL</span></div></div>
+  </div>
+</section>
+
+<section class="condicoes-gerais">
+  <div class="eyebrow" style="color:var(--accent)">Condições Gerais</div>
+  <h2>Validade, confidencialidade e propriedade intelectual</h2>
+  <div class="condicoes-grid">
+    <div class="condicao"><b>Validade da proposta</b>30 dias corridos a partir da data de emissão (16/09/2026). Após esse prazo, valores e cronograma podem ser revisados.</div>
+    <div class="condicao"><b>Confidencialidade</b>Dados operacionais, técnicos e financeiros da JC Gestão de Risco, e a metodologia/questionários/critérios da eloo.digital, são tratados como confidenciais por ambas as partes.</div>
+    <div class="condicao"><b>Propriedade intelectual</b>A metodologia, os questionários working paper e os modelos de relatório são da eloo.digital, cedidos apenas para uso neste Assessment. Dados e evidências da JC Gestão de Risco permanecem de sua propriedade exclusiva.</div>
+    <div class="condicao"><b>Prevalência contratual</b>Em caso de conflito entre esta proposta e um contrato formal assinado, prevalecem os termos do contrato.</div>
+  </div>
+</section>
+
+<section class="proximos-passos">
+  <div class="eyebrow" style="color:#9FC3DB;">Próximos Passos</div>
+  <h2>Do aceite ao kickoff formal</h2>
+  <div class="passos">
+    <div class="passo"><span class="n">PASSO 1</span><strong>Aceite da proposta</strong><span>Confirmação formal da JC Gestão de Risco</span></div>
+    <div class="passo"><span class="n">PASSO 2</span><strong>Kickoff formal</strong><span>Interlocutores, acessos e agenda definidos</span></div>
+    <div class="passo"><span class="n">PASSO 3</span><strong>Levantamento</strong><span>Todos os domínios iniciam em paralelo</span></div>
+  </div>
+</section>
+
+<footer>Assessment de Governança, Infraestrutura e Sistemas de TI — JC Gestão de Risco · Documento confidencial, uso exclusivo do destinatário · 16/09/2026</footer>
+<div style="text-align:center;padding:0 0 30px;"><a href="/assessment/jc-gestao-de-risco/" style="font-family:-apple-system,sans-serif;font-size:13px;color:#5b5f52;text-decoration:none;">&larr; Voltar ao painel do projeto</a></div>
+</body>
+</html>

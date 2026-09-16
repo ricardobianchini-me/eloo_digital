@@ -1,0 +1,125 @@
+---
+import '../../../styles/global.css';
+
+const marcos = [
+  { data: "16/09/2026", titulo: "Apresentação da Proposta", desc: "Proposta técnica e comercial apresentada à JC Gestão de Risco.", cor: "amber" },
+  { data: "—", titulo: "Aceite da Proposta", desc: "Confirmação formal da JC Gestão de Risco.", cor: "pendente" },
+  { data: "—", titulo: "Kickoff Formal", desc: "Interlocutores indicados por domínio, acessos confirmados, agenda de entrevistas definida.", cor: "pendente" },
+  { data: "—", titulo: "Levantamento (Fase 3)", desc: "Entrevistas por domínio, aplicação dos questionários working paper — todos os 7 domínios em paralelo.", cor: "pendente" },
+  { data: "—", titulo: "Diagnóstico (Fase 4)", desc: "Avaliação de maturidade por domínio, com base em evidência coletada.", cor: "pendente" },
+  { data: "—", titulo: "Relatório Executivo e Roadmap", desc: "Consolidação, ranking de riscos, quick-wins e plano de evolução.", cor: "pendente" },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Status do Projeto — JC Gestão de Risco | eloo Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="confid">Documento confidencial — uso exclusivo JC Gestão de Risco · não indexado, não distribuir</div>
+
+    <header class="topo">
+      <a href="/assessment/jc-gestao-de-risco/" class="voltar">&larr; Voltar ao painel do projeto</a>
+      <a href="/" class="wordmark" aria-label="eloo.digital">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+    </header>
+
+    <main class="painel">
+      <div class="cabecalho">
+        <span class="eyebrow">Status do Projeto</span>
+        <h1>JC Gestão de Risco</h1>
+        <div class="status status-amber">
+          <span class="status-dot"></span>
+          Proposta apresentada — aguardando aceite
+        </div>
+        <p class="status-detalhe">
+          Proposta apresentada em 16/09/2026. O kickoff formal, a indicação de
+          interlocutores por domínio e o início do levantamento só ocorrem após
+          o aceite.
+        </p>
+      </div>
+
+      <section class="bloco">
+        <h2>Linha do tempo</h2>
+        <div class="timeline">
+          {marcos.map((m) => (
+            <div class={`marco marco-${m.cor}`}>
+              <span class="marco-data">{m.data}</span>
+              <div>
+                <strong>{m.titulo}</strong>
+                <span>{m.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>Próximos passos</h2>
+        <p class="nota">
+          Após o aceite: kickoff formal para indicar interlocutores por
+          domínio, confirmar acessos e fechar a agenda de entrevistas. Todos
+          os 7 domínios iniciam o levantamento em paralelo, sem
+          sequenciamento por prioridade — ver Seção 8 da proposta técnica.
+        </p>
+      </section>
+    </main>
+
+    <footer class="rodape">eloo Assessment — JC Gestão de Risco · Documento confidencial, uso exclusivo do destinatário</footer>
+  </body>
+</html>
+
+<style is:global>
+  body { background: var(--parchment); margin: 0; }
+  .confid {
+    background: var(--dourado); color: var(--deep); text-align: center;
+    font-size: 0.78rem; font-weight: 700; padding: 0.45rem 1rem; letter-spacing: 0.02em;
+  }
+  .topo {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 2rem; border-bottom: 1px solid var(--line);
+  }
+  .voltar { font-size: 0.85rem; font-weight: 600; text-decoration: none; color: var(--ink-muted); }
+  .voltar:hover { color: var(--ink); }
+  .wordmark {
+    display: inline-flex; align-items: baseline; font-family: var(--font-brand);
+    font-weight: 800; letter-spacing: -0.02em; text-decoration: none; color: var(--deep); font-size: 1rem;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+
+  .painel { max-width: 880px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+  .cabecalho { margin-bottom: 3rem; }
+  .eyebrow { font-size: 0.8rem; font-weight: 700; color: var(--dourado); text-transform: uppercase; letter-spacing: 0.05em; }
+  .cabecalho h1 { font-family: var(--font-title); color: var(--deep); font-size: 2.2rem; margin: 0.3rem 0 1rem; }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-title);
+    font-weight: 700; font-size: 0.88rem; padding: 0.4rem 0.9rem; border-radius: 999px; margin-bottom: 0.6rem;
+  }
+  .status-amber { background: #fbf0d9; color: #8a5a00; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #d99a00; }
+  .status-detalhe { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.9rem; max-width: 62ch; }
+
+  .bloco { margin-top: 3rem; }
+  .bloco h2 { font-family: var(--font-title); color: var(--deep); font-size: 1.15rem; border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+  .nota { font-family: var(--font-body); color: var(--ink-muted); font-size: 0.9rem; max-width: 68ch; margin-top: 0.8rem; }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 1.2rem; }
+  .marco {
+    display: flex; gap: 1.2rem; padding: 1rem 0; border-left: 2px solid var(--line); position: relative; padding-left: 1.5rem;
+  }
+  .marco::before {
+    content: ""; position: absolute; left: -7px; top: 1.3rem; width: 12px; height: 12px; border-radius: 50%; background: var(--line);
+  }
+  .marco-verde::before { background: #3f8a5a; }
+  .marco-amber::before { background: #d99a00; }
+  .marco-pendente::before { background: var(--line); }
+  .marco-data { font-family: var(--font-title); font-size: 0.78rem; font-weight: 700; color: var(--ink-muted); min-width: 70px; }
+  .marco strong { display: block; font-family: var(--font-title); font-size: 0.98rem; color: var(--deep); }
+  .marco span { display: block; font-family: var(--font-body); font-size: 0.86rem; color: var(--ink-muted); margin-top: 0.2rem; max-width: 56ch; }
+</style>
