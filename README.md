@@ -34,20 +34,25 @@ para o cliente acessar. Ao atualizar proposta/questionário depois de
 publicado, editar os dois lugares (fonte em `pacce-co`, cópia aqui) ou, no
 mínimo, atualizar aqui e replicar depois na fonte.
 
-**Proteção de acesso:** essas páginas ficam sob HTTP Basic Auth no NGINX do
-container (`location /assessment/{cliente}/` em `nginx.conf`, com
-`auth_basic_user_file /etc/nginx/.htpasswd`). O arquivo `.htpasswd` (senhas
-com hash apr1, nunca em texto puro) fica no repositório — commitado porque
-são hashes, não senhas — e é copiado pro container no `Dockerfile`. Pra
-adicionar um cliente novo:
+**Proteção de acesso (2026-09-16 — PIN, não mais Basic Auth):** essas páginas
+ficam atrás de um PIN por cliente, com a mesma UX da ferramenta interna de
+resposta ao vivo (tela própria, só um campo de PIN — nunca o popup nativo
+de usuário+senha do navegador do HTTP Basic Auth, que era confuso). O gate
+roda no **nginx do host** (`hlera-bot/nginx/vm2-apps/eloo-digital`), via
+`auth_request` contra `GET /assessment/{cliente}/portal/check` no app
+`assessti-forms` (`app/portal_auth.py` + `app/clientes.py`, campo
+`portal_pin`) — o nginx *deste* repositório (`nginx.conf`, dentro do
+container do site estático) não faz mais nenhum auth_basic, pra não conflitar
+com esse fluxo. Pra adicionar um cliente novo:
 
-1. Gerar hash: `openssl passwd -apr1 "senha-gerada"` e adicionar uma linha
-   `usuario:hash` em `.htpasswd`.
-2. Adicionar um bloco `location /assessment/{slug}/ { auth_basic ...; }` em
-   `nginx.conf` (copiar o bloco existente de `super-logistica`).
-3. Criar a pasta `src/pages/assessment/{slug}/` seguindo o padrão acima.
-4. A senha em texto puro é entregue ao cliente por canal separado (nunca
-   commitada) — quem gerou guarda o registro fora do repositório.
+1. Adicionar `"portal_pin": "<pin>"` na entrada do cliente em
+   `assessti-forms/app/clientes.py` e fazer deploy do app (dispara sozinho
+   com `paths: ['assessti-forms/**']`).
+2. Criar a pasta `src/pages/assessment/{slug}/` seguindo o padrão acima —
+   nenhum location block novo é necessário no nginx do host nem aqui, o
+   gate já cobre `/assessment/{qualquer-slug}/` genericamente.
+3. O PIN é entregue ao cliente por canal separado (nunca por e-mail junto
+   com o link do portal).
 
 Todas essas páginas têm `<meta name="robots" content="noindex, nofollow">`
 e o path `/assessment/*/` está bloqueado em `public/robots.txt` — não
@@ -130,10 +135,9 @@ src/pages/assessment/{cliente}/          — portal privado de um cliente (ver s
 src/layouts/ClientDoc.astro              — layout dos documentos de cliente (questionários em markdown)
 src/styles/global.css                    — tokens de design (cores, tipografia) + wordmark, compartilhado por todas as páginas
 public/                                  — favicon, assets estáticos, robots.txt, proposta.html de cada cliente
-.htpasswd                                — hashes de senha dos portais de cliente (apr1; nunca senha em texto puro)
 Dockerfile                               — build Astro + serve via nginx:alpine
 docker-compose.yml                       — como o container roda na VM
-nginx.conf                               — config do nginx *dentro* do container (não confundir com o nginx do host) — inclui os location blocks de auth_basic por cliente
+nginx.conf                               — config do nginx *dentro* do container (não confundir com o nginx do host) — só serve estático, o gate de PIN dos portais de cliente vive no nginx do host + assessti-forms
 ```
 
 Cada página em `src/pages/` vira uma rota automaticamente (Astro file-based
