@@ -216,6 +216,23 @@
   .passo span{font-size:13px; color:#CFE0EC;}
 
   footer{padding:22px clamp(20px,6vw,80px); font-size:12px; color:var(--texto-fraco); border-top:1px solid var(--linha);}
+
+  /* Sumário (índice de seções) */
+  .sumario{
+    position:sticky; top:0; z-index:10; background:var(--cinza);
+    border-bottom:1px solid var(--linha); padding:12px clamp(20px,6vw,80px);
+    display:flex; gap:8px; overflow-x:auto; white-space:nowrap;
+    -ms-overflow-style:none; scrollbar-width:thin;
+  }
+  .sumario a{
+    flex:none; font-size:12.5px; font-weight:600; text-decoration:none;
+    color:var(--azul-2); background:var(--card); border:1px solid var(--linha);
+    border-radius:20px; padding:6px 13px; transition:border-color .15s ease, color .15s ease;
+  }
+  .sumario a:hover{border-color:var(--accent); color:var(--accent);}
+  @media (prefers-color-scheme: dark){ .sumario a{ color:#9FC3DB; } }
+  html{scroll-behavior:smooth;}
+  section[id]{scroll-margin-top:64px;}
 </style>
 </head>
 <body>
@@ -232,7 +249,24 @@
   </div>
 </section>
 
-<section class="quem-somos">
+<nav class="sumario" aria-label="Índice da proposta">
+  <a href="#quem-somos">Quem Somos</a>
+  <a href="#objetivo">Objetivo</a>
+  <a href="#metodologia">Metodologia</a>
+  <a href="#cronograma">Cronograma</a>
+  <a href="#escopo-premissas">Escopo e Premissas</a>
+  <a href="#lastro">Lastro Metodológico</a>
+  <a href="#escopo">Escopo</a>
+  <a href="#raci">Responsabilidades</a>
+  <a href="#esforco">Esforço e Prazo</a>
+  <a href="#entregaveis">Entregáveis</a>
+  <a href="#investimento">Investimento</a>
+  <a href="#equipe">Equipe</a>
+  <a href="#condicoes-gerais">Condições Gerais</a>
+  <a href="#proximos-passos">Próximos Passos</a>
+</nav>
+
+<section class="quem-somos" id="quem-somos">
   <div class="eyebrow" style="color:var(--accent)">Quem Somos</div>
   <h2>Um especialista por domínio, um gerente do início ao fim</h2>
   <p>O <b>eloo Assessment</b> é a vertical de consultoria B2B da eloo.digital para governança, infraestrutura e sistemas de TI — um especialista por domínio técnico (Segurança, Infraestrutura, Cloud, Arquitetura Corporativa, Endpoint, Backup/Continuidade e Governança), mais um gerente de projeto do início ao fim. O diagnóstico segue COBIT 2019 e ITIL 4, com o método de avaliação — como pontuar, como validar evidência, como calcular risco — lastreado em metodologias formais públicas (ver Seção "Lastro Metodológico" abaixo), o mesmo padrão técnico usado por firmas de consultoria de TI de primeira linha.</p>
@@ -242,7 +276,7 @@
   <p>A maioria das empresas descobre um gap crítico de TI só quando ele já virou incidente — um backup que nunca foi testado, uma senha administrativa que ninguém sabe quem mais conhece, um sistema fora de suporte sustentando uma operação inteira. O Assessment identifica isso antes, com evidência documentada — nunca com uma lista de boas práticas genéricas ou percepção de quem responde à entrevista.</p>
 </section>
 
-<section class="objetivo">
+<section class="objetivo" id="objetivo">
   <div class="eyebrow" style="color:var(--accent)">Objetivo</div>
   <h2>Diagnosticar o ambiente de TI antes de investir na evolução dele</h2>
   <p>Avaliar o ambiente tecnológico da Super Logística sob as perspectivas de Infraestrutura, Sistemas, Aplicações, Segurança, Continuidade, Gestão de Ativos, Licenciamento e Processos de TI — identificando cenário atual, controles existentes, lacunas, riscos e dependências críticas que sustentam a operação logística multi-unidade.</p>
@@ -253,7 +287,7 @@
   </div>
 </section>
 
-<section class="metodologia">
+<section class="metodologia" id="metodologia">
   <div class="eyebrow" style="color:var(--accent)">Metodologia</div>
   <h2>Diagnóstico → Avaliação → Priorização → Roadmap</h2>
   <p class="ciclo" style="margin-top:6px; text-align:left; color:var(--texto-suave); font-weight:400;">As 5 etapas formais do assessment, com status de projeto reportado a cada transição.</p>
@@ -290,7 +324,7 @@
   </table>
 </section>
 
-<section class="cronograma">
+<section class="cronograma" id="cronograma">
   <div class="eyebrow" style="color:var(--accent)">Cronograma</div>
   <h2>16 semanas (~4 meses) — sessões presenciais e remotas</h2>
   <p style="max-width:74ch; font-size:14.5px; color:var(--texto-suave); margin-top:6px;">
@@ -376,7 +410,7 @@
   </table>
 </section>
 
-<section class="escopo-premissas">
+<section class="escopo-premissas" id="escopo-premissas">
   <div class="eyebrow" style="color:var(--accent)">Escopo e Premissas</div>
   <h2>Para o cronograma acima se sustentar</h2>
   <div class="premissas-grid">
@@ -389,7 +423,7 @@
   </div>
 </section>
 
-<section class="lastro">
+<section class="lastro" id="lastro">
   <div class="eyebrow" style="color:var(--accent)">Lastro Metodológico</div>
   <h2>Como avaliamos, não só o que avaliamos</h2>
   <p class="lastro-intro">Frameworks como COBIT e ITIL definem <em>o padrão de controle</em> esperado. Mas a forma de conduzir o assessment — como pontuar, como validar evidência, como calcular risco — vem de métodos formais próprios, também públicos e amplamente adotados por firmas de consultoria de TI de primeira linha. É esse método, e não apenas o framework, que garante que o diagnóstico da Super Logística seja auditável e defensável.</p>
@@ -428,7 +462,7 @@
   <p class="lastro-rodape">Nenhuma destas metodologias é propriedade de uma firma de consultoria específica — são normas e modelos públicos (ISACA, SEI/CMMI Institute, NIST, ISO, The Open Group, AXELOS), o que dá rigor auditável ao diagnóstico sem depender de licenciamento de metodologia proprietária de terceiros.</p>
 </section>
 
-<section class="escopo">
+<section class="escopo" id="escopo">
   <div class="eyebrow" style="color:var(--accent)">Escopo</div>
   <h2>Três frentes de avaliação — 300 perguntas no total</h2>
   <div class="frentes">
@@ -454,7 +488,7 @@
   </div>
 </section>
 
-<section class="raci">
+<section class="raci" id="raci">
   <div class="eyebrow" style="color:var(--accent)">Responsabilidades</div>
   <h2>Quem faz o quê</h2>
   <p class="raci-legenda"><b>R</b> Responsável (executa) · <b>A</b> Aprovador · <b>C</b> Consultado · <b>I</b> Informado</p>
@@ -472,7 +506,7 @@
   </table>
 </section>
 
-<section class="esforco">
+<section class="esforco" id="esforco">
   <div class="eyebrow" style="color:var(--accent)">Esforço e Prazo</div>
   <h2>242h de consultoria · 56h do lado Super Logística</h2>
   <p style="max-width:74ch; font-size:13.5px; color:var(--texto-suave); margin-top:4px;">
@@ -506,7 +540,7 @@
   </div>
 </section>
 
-<section class="entregaveis">
+<section class="entregaveis" id="entregaveis">
   <div class="eyebrow" style="color:var(--accent)">Entregáveis</div>
   <h2>O que fica com a Super Logística ao final</h2>
   <div class="entregaveis-grid">
@@ -546,7 +580,7 @@
   </div>
 </section>
 
-<section class="investimento">
+<section class="investimento" id="investimento">
   <div class="eyebrow" style="color:var(--accent)">Investimento</div>
   <h2>Valor fechado por escopo</h2>
   <div class="investimento-box" style="text-align:left; max-width:640px;">
@@ -561,7 +595,7 @@
   </div>
 </section>
 
-<section class="equipe">
+<section class="equipe" id="equipe">
   <div class="eyebrow" style="color:var(--accent)">Equipe</div>
   <h2>Um especialista por domínio, um gerente do início ao fim</h2>
   <div class="equipe-grid">
@@ -576,7 +610,7 @@
   </div>
 </section>
 
-<section class="condicoes-gerais">
+<section class="condicoes-gerais" id="condicoes-gerais">
   <div class="eyebrow" style="color:var(--accent)">Condições Gerais</div>
   <h2>Validade, confidencialidade e propriedade intelectual</h2>
   <div class="condicoes-grid">
@@ -587,7 +621,7 @@
   </div>
 </section>
 
-<section class="proximos-passos">
+<section class="proximos-passos" id="proximos-passos">
   <div class="eyebrow" style="color:#9FC3DB;">Próximos Passos</div>
   <h2>Do aceite ao kickoff formal</h2>
   <div class="passos">
