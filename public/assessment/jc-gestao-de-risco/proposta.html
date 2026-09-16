@@ -245,6 +245,21 @@
   @media (prefers-color-scheme: dark){ .sumario a{ color:#9FC3DB; } }
   html{scroll-behavior:smooth;}
   section[id]{scroll-margin-top:64px;}
+
+  /* Impressão / PDF */
+  @media print{
+    .sumario{display:none !important;}
+    section{break-inside:avoid;}
+    .gantt-wrap{overflow:visible !important;}
+    .gantt{
+      min-width:0 !important;
+      grid-template-columns:110px repeat(16,minmax(0,1fr)) !important;
+      font-size:9px;
+    }
+    .gantt-bar{font-size:8px !important; padding:0 3px !important;}
+    .gantt-cell.head{font-size:8px !important;}
+    .gantt-cell.label{font-size:9px !important;}
+  }
 </style>
 </head>
 <body>
