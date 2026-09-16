@@ -261,8 +261,10 @@
     /* Evita seção inteira "sumir" pra próxima página deixando um vão em
        branco — o break-inside:avoid vai nos cartões/linhas, não na seção. */
     .frente, .metodo-card, .destaque, .premissa, .condicao, .pessoa,
-    .passo, .lider-card, .entregavel, tr, .gantt-wrap { break-inside: avoid; }
+    .passo, .lider-card, .entregavel, .fase, .prazo-card, .investimento-box,
+    .radar-exemplo, tr, .gantt-wrap { break-inside: avoid; }
     h1, h2, h3, .eyebrow { break-after: avoid-page; }
+    .eyebrow, .raci-legenda { break-after: avoid-page; }
 
     .gantt-wrap{overflow:visible !important;}
     .gantt{
