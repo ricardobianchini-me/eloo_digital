@@ -72,6 +72,10 @@ const servicos = [
     desc: "Diagnóstico técnico de infraestrutura, sistemas e governança de TI, com rigor de auditoria — pra empresas que precisam saber onde estão antes de investir em evolução tecnológica.",
     href: "/assessment",
   },
+  {
+    nome: "Soluções Digitais",
+    desc: "Transformamos suas ideias em soluções reais. Desenvolvimento sob medida de sistemas, aplicativos e ferramentas digitais — para quem precisa de algo que o mercado ainda não vende pronto.",
+  },
 ];
 
 const ofertas = [
@@ -123,7 +127,7 @@ const ofertas = [
 
     <section class="section" id="hub">
       <p class="eyebrow">O que a eloo.digital faz por você</p>
-      <h2>Entregamos uma solução completa, sustentada por quatro serviços de apoio.</h2>
+      <h2>Entregamos uma solução completa, sustentada por cinco serviços de apoio.</h2>
       <p class="lede">
         Por trás de tudo isso está a eloo.digital: uma parceira única, com o mesmo time e o mesmo
         cuidado de longo prazo, pronta para atender o desafio mais urgente da sua organização.
@@ -492,8 +496,7 @@ const ofertas = [
   }
 
   /* Hub — o que fazemos */
-  .hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
-  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
+  .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
   @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
   .hub-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem;
