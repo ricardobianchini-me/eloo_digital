@@ -10,14 +10,6 @@ import '@fontsource/work-sans/600.css';
 const DIAGNOSTICO_URL = "https://claude.ai/code/artifact/1015379a-794c-4a92-8e04-ea01320f4fab";
 const PACCE_URL = "https://pacce.app";
 
-const ofertas = [
-  { tag: "Produto", nome: "PACCE", desc: "Plataforma de gestão e atendimento — o núcleo de tudo.", core: true },
-  { tag: "Serviço", nome: "Criação de Sites", desc: "Institucional com CMS — manutenção contínua, não entrega única." },
-  { tag: "Serviço", nome: "Marketing Digital", desc: "Conteúdo e captação com fluência no seu público." },
-  { tag: "Serviço", nome: "Canais Digitais", desc: "Facebook, Instagram e YouTube publicados pelo mesmo motor do PACCE." },
-  { tag: "Serviço", nome: "Assessment de TI", desc: "Diagnóstico técnico de infraestrutura, sistemas e governança de TI, com rigor de auditoria.", href: "/assessment" },
-];
-
 const jornada = [
   {
     n: "01", nome: "Diagnóstico",
@@ -80,6 +72,11 @@ const servicos = [
     desc: "Diagnóstico técnico de infraestrutura, sistemas e governança de TI, com rigor de auditoria — pra empresas que precisam saber onde estão antes de investir em evolução tecnológica.",
     href: "/assessment",
   },
+];
+
+const ofertas = [
+  { tag: "Produto", nome: "PACCE", desc: "Plataforma de gestão e atendimento — o núcleo de tudo.", core: true },
+  ...servicos.map((s) => ({ tag: "Serviço", nome: s.nome, desc: s.desc, href: s.href })),
 ];
 ---
 
@@ -290,7 +287,7 @@ const servicos = [
 
     <section class="section" id="servicos">
       <p class="eyebrow">Serviços</p>
-      <h2>O que a eloo.digital vem fazendo pelos seus clientes</h2>
+      <h2>O que a <span class="heading-brand">eloo.digital</span> vem fazendo pelos seus clientes</h2>
       <p class="lede">
         Presença, comunicação e crescimento — pra quem já resolveu a gestão interna e agora
         precisa aparecer, ou pra quem ainda está começando essa jornada.
@@ -484,6 +481,7 @@ const servicos = [
     text-wrap: balance;
     max-width: 32ch;
   }
+  .heading-brand { color: var(--accent); }
   .lede {
     font-family: var(--font-body);
     font-size: 1.02rem;
