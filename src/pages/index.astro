@@ -327,9 +327,6 @@ const ofertas = [
           <p class="eyebrow">Fale com a gente</p>
           <h2>Prefere conversar direto?</h2>
           <p class="lede">Sem venda insistente por telefone: a gente responde, você decide o próximo passo.</p>
-          <div class="contact-alt">
-            <a href="mailto:contato@eloo.digital">→ contato@eloo.digital</a>
-          </div>
         </div>
         <div class="contato-form-wrap">
         <form class="mock-form" id="contato-form">
@@ -428,7 +425,7 @@ const ofertas = [
           status.textContent = "Recebemos seu contato — a gente responde em breve. Obrigado!";
           status.className = "form-note is-ok";
         } catch (err) {
-          status.textContent = "Não foi possível enviar agora. Tente de novo ou escreva pro e-mail ao lado.";
+          status.textContent = "Não foi possível enviar agora. Tente de novo em instantes.";
           status.className = "form-note is-error";
         } finally {
           submitBtn.disabled = false;
@@ -690,8 +687,6 @@ const ofertas = [
   /* Contato */
   .contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
   @media (max-width: 880px) { .contato-grid { grid-template-columns: 1fr; } }
-  .contact-alt { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.4rem; }
-  .contact-alt a { font-family: var(--font-title); font-size: 0.9rem; font-weight: 600; color: var(--accent); text-decoration: none; }
   .mock-form { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; }
   .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
   @media (max-width: 460px) { .f-row { grid-template-columns: 1fr; } }
