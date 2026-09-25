@@ -104,10 +104,10 @@ const servicos = [
 
     <header class="hero reveal" id="topo">
       <div class="hero-inner">
-        <span class="badge">Sete anos de campo no acolhimento e na assistência social, hoje a serviço de qualquer organização do terceiro setor</span>
+        <span class="badge">O seu <em>eloo</em> com o mundo digital</span>
         <h1>O nível de parceria em tecnologia que a sua organização <span class="accent">nunca experimentou</span>.</h1>
         <p class="hero-sub">
-          O parceiro na sua transformação digital — o seu <em>elo</em> com o mundo digital, em
+          O parceiro na sua transformação digital — o seu <em>eloo</em> com o mundo digital, em
           gestão, presença e marketing. Mais do que um fornecedor que some após a entrega, somos o
           parceiro estratégico que cresce junto com o seu negócio.
         </p>
@@ -128,11 +128,22 @@ const servicos = [
 
       <div class="hub-grid">
         {ofertas.map((o) => (
-          <div class={`hub-card ${o.core ? "hub-card-core" : ""}`}>
-            <span class="hub-tag">{o.tag}</span>
-            <h3>{o.nome}</h3>
-            <p>{o.desc}</p>
-          </div>
+          o.core ? (
+            <a href="/pacce" class="hub-card hub-card-core" aria-label="Conhecer o PACCE de perto">
+              <span class="hub-tag">{o.tag}</span>
+              <div class="hub-core-head">
+                <span class="pacce-mark" aria-hidden="true">P</span>
+                <h3>{o.nome}</h3>
+              </div>
+              <p>{o.desc}</p>
+            </a>
+          ) : (
+            <div class="hub-card">
+              <span class="hub-tag">{o.tag}</span>
+              <h3>{o.nome}</h3>
+              <p>{o.desc}</p>
+            </div>
+          )
         ))}
       </div>
     </section>
@@ -398,13 +409,15 @@ const servicos = [
     border: 1px solid var(--line);
     border-radius: 999px;
     padding: 0.5rem 1.2rem;
-    font-size: 0.82rem;
+    font-family: var(--font-title);
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--ink-soft);
     margin-bottom: 2rem;
     line-height: 1.4;
     background: var(--card);
   }
+  .badge em { font-style: normal; font-weight: 700; color: var(--accent); }
   h1 {
     font-family: var(--font-title);
     font-size: clamp(2.4rem, 5.6vw, 3.8rem);
@@ -461,11 +474,28 @@ const servicos = [
   .hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
   @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
-  .hub-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem; }
-  .hub-card-core { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .hub-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem;
+    display: block; text-decoration: none; color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .hub-card-core { background: var(--ink); color: var(--bg); border-color: var(--ink); cursor: pointer; }
+  a.hub-card-core:hover, a.hub-card-core:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(36,38,31,.22);
+    border-color: var(--accent);
+  }
   .hub-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
   .hub-card-core .hub-tag { color: color-mix(in srgb, var(--accent) 70%, white); }
+  .hub-core-head { display: flex; align-items: center; gap: 0.55rem; margin: 0.5rem 0 0.4rem; }
+  .pacce-mark {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    width: 1.7rem; height: 1.7rem; border-radius: 7px;
+    background: var(--accent); color: var(--accent-ink);
+    font-family: var(--font-title); font-weight: 800; font-size: 0.85rem;
+  }
   .hub-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0.5rem 0 0.4rem; font-weight: 600; }
+  .hub-core-head h3 { margin: 0; }
   .hub-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-soft); }
   .hub-card-core p { color: color-mix(in srgb, var(--bg) 85%, transparent); }
 
