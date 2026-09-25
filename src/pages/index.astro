@@ -1,32 +1,78 @@
 ---
 import '../styles/global.css';
+import '@fontsource/lora/500.css';
+import '@fontsource/lora/600.css';
+import '@fontsource/lora/700.css';
+import '@fontsource/work-sans/400.css';
+import '@fontsource/work-sans/500.css';
+import '@fontsource/work-sans/600.css';
 
 const DIAGNOSTICO_URL = "https://claude.ai/code/artifact/1015379a-794c-4a92-8e04-ea01320f4fab";
+const PACCE_URL = "https://pacce.app";
+
+const ofertas = [
+  { tag: "Produto", nome: "PACCE", desc: "Plataforma de gestão e atendimento — o núcleo de tudo.", core: true },
+  { tag: "Serviço", nome: "Criação de Sites", desc: "Institucional com CMS — manutenção contínua, não entrega única." },
+  { tag: "Serviço", nome: "Marketing Digital", desc: "Conteúdo e captação com fluência no seu público." },
+  { tag: "Serviço", nome: "Canais Digitais", desc: "Facebook, Instagram e YouTube publicados pelo mesmo motor do PACCE." },
+];
+
+const jornada = [
+  {
+    n: "01", nome: "Diagnóstico",
+    resumo: "Uma avaliação rápida e precisa do seu cenário atual.",
+    como: "Uma conversa de 20 minutos ou um questionário rápido avaliando 6 dimensões estratégicas.",
+    recebe: "Um relatório completo em até 24 horas.",
+    status: "live",
+  },
+  {
+    n: "02", nome: "Planejamento",
+    resumo: "O caminho estratégico para a evolução da sua entidade.",
+    como: "Criamos um plano de implantação sob medida, respeitando o ritmo e a realidade da sua organização a partir dos resultados do diagnóstico.",
+    status: "pending",
+  },
+  {
+    n: "03", nome: "Implantação",
+    resumo: "A tecnologia e o método saindo do papel.",
+    como: "Execução 100% acompanhada pelo nosso time para a implementação do site, do sistema (PACCE) ou de ambos.",
+    status: "pending",
+  },
+  {
+    n: "04", nome: "Evolução",
+    resumo: "A parceria de longo prazo que garante a continuidade.",
+    como: "Acompanhamento recorrente e suporte pós-implantação. A gente não some após a entrega — cresce junto com você.",
+    status: "pending",
+  },
+];
 
 const dimensoes = [
+  { nome: "Cadastro e Pré-cadastro", desc: "Como as informações de quem é atendido são coletadas e guardadas." },
+  { nome: "Acompanhamento do Atendimento", desc: "O histórico e a evolução de cada assistido." },
+  { nome: "Escalas de Trabalhadores", desc: "A organização dos turnos de funcionários e voluntários." },
+  { nome: "Presença Digital", desc: "Como sua organização se posiciona e se comunica na internet." },
+  { nome: "Ferramenta Atual", desc: "A avaliação dos sistemas ou métodos que você já usa hoje." },
+  { nome: "Transparência Financeira", desc: "A organização dos dados para facilitar prestações de contas em assembleia." },
+];
+
+const maturidade = [
+  { n: "1", nome: "Manual", desc: "Processos dependentes de papel, memória ou conversas de WhatsApp sem centralização." },
+  { n: "2", nome: "Parcial", desc: "Uso de planilhas ou documentos isolados, sem garantia de continuidade das informações." },
+  { n: "3", nome: "Frágil", desc: "Existe um sistema em uso, mas sofre com falta de atualização, lentidão ou ausência de suporte." },
+  { n: "4", nome: "Estruturado", desc: "Processo digital seguro, com continuidade garantida, independente de quem o opere." },
+];
+
+const servicos = [
   {
-    nome: "Cadastro e pré-cadastro",
-    desc: "Da primeira visita ao cadastro completo, sem perder quem passou pela porta.",
+    nome: "Sites Institucionais Inteligentes (com CMS)",
+    desc: "Presença digital forte e sob controle. Cuidamos do design, da tecnologia e da manutenção contínua pós-entrega — uma parceria de longo prazo para garantir que seu site cresça junto com a sua causa.",
   },
   {
-    nome: "Acompanhamento do atendimento",
-    desc: "Histórico de cada assistido num lugar só — não espalhado entre caderneta e memória de quem atendeu.",
+    nome: "Marketing Digital e Captação Estratégica",
+    desc: "Fluência real no seu nicho para atrair quem importa. Criamos conteúdos autênticos, eliminando textos genéricos e robóticos, garantindo uma comunicação que gera identificação e confiança imediatas.",
   },
   {
-    nome: "Escalas de trabalhadores",
-    desc: "Quem está de plantão, quem falta — sem depender de grupo de WhatsApp pra confirmar.",
-  },
-  {
-    nome: "Presença digital",
-    desc: "Site e redes sociais que continuam de pé mesmo quando quem cuidava delas não tem mais tempo.",
-  },
-  {
-    nome: "Ferramenta atual",
-    desc: "Se já existe um sistema, avaliamos o que aproveitar antes de propor trocar tudo.",
-  },
-  {
-    nome: "Transparência financeira",
-    desc: "Balancete e prestação de contas prontos, sem virar trabalho extra de fim de mês.",
+    nome: "Sincronização de Canais Digitais",
+    desc: "Suas redes sociais integradas ao seu sistema de gestão. Publique e atualize seus conteúdos no Instagram, Facebook e YouTube a partir de um único lugar, sem depender de voluntário disponível.",
   },
 ];
 ---
@@ -38,7 +84,7 @@ const dimensoes = [
     <title>eloo.digital — Feito para durar</title>
     <meta
       name="description"
-      content="Cadastro, atendimento e presença digital para instituições que cuidam de pessoas. A Eloo é o parceiro de tecnologia que essas instituições nunca tiveram."
+      content="Cadastro, atendimento e presença digital para entidades de acolhimento e organizações do terceiro setor. A eloo.digital é o parceiro de tecnologia que essas instituições sempre precisaram."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
@@ -47,63 +93,169 @@ const dimensoes = [
     <nav>
       <a href="#topo" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
       <div class="navlinks">
-        <a href="#problema">O problema</a>
-        <a href="#metodologia">Metodologia Lumen</a>
-        <a href="#instituicoes">Para instituições</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#pacce">PACCE</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#metodologia">Metodologia</a>
+        <a href="#contato">Contato</a>
       </div>
-      <a class="btn btn-nav" href={DIAGNOSTICO_URL}>Diagnóstico gratuito</a>
+      <a class="btn btn-nav" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
     </nav>
 
     <header class="hero reveal" id="topo">
       <div class="hero-inner">
-        <span class="badge">Sete anos de campo no espiritismo kardecista, hoje a serviço de qualquer instituição que cuida de pessoas</span>
-        <h1>Feito para <span class="accent">durar</span>.</h1>
+        <span class="badge">Sete anos de campo no acolhimento e na assistência social, hoje a serviço de qualquer organização do terceiro setor</span>
+        <h1>O nível de parceria em tecnologia que a sua organização <span class="accent">nunca experimentou</span>.</h1>
         <p class="hero-sub">
-          Sistema gratuito vem e vai — porque nunca foi negócio de ninguém. O nosso é.
-          Cadastro, atendimento e presença digital para instituições espiritualistas
-          e do terceiro setor, com quem entende esse campo há sete anos.
+          Uma única plataforma de gestão, presença digital e marketing. Mais do que um fornecedor
+          que some após a entrega, somos o parceiro estratégico que cresce junto com o seu negócio.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Ver meu diagnóstico gratuito</a>
-          <a class="btn btn-ghost" href="#metodologia">Conhecer a metodologia</a>
+          <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+          <a class="btn btn-ghost" href="#pacce">Conhecer o PACCE</a>
         </div>
       </div>
     </header>
 
-    <section class="section" id="problema">
-      <h2>Não é falta de sistema. É falta de uma solução digital.</h2>
+    <section class="section" id="hub">
+      <p class="eyebrow">O que a eloo.digital faz por você</p>
+      <h2>Entregamos uma solução completa, sustentada por três serviços de apoio.</h2>
       <p class="lede">
-        A maioria das instituições já tentou algo — um trabalhador que entende de tecnologia,
-        um sistema gratuito de terceiros. Funciona até o dia em que quem mantém não tem mais tempo.
+        Por trás de tudo isso está a eloo.digital: uma parceira única, com o mesmo time e o mesmo
+        cuidado de longo prazo, pronta para atender o desafio mais urgente da sua organização.
       </p>
 
-      <div class="split">
-        <div class="split-col">
-          <span class="split-label">O que existe hoje</span>
-          <ul>
-            <li>Caderneta de papel ou planilha que só uma pessoa sabe atualizar</li>
-            <li>Histórico de atendimento na memória de quem atendeu, não registrado</li>
-            <li>Sistema gratuito, projeto social de outra empresa — sem quem responda quando falha</li>
-          </ul>
+      <div class="hub-grid">
+        {ofertas.map((o) => (
+          <div class={`hub-card ${o.core ? "hub-card-core" : ""}`}>
+            <span class="hub-tag">{o.tag}</span>
+            <h3>{o.nome}</h3>
+            <p>{o.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="sobre">
+      <div class="sobre-grid">
+        <div>
+          <p class="eyebrow">Sobre a eloo.digital</p>
+          <h2>O parceiro estratégico em tecnologia que a sua organização sempre precisou</h2>
+          <p class="lede">
+            Conectamos propósito e inovação para ampliar o alcance do bem. Não somos uma agência
+            comum e nem apenas uma empresa de software — unimos tecnologia de ponta e IA aplicada
+            a um método de consultoria estratégica.
+          </p>
+          <p class="lede">
+            Mais do que isso: temos fluência real na rotina, na cultura e na linguagem de quem
+            atua na linha de frente do acolhimento e da assistência social.
+          </p>
+          <p class="eyebrow" style="margin-top:2rem;">Para quem trabalhamos</p>
+          <p class="lede">
+            Apoiamos organizações do Terceiro Setor que possuem uma estrutura sólida, governança
+            formal e o compromisso transparente de prestação de contas. Nosso foco é fortalecer:
+          </p>
+          <div class="pills">
+            <span class="pill">Entidades de Acolhimento</span>
+            <span class="pill">Organizações Assistenciais</span>
+            <span class="pill">Projetos e Associações Sociais</span>
+          </div>
         </div>
-        <div class="split-col split-col-accent">
-          <span class="split-label">Com a Eloo</span>
-          <ul>
-            <li>Cadastro e histórico centralizados, acessíveis por quem precisa</li>
-            <li>Nosso negócio principal — não é caridade lateral de ninguém</li>
-            <li>Você tem com quem falar, sempre, porque é o que a gente faz todo dia</li>
-          </ul>
+        <div class="comp-list">
+          <div class="comp-card">
+            <h4>Tecnologia e Inteligência Artificial Aplicadas</h4>
+            <p>Tecnologia real, validada e pronta para o mercado. O PACCE não é uma promessa de futuro: ele já opera em produção e entrega resultados hoje.</p>
+          </div>
+          <div class="comp-card">
+            <h4>Consultoria Estratégica e Direcionada</h4>
+            <p>Entender primeiro, propor depois. Através da Metodologia LUMEN, realizamos um diagnóstico preciso para garantir que a tecnologia atenda às reais necessidades do seu negócio.</p>
+          </div>
+          <div class="comp-card">
+            <h4>Fluência Real na Linguagem do Terceiro Setor</h4>
+            <p>São 7 anos de experiência de campo aplicados ao seu projeto. Falamos a mesma língua e entregamos soluções sob medida para quem atua no acolhimento e na assistência.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section section-deep" id="metodologia">
-      <h2>Metodologia Lumen — o que avaliamos antes de propor qualquer coisa</h2>
+    <section class="section section-deep" id="pacce">
+      <div class="pacce-grid">
+        <div>
+          <a href={PACCE_URL} target="_blank" rel="noopener" class="pacce-shot">
+            <img src="/img/pacce-atendimento.png" alt="Tela de Gestão de Atendimentos do PACCE, com a seleção de tratamentos por departamento" />
+          </a>
+          <p class="pacce-shot-caption">Tela real do PACCE — base de demonstração.</p>
+        </div>
+        <div>
+          <p class="eyebrow">Produto principal</p>
+          <h2>PACCE — a plataforma de gestão que fica</h2>
+          <p class="lede">
+            Cadastro, atendimento e histórico organizados num só lugar. Multi-instituição, feito
+            pra crescer junto com quem usa — não pra ser trocado em dois anos.
+          </p>
+          <p class="lede">
+            Por dentro, o PACCE é simples: <strong>Overview</strong> pra ver o dia inteiro num
+            relance, <strong>Atendimento</strong> pra abrir e acompanhar cada caso por
+            departamento, <strong>Assistidos</strong> pra manter o cadastro e o histórico de cada
+            um, e a área de <strong>Coordenação/Administração</strong> pra configurar tratamentos,
+            turnos, instituição e equipe.
+          </p>
+          <ul class="pacce-feats">
+            <li>Cadastro por QR Code ou recepção, sem depender de computador livre</li>
+            <li>Histórico de atendimento com orientação e data de retorno</li>
+            <li>Filas por setor com baixa — Passe, Cromoterapia, Desobsessão e mais</li>
+            <li>Isolamento total de dados entre instituições diferentes</li>
+          </ul>
+          <a href={PACCE_URL} target="_blank" rel="noopener" class="btn btn-primary">Ver o PACCE de perto</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicos">
+      <p class="eyebrow">Serviços</p>
+      <h2>O que sustenta o PACCE por fora</h2>
       <p class="lede">
-        Seis dimensões da rotina operacional da sua instituição. O Diagnóstico Digital gratuito
-        mede onde você está em cada uma antes de qualquer conversa comercial.
+        Presença, comunicação e crescimento — pra quem já resolveu a gestão interna e agora
+        precisa aparecer, ou pra quem ainda está começando essa jornada.
+      </p>
+      <div class="servicos-grid">
+        {servicos.map((s) => (
+          <div class="servico-card">
+            <h3>{s.nome}</h3>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section section-deep" id="metodologia">
+      <p class="eyebrow">Como trabalhamos</p>
+      <h2>Metodologia LUMEN — o que avaliamos antes de propor qualquer solução</h2>
+      <p class="lede">
+        A Metodologia LUMEN nasceu de 7 anos de vivência real na linha de frente de entidades de
+        acolhimento. Ela não é um modelo teórico ou genérico copiado do mercado corporativo
+        tradicional — desenvolvemos um método estruturado de <strong>Maturidade Digital</strong>
+        desenhado sob medida para as necessidades e dores específicas do atendimento assistencial
+        e do terceiro setor.
       </p>
 
+      <p class="eyebrow" style="margin-top:3rem;">A jornada da sua organização</p>
+      <p class="lede">Dividida em quatro etapas claras, focadas em dar segurança e previsibilidade pra sua diretoria:</p>
+
+      <div class="jornada-grid">
+        {jornada.map((j) => (
+          <div class={`j-step j-step-${j.status}`}>
+            <p class="j-num">{j.n}</p>
+            <h4>{j.nome}</h4>
+            <p class="j-resumo">{j.resumo}</p>
+            <p class="j-sub"><strong>Como funciona:</strong> {j.como}</p>
+            {j.recebe && <p class="j-sub"><strong>Você recebe:</strong> {j.recebe}</p>}
+            <span class="badge-status">{j.status === "live" ? "Disponível hoje" : "Em construção"}</span>
+          </div>
+        ))}
+      </div>
+
+      <p class="eyebrow" style="margin-top:3rem;">As 6 dimensões do Diagnóstico</p>
       <dl class="dim-list">
         {dimensoes.map((d) => (
           <div class="dim-row">
@@ -112,31 +264,82 @@ const dimensoes = [
           </div>
         ))}
       </dl>
-    </section>
 
-    <section class="band" id="instituicoes">
-      <div class="band-inner">
-        <h2>De federações espíritas a organizações do terceiro setor</h2>
-        <p class="lede">
-          Hoje atendemos principalmente casas espíritas kardecistas — é onde validamos a
-          Metodologia Lumen nos últimos sete anos. A mesma lógica serve pra qualquer instituição
-          espiritualista ou do terceiro setor que cuida de pessoas de forma organizada: federação,
-          associação, casa de acolhimento. Conversamos com quem representa uma rede de instituições
-          filiadas, não com mais um vendedor de software genérico.
-        </p>
+      <p class="eyebrow" style="margin-top:3rem;">Níveis de maturidade digital</p>
+      <div class="rubric">
+        {maturidade.map((m) => (
+          <div class={`rubric-lvl rubric-lvl-${m.n}`}>
+            <b>{m.n} · {m.nome}</b>
+            <span>{m.desc}</span>
+          </div>
+        ))}
       </div>
+
+      <a class="btn btn-primary" style="margin-top:2.5rem;" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
     </section>
 
     <section class="cta-final">
-      <p class="cta-kicker">Comece pelo diagnóstico</p>
-      <h2 class="cta-big">Vinte minutos pra entender onde sua instituição está hoje.</h2>
-      <p class="lede">Gratuito, sem compromisso — o relatório completo chega em até 24 horas.</p>
-      <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Agendar diagnóstico gratuito</a>
+      <p class="cta-kicker">Vamos conversar</p>
+      <h2 class="cta-big">Onde sua organização está hoje?</h2>
+      <p class="lede">Faça o Diagnóstico LUMEN online agora — 10 minutos, sem compromisso, e você já sai com um retrato de onde sua organização está.</p>
+      <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+    </section>
+
+    <section class="section" id="contato">
+      <div class="contato-grid">
+        <div>
+          <p class="eyebrow">Fale com a gente</p>
+          <h2>Prefere conversar direto?</h2>
+          <p class="lede">Sem venda insistente por telefone: a gente responde, você decide o próximo passo.</p>
+          <div class="contact-alt">
+            <a href="#">→ Falar agora pelo WhatsApp</a>
+            <a href="mailto:contato@eloo.digital">→ contato@eloo.digital</a>
+          </div>
+        </div>
+        <form class="mock-form" onsubmit="return false;">
+          <div class="f-row">
+            <div class="f-field">
+              <label for="f-nome">Nome</label>
+              <input id="f-nome" name="nome" type="text" placeholder="Seu nome" />
+            </div>
+            <div class="f-field">
+              <label for="f-instituicao">Instituição</label>
+              <input id="f-instituicao" name="instituicao" type="text" placeholder="Nome da organização" />
+            </div>
+          </div>
+          <div class="f-row">
+            <div class="f-field">
+              <label for="f-email">E-mail</label>
+              <input id="f-email" name="email" type="email" placeholder="voce@instituicao.org" />
+            </div>
+            <div class="f-field">
+              <label for="f-whats">WhatsApp</label>
+              <input id="f-whats" name="whatsapp" type="tel" placeholder="(11) 90000-0000" />
+            </div>
+          </div>
+          <div class="f-field">
+            <label for="f-interesse">O que você procura</label>
+            <select id="f-interesse" name="interesse">
+              <option>Diagnóstico gratuito</option>
+              <option>PACCE</option>
+              <option>Criação de Sites</option>
+              <option>Marketing Digital</option>
+              <option>Canais Digitais</option>
+            </select>
+          </div>
+          <div class="f-field">
+            <label for="f-msg">Mensagem (opcional)</label>
+            <textarea id="f-msg" name="mensagem" rows="3" placeholder="Conte um pouco do que está acontecendo hoje"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Solicitar contato</button>
+          <p class="form-note">Formulário ainda sem envio automático — próximo passo é conectar a um CRM real.</p>
+        </form>
+      </div>
     </section>
 
     <footer>
       <a href="#topo" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
-      <p>eloo.digital · PACCE, feito pela Eloo</p>
+      <p>eloo.digital · PACCE, feito pela eloo.digital</p>
     </footer>
   </body>
 </html>
@@ -159,7 +362,7 @@ const dimensoes = [
   .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
   .navlinks a { text-decoration: none; color: var(--ink-muted); }
   .navlinks a:hover { color: var(--ink); }
-  @media (max-width: 780px) { .navlinks { display: none; } }
+  @media (max-width: 900px) { .navlinks { display: none; } }
 
   .btn {
     display: inline-flex;
@@ -176,12 +379,13 @@ const dimensoes = [
   }
   .btn:hover { transform: translateY(-1px); }
   .btn:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
-  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--deep); color: var(--parchment); }
-  .btn-nav:hover { background: var(--deep-2); }
-  .btn-primary { background: var(--dourado); color: var(--deep); }
-  .btn-primary:hover { background: color-mix(in srgb, var(--dourado) 88%, white); }
-  .btn-ghost { background: transparent; color: var(--mint); border-color: color-mix(in srgb, var(--mint) 40%, transparent); }
-  .btn-ghost:hover { border-color: var(--mint); }
+  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--dourado); color: var(--parchment); }
+  .btn-nav:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
+  .btn-primary { background: var(--dourado); color: var(--parchment); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink-muted); }
+  .section-deep .btn-ghost { color: var(--mint); border-color: color-mix(in srgb, var(--mint) 40%, transparent); }
 
   .hero {
     background: var(--deep);
@@ -204,10 +408,10 @@ const dimensoes = [
   }
   h1 {
     font-family: var(--font-title);
-    font-size: clamp(2.6rem, 6vw, 4.5rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.02;
+    font-size: clamp(2.4rem, 5.6vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
     margin: 0 0 1.3rem;
     text-wrap: balance;
     color: var(--mint);
@@ -215,7 +419,7 @@ const dimensoes = [
   h1 .accent { color: var(--dourado); }
   .hero-sub {
     font-family: var(--font-body);
-    font-size: 1.18rem;
+    font-size: 1.1rem;
     color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%);
     max-width: 54ch;
     margin: 0 auto 2.4rem;
@@ -223,14 +427,23 @@ const dimensoes = [
   }
   .hero-actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
 
-  .section { max-width: 1000px; margin: 0 auto; padding: 6rem 2rem; }
+  .section { max-width: 1080px; margin: 0 auto; padding: 6rem 2rem; }
   .section-deep { max-width: none; background: var(--deep-2); color: var(--mint); }
-  .section-deep > * { max-width: 1000px; margin-left: auto; margin-right: auto; }
+  .section-deep > * { max-width: 1080px; margin-left: auto; margin-right: auto; }
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--dourado);
+    margin: 0 0 0.9rem;
+  }
   h2 {
     font-family: var(--font-title);
-    font-size: clamp(1.6rem, 3.6vw, 2.3rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
     margin: 0 0 1.1rem;
     text-wrap: balance;
     max-width: 32ch;
@@ -238,82 +451,122 @@ const dimensoes = [
   .section-deep h2 { color: var(--mint); }
   .lede {
     font-family: var(--font-body);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     color: var(--ink-muted);
     line-height: 1.65;
     max-width: 62ch;
-    margin: 0 0 2.5rem;
+    margin: 0 0 1.4rem;
   }
   .section-deep .lede { color: color-mix(in srgb, var(--mint) 78%, var(--parchment) 22%); }
 
-  .split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    overflow: hidden;
-  }
-  @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
-  .split-col { background: #fbfaf4; padding: 2rem 1.9rem; }
-  .split-col-accent { background: var(--deep); color: var(--mint); }
-  .split-label {
-    display: block;
-    font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-    color: var(--ink);
-  }
-  .split-col-accent .split-label { color: var(--dourado); }
-  .split-col ul {
-    margin: 0;
-    padding-left: 1.15rem;
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    line-height: 1.75;
-  }
+  /* Hub — o que fazemos */
+  .hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
+  .hub-card { background: #fffdf8; border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem; }
+  .hub-card-core { background: var(--deep); color: var(--mint); border-color: var(--deep); }
+  .hub-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--dourado); }
+  .hub-card-core .hub-tag { color: color-mix(in srgb, var(--dourado) 70%, white); }
+  .hub-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0.5rem 0 0.4rem; font-weight: 600; }
+  .hub-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-muted); }
+  .hub-card-core p { color: color-mix(in srgb, var(--mint) 80%, var(--parchment) 20%); }
 
-  .dim-list { margin: 0; }
+  /* Sobre */
+  .sobre-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: start; }
+  @media (max-width: 880px) { .sobre-grid { grid-template-columns: 1fr; } }
+  .pills { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .pill { font-family: var(--font-title); font-size: 0.78rem; font-weight: 600; color: var(--floresta); background: color-mix(in srgb, var(--floresta) 14%, var(--parchment)); border-radius: 999px; padding: 0.4rem 0.9rem; }
+  .comp-list { display: flex; flex-direction: column; gap: 1rem; }
+  .comp-card { background: #fffdf8; border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; }
+  .comp-card h4 { font-family: var(--font-title); font-size: 0.95rem; margin: 0 0 0.4rem; font-weight: 600; }
+  .comp-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-muted); }
+
+  /* PACCE showcase */
+  .pacce-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  @media (max-width: 880px) { .pacce-grid { grid-template-columns: 1fr; } }
+  .pacce-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-deep); box-shadow: 0 20px 40px rgba(0,0,0,.28); }
+  .pacce-shot img { width: 100%; height: auto; }
+  .pacce-shot-caption { font-family: var(--font-body); font-size: 0.78rem; color: color-mix(in srgb, var(--mint) 65%, var(--parchment) 35%); margin: 0.7rem 0.2rem 0; }
+  .pacce-feats { list-style: none; margin: 0 0 1.6rem; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+  .pacce-feats li { font-family: var(--font-body); font-size: 0.92rem; color: color-mix(in srgb, var(--mint) 88%, var(--parchment) 12%); display: flex; gap: 0.55rem; }
+  .pacce-feats li::before { content: "—"; color: var(--dourado); font-weight: 700; flex: none; }
+
+  /* Serviços */
+  .servicos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 2rem; }
+  @media (max-width: 820px) { .servicos-grid { grid-template-columns: 1fr; } }
+  .servico-card { background: #fffdf8; border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem 1.4rem; }
+  .servico-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.5rem; font-weight: 600; }
+  .servico-card p { font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-muted); margin: 0; }
+
+  /* Metodologia */
+  .jornada-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-top: 1.6rem; }
+  @media (max-width: 900px) { .jornada-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .jornada-grid { grid-template-columns: 1fr; } }
+  .j-step { border-radius: 14px; padding: 1.3rem 1.2rem; }
+  .j-step-live { background: color-mix(in srgb, var(--dourado) 16%, var(--deep-2)); border: 1px solid var(--dourado); }
+  .j-step-pending { border: 1.5px dashed color-mix(in srgb, var(--mint) 30%, transparent); }
+  .j-num { font-family: var(--font-title); font-size: 0.8rem; opacity: 0.7; margin: 0 0 0.5rem; }
+  .j-step h4 { font-family: var(--font-title); font-size: 1rem; margin: 0 0 0.4rem; font-weight: 600; color: var(--mint); }
+  .j-resumo { font-family: var(--font-body); font-size: 0.82rem; margin: 0 0 0.5rem; color: color-mix(in srgb, var(--mint) 88%, var(--parchment) 12%); }
+  .j-sub { font-family: var(--font-body); font-size: 0.76rem; margin: 0.4rem 0 0; line-height: 1.45; color: color-mix(in srgb, var(--mint) 70%, var(--parchment) 30%); }
+  .badge-status { display: inline-block; font-family: var(--font-title); font-size: 0.63rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 999px; }
+  .j-step-live .badge-status { background: var(--dourado); color: var(--deep-2); }
+  .j-step-pending .badge-status { border: 1px solid color-mix(in srgb, var(--mint) 40%, transparent); color: color-mix(in srgb, var(--mint) 70%, var(--parchment) 30%); }
+
+  .dim-list { margin: 1.4rem 0 0; }
   .dim-row {
     display: grid;
     grid-template-columns: minmax(0, 15rem) 1fr;
     gap: 2rem;
-    padding: 1.6rem 0;
+    padding: 1.4rem 0;
     border-top: 1px solid var(--line-deep);
   }
   .dim-row:last-child { border-bottom: 1px solid var(--line-deep); }
   @media (max-width: 640px) { .dim-row { grid-template-columns: 1fr; gap: 0.4rem; } }
-  .dim-row dt {
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: var(--mint);
-  }
-  .dim-row dd {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: 0.98rem;
-    line-height: 1.6;
-    color: color-mix(in srgb, var(--mint) 75%, var(--parchment) 25%);
-  }
+  .dim-row dt { font-family: var(--font-title); font-weight: 600; font-size: 0.98rem; color: var(--mint); }
+  .dim-row dd { margin: 0; font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: color-mix(in srgb, var(--mint) 75%, var(--parchment) 25%); }
 
-  .band { background: var(--parchment-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .band-inner { max-width: 760px; margin: 0 auto; padding: 5.5rem 2rem; text-align: center; }
-  .band-inner h2 { max-width: none; margin-left: auto; margin-right: auto; }
-  .band-inner .lede { margin-left: auto; margin-right: auto; }
+  .rubric { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.4rem; }
+  .rubric-lvl { flex: 1 1 220px; border-radius: 12px; padding: 1.1rem 1.2rem; }
+  .rubric-lvl b { display: block; font-family: var(--font-title); font-size: 0.92rem; margin-bottom: 0.4rem; }
+  .rubric-lvl span { font-family: var(--font-body); font-size: 0.8rem; line-height: 1.4; }
+  .rubric-lvl-1 { background: color-mix(in srgb, var(--mint) 10%, var(--deep-2)); color: color-mix(in srgb, var(--mint) 70%, var(--parchment) 30%); }
+  .rubric-lvl-2 { background: color-mix(in srgb, var(--mint) 16%, var(--deep-2)); color: color-mix(in srgb, var(--mint) 78%, var(--parchment) 22%); }
+  .rubric-lvl-3 { background: color-mix(in srgb, var(--mint) 22%, var(--deep-2)); color: color-mix(in srgb, var(--mint) 86%, var(--parchment) 14%); }
+  .rubric-lvl-4 { background: var(--dourado); color: var(--deep-2); }
+  .rubric-lvl-4 span { color: color-mix(in srgb, var(--deep-2) 80%, transparent); }
 
   .cta-final { text-align: center; padding: 6.5rem 2rem; }
-  .cta-kicker { font-weight: 700; color: var(--dourado); margin: 0 0 0.6rem; font-size: 0.95rem; }
+  .cta-kicker { font-family: var(--font-title); font-weight: 700; color: var(--dourado); margin: 0 0 0.6rem; font-size: 0.95rem; }
   .cta-big {
     font-family: var(--font-title);
     font-size: clamp(1.9rem, 4.6vw, 2.7rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     margin: 0 auto 0.8rem;
     max-width: 26ch;
     text-wrap: balance;
   }
   .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
+
+  /* Contato */
+  .contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  @media (max-width: 880px) { .contato-grid { grid-template-columns: 1fr; } }
+  .contact-alt { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.4rem; }
+  .contact-alt a { font-family: var(--font-title); font-size: 0.9rem; font-weight: 600; color: var(--dourado); text-decoration: none; }
+  .mock-form { background: #fffdf8; border: 1px solid var(--line); border-radius: 16px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.9rem; }
+  .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  @media (max-width: 460px) { .f-row { grid-template-columns: 1fr; } }
+  .f-field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .f-field label { font-family: var(--font-title); font-size: 0.75rem; font-weight: 600; color: var(--ink-muted); }
+  .f-field input, .f-field select, .f-field textarea {
+    font-family: var(--font-body); font-size: 0.92rem; color: var(--ink);
+    background: var(--parchment); border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.6rem 0.7rem;
+  }
+  .f-field input:focus, .f-field select:focus, .f-field textarea:focus { outline: none; border-color: var(--dourado); }
+  .mock-form .btn { margin-top: 0.2rem; }
+  .form-note { font-family: var(--font-body); font-size: 0.72rem; color: var(--ink-muted); margin: 0; }
 
   footer {
     border-top: 1px solid var(--line);
@@ -323,5 +576,5 @@ const dimensoes = [
     font-size: 0.85rem;
   }
   footer .wordmark { color: var(--deep); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
-  footer p { margin: 0; }
+  footer p { margin: 0; font-family: var(--font-body); }
 </style>

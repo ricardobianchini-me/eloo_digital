@@ -14,20 +14,23 @@
 }
 
 :root {
-  --deep: #1a2421;
-  --deep-2: #141c19;
-  --mint: #c2e7d9;
-  --salvia: #6b8e81;
-  --dourado: #d4af37;
-  --parchment: #f4f2ea;
-  --parchment-2: #ece7d8;
-  --ink: #23261f;
-  --ink-muted: #5b5f52;
-  --line: #d9d6c4;
-  --line-deep: #2c3632;
+  /* Paleta "Fibra" — substitui a paleta verde-preto/mint/dourado em 2026-09-25.
+     Ver 01_brand_book.md (playbook pacce-co) para o histórico da decisão. */
+  --deep: #24261f;       /* Tinta — era o verde-preto #1a2421 */
+  --deep-2: #1a1b16;     /* Tinta, variação mais escura (headers/bandas escuras) */
+  --mint: #e8e4dc;       /* Pedra — substitui o Mint sobre fundo escuro */
+  --salvia: #a89f8a;     /* tom neutro morno intermediário, substitui a Sálvia */
+  --dourado: #a6472e;    /* Tijolo — substitui o Dourado como acento único de ação */
+  --floresta: #4a5a4e;   /* cor de apoio nova (tags/estados/gráficos, nunca cor de ação) */
+  --parchment: #e8e4dc;  /* Pedra */
+  --parchment-2: #ddd6c6;
+  --ink: #24261f;        /* Tinta */
+  --ink-muted: #5c5d50;
+  --line: #cbc4b2;
+  --line-deep: #3a3c33;
 
-  --font-title: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --font-body: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --font-title: 'Lora', Georgia, serif;
+  --font-body: 'Work Sans', -apple-system, "Segoe UI", Arial, sans-serif;
   --font-brand: 'Montserrat', var(--font-title);
 }
 
