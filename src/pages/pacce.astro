@@ -93,7 +93,7 @@ const maturidade = [
     </section>
 
     <!-- BLOCO 3 — Pilares de funcionalidade -->
-    <section class="section section-deep" id="pilares">
+    <section class="section band" id="pilares">
       <h2>Tudo o que sua organização precisa em um único ecossistema.</h2>
       <div class="pilares-grid">
         {pilares.map((p) => (
@@ -131,7 +131,7 @@ const maturidade = [
     </section>
 
     <!-- BLOCO 5 — Tecnologia validada -->
-    <section class="section section-deep">
+    <section class="section band">
       <div class="tech-grid">
         <div>
           <h2>IA aplicada e produto de verdade. O PACCE já roda em produção.</h2>
@@ -175,13 +175,13 @@ const maturidade = [
     position: sticky; top: 0; z-index: 10;
     display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
     padding: 1.1rem 2rem;
-    background: color-mix(in srgb, var(--parchment) 88%, transparent);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
-  .nav-wordmark { text-decoration: none; color: var(--deep); font-size: 1.15rem; }
+  .nav-wordmark { text-decoration: none; color: var(--ink); font-size: 1.15rem; }
   .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
-  .navlinks a { text-decoration: none; color: var(--ink-muted); }
+  .navlinks a { text-decoration: none; color: var(--ink-soft); }
   .navlinks a:hover { color: var(--ink); }
   @media (max-width: 780px) { .navlinks { display: none; } }
 
@@ -192,15 +192,15 @@ const maturidade = [
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
   }
   .btn:hover { transform: translateY(-1px); }
-  .btn:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
-  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--dourado); color: var(--parchment); }
-  .btn-nav:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
-  .btn-primary { background: var(--dourado); color: var(--parchment); }
-  .btn-primary:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
-  .btn-ghost { background: transparent; color: var(--mint); border-color: color-mix(in srgb, var(--mint) 40%, transparent); }
-  .btn-ghost:hover { border-color: var(--mint); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--accent); color: var(--accent-ink); }
+  .btn-nav:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink-soft); }
 
-  .hero { background: var(--deep); color: var(--mint); padding: 5.5rem 2rem; }
+  .hero { padding: 5.5rem 2rem; }
   .hero-grid {
     max-width: 1120px; margin: 0 auto;
     display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; align-items: center;
@@ -208,76 +208,73 @@ const maturidade = [
   @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
   .eyebrow {
     font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
-    font-weight: 600; color: var(--dourado); margin: 0 0 0.9rem;
+    font-weight: 600; color: var(--accent); margin: 0 0 0.9rem;
   }
-  .eyebrow-light { color: color-mix(in srgb, var(--mint) 80%, var(--dourado) 20%); }
   h1 {
     font-family: var(--font-title); font-size: clamp(2rem, 4.2vw, 2.9rem); font-weight: 700;
-    letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 1.2rem; text-wrap: balance; color: var(--mint);
+    letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 1.2rem; text-wrap: balance; color: var(--ink);
   }
   .hero-sub {
     font-family: var(--font-body); font-size: 1.05rem;
-    color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%);
+    color: var(--ink-soft);
     max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;
   }
   .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
-  .hero-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-deep); box-shadow: 0 24px 48px rgba(0,0,0,.32); }
+  .hero-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 48px rgba(36,38,31,.18); }
   .hero-shot img { width: 100%; height: auto; }
   .hero-shot-small { max-width: 480px; margin: 0 auto; }
 
   .section { max-width: 1120px; margin: 0 auto; padding: 5.5rem 2rem; }
-  .section-deep { max-width: none; background: var(--deep-2); color: var(--mint); }
-  .section-deep > * { max-width: 1120px; margin-left: auto; margin-right: auto; }
-  .section-deep .tech-grid { max-width: 1120px; margin: 0 auto; }
+  .band { max-width: none; background: var(--bg-alt); }
+  .band > * { max-width: 1120px; margin-left: auto; margin-right: auto; }
+  .band .tech-grid { max-width: 1120px; margin: 0 auto; }
   h2 {
     font-family: var(--font-title); font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700;
     letter-spacing: -0.01em; margin: 0 0 1.1rem; text-wrap: balance; max-width: 34ch;
   }
-  .section-deep h2 { color: var(--mint); }
   .lede {
-    font-family: var(--font-body); font-size: 1.02rem; color: var(--ink-muted);
+    font-family: var(--font-body); font-size: 1.02rem; color: var(--ink-soft);
     line-height: 1.65; max-width: 66ch; margin: 0 0 1.2rem;
   }
-  .section-deep .lede { color: color-mix(in srgb, var(--mint) 78%, var(--parchment) 22%); }
-  .lede a { color: var(--dourado); font-weight: 600; }
+  .lede a { color: var(--accent); font-weight: 600; }
 
   .pilares-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem; }
   @media (max-width: 700px) { .pilares-grid { grid-template-columns: 1fr; } }
   .pilar-card {
-    background: color-mix(in srgb, var(--mint) 8%, var(--deep-2));
-    border: 1px solid color-mix(in srgb, var(--mint) 16%, transparent);
+    background: var(--card);
+    border: 1px solid var(--line);
     border-radius: 14px; padding: 1.5rem 1.5rem;
   }
-  .pilar-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--mint); }
-  .pilar-card p { font-family: var(--font-body); font-size: 0.9rem; margin: 0; color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%); }
+  .pilar-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--ink); }
+  .pilar-card p { font-family: var(--font-body); font-size: 0.9rem; margin: 0; color: var(--ink-soft); }
 
   .matriz-table { margin-top: 2rem; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .matriz-row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.4fr; gap: 1.2rem; padding: 1rem 1.3rem; }
   @media (max-width: 780px) { .matriz-row { grid-template-columns: 1fr; gap: 0.3rem; } }
-  .matriz-head { background: var(--deep); color: var(--mint); font-family: var(--font-title); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
-  .matriz-row:not(.matriz-head) { border-top: 1px solid var(--line); font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-muted); }
-  .matriz-row:not(.matriz-head):nth-child(odd) { background: #fffdf8; }
+  .matriz-head { background: var(--ink); color: var(--bg); font-family: var(--font-title); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+  .matriz-row:not(.matriz-head) { border-top: 1px solid var(--line); font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-soft); }
+  .matriz-row:not(.matriz-head):nth-child(odd) { background: var(--card); }
   .matriz-estagio { font-family: var(--font-title); font-weight: 600; color: var(--ink); }
-  .matriz-estagio b { color: var(--dourado); margin-right: 0.3rem; }
-  .matriz-impacto { color: var(--floresta); font-weight: 500; }
-  .matriz-4 { background: color-mix(in srgb, var(--dourado) 12%, transparent) !important; }
+  .matriz-estagio b { color: var(--accent); margin-right: 0.3rem; }
+  .matriz-impacto { color: var(--support); font-weight: 500; }
+  .matriz-4 { background: color-mix(in srgb, var(--accent) 12%, transparent) !important; }
 
   .tech-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; }
   @media (max-width: 880px) { .tech-grid { grid-template-columns: 1fr; } }
 
-  .cta-final { text-align: center; padding: 6rem 2rem; }
-  .cta-kicker { font-family: var(--font-title); font-weight: 700; color: var(--dourado); margin: 0 0 0.6rem; font-size: 0.95rem; }
+  .cta-final { text-align: center; padding: 6rem 2rem; background: var(--bg-alt); }
+  .cta-kicker { font-family: var(--font-title); font-weight: 700; color: var(--accent); margin: 0 0 0.6rem; font-size: 0.95rem; }
   .cta-big {
     font-family: var(--font-title); font-size: clamp(1.8rem, 4.2vw, 2.5rem); font-weight: 700;
-    letter-spacing: -0.01em; margin: 0 auto 0.8rem; max-width: 30ch; text-wrap: balance;
+    letter-spacing: -0.01em; margin: 0 auto 0.8rem; max-width: 30ch; text-wrap: balance; color: var(--ink);
   }
   .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
-  .cta-support { font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-muted); margin-top: 1.6rem; }
+  .cta-support { font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-soft); margin-top: 1.6rem; }
 
   footer {
     border-top: 1px solid var(--line); padding: 3rem 2rem; text-align: center;
-    color: var(--ink-muted); font-size: 0.85rem;
+    color: var(--ink-soft); font-size: 0.85rem;
   }
-  footer .wordmark { color: var(--deep); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
+  footer .wordmark { color: var(--ink); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
   footer p { margin: 0; font-family: var(--font-body); }
 </style>

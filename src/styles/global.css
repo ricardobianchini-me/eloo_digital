@@ -15,30 +15,47 @@
 
 :root {
   /* Paleta "Fibra" — substitui a paleta verde-preto/mint/dourado em 2026-09-25.
+     Nomes de variável alinhados 1:1 com o mockup de referência
+     (https://claude.ai/artifact/4iLeBtsUtkAinFzKh2BjR7) de propósito: o site é
+     claro (fundo Pedra) do topo ao fim — o escuro (--ink) é reservado como
+     acento pequeno e esparso (um card no hub, um card na jornada, nada mais).
      Ver 01_brand_book.md (playbook pacce-co) para o histórico da decisão. */
-  --deep: #24261f;       /* Tinta — era o verde-preto #1a2421 */
-  --deep-2: #1a1b16;     /* Tinta, variação mais escura (headers/bandas escuras) */
-  --mint: #e8e4dc;       /* Pedra — substitui o Mint sobre fundo escuro */
-  --salvia: #a89f8a;     /* tom neutro morno intermediário, substitui a Sálvia */
-  --dourado: #a6472e;    /* Tijolo — substitui o Dourado como acento único de ação */
-  --floresta: #4a5a4e;   /* cor de apoio nova (tags/estados/gráficos, nunca cor de ação) */
-  --parchment: #e8e4dc;  /* Pedra */
-  --parchment-2: #ddd6c6;
-  --ink: #24261f;        /* Tinta */
-  --ink-muted: #5c5d50;
+  --bg: #e8e4dc;         /* Pedra — fundo padrão de toda a página */
+  --bg-alt: #ddd6c6;     /* Pedra escurecida — faixas alternadas (.band), ainda claras */
+  --card: #fffdf8;       /* quase-branco — fundo de cards sobre --bg */
+  --ink: #24261f;        /* Tinta — texto padrão; também fundo dos 2 cards de acento escuro */
+  --ink-soft: #5c5d50;   /* Tinta suavizada — texto secundário */
+  --accent: #a6472e;     /* Tijolo — único acento de ação (CTAs, links, destaques) */
+  --accent-ink: #f6eee7; /* texto sobre fundo --accent */
+  --support: #4a5a4e;    /* Floresta — cor de apoio (tags/estados), nunca cor de ação */
+  --support-tint: #dee3dc;
   --line: #cbc4b2;
-  --line-deep: #3a3c33;
 
   --font-title: 'Lora', Georgia, serif;
   --font-body: 'Work Sans', -apple-system, "Segoe UI", Arial, sans-serif;
   --font-brand: 'Montserrat', var(--font-title);
+
+  /* Aliases de compatibilidade — nomes antigos usados em páginas que ainda
+     não foram convertidas para a estrutura clara-primeiro (assessment.astro,
+     ClientDoc.astro, páginas de diagnóstico por cliente). Não usar nomes
+     antigos em código novo — usar os tokens acima. */
+  --deep: var(--ink);
+  --deep-2: var(--ink);
+  --mint: var(--bg);
+  --salvia: var(--support);
+  --dourado: var(--accent);
+  --floresta: var(--support);
+  --parchment: var(--bg);
+  --parchment-2: var(--bg-alt);
+  --ink-muted: var(--ink-soft);
+  --line-deep: var(--line);
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: var(--parchment);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-title);
   -webkit-font-smoothing: antialiased;
@@ -64,5 +81,5 @@ img, svg { display: block; max-width: 100%; }
   letter-spacing: -0.02em;
 }
 .wordmark .oo { letter-spacing: -0.12em; }
-.wordmark .dot { color: var(--dourado); margin: 0 0.02em; }
+.wordmark .dot { color: var(--accent); margin: 0 0.02em; }
 .wordmark .suffix { font-weight: 400; }
