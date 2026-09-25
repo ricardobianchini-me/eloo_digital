@@ -15,6 +15,7 @@ const ofertas = [
   { tag: "Serviço", nome: "Criação de Sites", desc: "Institucional com CMS — manutenção contínua, não entrega única." },
   { tag: "Serviço", nome: "Marketing Digital", desc: "Conteúdo e captação com fluência no seu público." },
   { tag: "Serviço", nome: "Canais Digitais", desc: "Facebook, Instagram e YouTube publicados pelo mesmo motor do PACCE." },
+  { tag: "Serviço", nome: "Assessment de TI", desc: "Diagnóstico técnico de infraestrutura, sistemas e governança de TI, com rigor de auditoria.", href: "/assessment" },
 ];
 
 const jornada = [
@@ -125,7 +126,7 @@ const servicos = [
 
     <section class="section" id="hub">
       <p class="eyebrow">O que a eloo.digital faz por você</p>
-      <h2>Entregamos uma solução completa, sustentada por três serviços de apoio.</h2>
+      <h2>Entregamos uma solução completa, sustentada por quatro serviços de apoio.</h2>
       <p class="lede">
         Por trás de tudo isso está a eloo.digital: uma parceira única, com o mesmo time e o mesmo
         cuidado de longo prazo, pronta para atender o desafio mais urgente da sua organização.
@@ -140,6 +141,12 @@ const servicos = [
                 <img src="/img/pacce-icon.png" alt="" class="pacce-mark" width="28" height="28" />
                 <h3>{o.nome}</h3>
               </div>
+              <p>{o.desc}</p>
+            </a>
+          ) : o.href ? (
+            <a href={o.href} class="hub-card">
+              <span class="hub-tag">{o.tag}</span>
+              <h3>{o.nome}</h3>
               <p>{o.desc}</p>
             </a>
           ) : (
@@ -201,7 +208,7 @@ const servicos = [
       <p class="lede">
         A Metodologia LUMEN nasceu de 7 anos de vivência real na linha de frente de entidades de
         acolhimento. Ela não é um modelo teórico ou genérico copiado do mercado corporativo
-        tradicional — desenvolvemos um método estruturado de <strong>Maturidade Digital</strong>
+        tradicional — desenvolvemos um método estruturado de <strong>Maturidade Digital</strong>{" "}
         desenhado sob medida para as necessidades e dores específicas do atendimento assistencial
         e do terceiro setor.
       </p>
@@ -217,7 +224,7 @@ const servicos = [
             <p class="j-resumo">{j.resumo}</p>
             <p class="j-sub"><strong>Como funciona:</strong> {j.como}</p>
             {j.recebe && <p class="j-sub"><strong>Você recebe:</strong> {j.recebe}</p>}
-            <span class="badge-status">{j.status === "live" ? "Disponível hoje" : "Em construção"}</span>
+            {j.status === "live" && <span class="badge-status">Disponível hoje</span>}
           </div>
         ))}
       </div>
@@ -280,7 +287,7 @@ const servicos = [
 
     <section class="section" id="servicos">
       <p class="eyebrow">Serviços</p>
-      <h2>O que sustenta o PACCE por fora</h2>
+      <h2>O que a eloo.digital vem fazendo pelos seus clientes</h2>
       <p class="lede">
         Presença, comunicação e crescimento — pra quem já resolveu a gestão interna e agora
         precisa aparecer, ou pra quem ainda está começando essa jornada.
@@ -484,19 +491,22 @@ const servicos = [
   }
 
   /* Hub — o que fazemos */
-  .hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
-  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
+  .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
   @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
   .hub-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem;
     display: block; text-decoration: none; color: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
-  .hub-card-core { background: var(--ink); color: var(--bg); border-color: var(--ink); cursor: pointer; }
-  a.hub-card-core:hover, a.hub-card-core:focus-visible {
+  .hub-card-core { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  a.hub-card { cursor: pointer; }
+  a.hub-card:hover, a.hub-card:focus-visible {
     transform: translateY(-2px);
-    box-shadow: 0 16px 32px rgba(36,38,31,.22);
+    box-shadow: 0 16px 32px rgba(36,38,31,.16);
     border-color: var(--accent);
+  }
+  a.hub-card-core:hover, a.hub-card-core:focus-visible {
+    box-shadow: 0 16px 32px rgba(36,38,31,.22);
   }
   .hub-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
   .hub-card-core .hub-tag { color: color-mix(in srgb, var(--accent) 70%, white); }
@@ -566,7 +576,6 @@ const servicos = [
   .j-step-live .j-sub { color: color-mix(in srgb, var(--bg) 72%, transparent); }
   .badge-status { display: inline-block; font-family: var(--font-title); font-size: 0.63rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 999px; }
   .j-step-live .badge-status { background: var(--accent); color: var(--accent-ink); }
-  .j-step-pending .badge-status { border: 1px solid var(--line); color: var(--ink-soft); }
 
   .dim-list { margin: 1.4rem 0 0; }
   .dim-row {
