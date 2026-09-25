@@ -328,7 +328,6 @@ const ofertas = [
           <h2>Prefere conversar direto?</h2>
           <p class="lede">Sem venda insistente por telefone: a gente responde, você decide o próximo passo.</p>
           <div class="contact-alt">
-            <a href="#">→ Falar agora pelo WhatsApp</a>
             <a href="mailto:contato@eloo.digital">→ contato@eloo.digital</a>
           </div>
         </div>
@@ -429,7 +428,7 @@ const ofertas = [
           status.textContent = "Recebemos seu contato — a gente responde em breve. Obrigado!";
           status.className = "form-note is-ok";
         } catch (err) {
-          status.textContent = "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp / e-mail ao lado.";
+          status.textContent = "Não foi possível enviar agora. Tente de novo ou escreva pro e-mail ao lado.";
           status.className = "form-note is-error";
         } finally {
           submitBtn.disabled = false;
