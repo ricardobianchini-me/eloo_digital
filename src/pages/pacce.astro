@@ -1,0 +1,283 @@
+---
+import '../styles/global.css';
+import '@fontsource/lora/500.css';
+import '@fontsource/lora/600.css';
+import '@fontsource/lora/700.css';
+import '@fontsource/work-sans/400.css';
+import '@fontsource/work-sans/500.css';
+import '@fontsource/work-sans/600.css';
+
+const DIAGNOSTICO_URL = "https://claude.ai/code/artifact/1015379a-794c-4a92-8e04-ea01320f4fab";
+const WHATSAPP_URL = "https://wa.me/";
+
+const pilares = [
+  {
+    nome: "Prontuário Social e Acolhimento",
+    desc: "Centralize o cadastro, pré-cadastro e todo o histórico de evolução das pessoas assistidas. Garanta a continuidade do atendimento, mesmo com a rotatividade de voluntários.",
+  },
+  {
+    nome: "Escalas de Trabalhadores Inteligentes",
+    desc: "Organize os turnos de funcionários, plantonistas e voluntários de forma simples. Monitore presenças e evite buracos na escala de atendimento.",
+  },
+  {
+    nome: "Transparência Pronta para Assembleias",
+    desc: "Dados financeiros e operacionais estruturados de ponta a ponta. Extraia relatórios claros e seguros para auditorias, editais e prestações de contas em assembleias formais.",
+  },
+  {
+    nome: "Segurança e Conformidade Rígida",
+    desc: "Proteja informações altamente sensíveis dos seus assistidos em conformidade com as exigências legais, eliminando o trânsito de dados vulneráveis.",
+  },
+];
+
+const maturidade = [
+  { n: "1", nome: "Manual", realidade: "Dependência de papel, memória ou conversas informais.", impacto: "Digitalização imediata e centralizada de dados." },
+  { n: "2", nome: "Parcial", realidade: "Planilhas isoladas que não garantem continuidade.", impacto: "Integração total entre setores e equipes." },
+  { n: "3", nome: "Frágil", realidade: "Sistemas antigos, obsoletos ou sem suporte técnico.", impacto: "Plataforma robusta, com IA aplicada e atualização contínua." },
+  { n: "4", nome: "Estruturado", realidade: "Processo seguro e resiliente a trocas na equipe.", impacto: "Onde o PACCE consolida sua instituição." },
+];
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PACCE — eloo.digital</title>
+    <meta
+      name="description"
+      content="A plataforma de gestão definitiva para quem lidera o acolhimento e a assistência social. Cadastro, atendimento, escalas e transparência num só lugar."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <nav>
+      <a href="/#topo" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <div class="navlinks">
+        <a href="/">← eloo.digital</a>
+        <a href="/#servicos">Serviços</a>
+        <a href="/#metodologia">Metodologia</a>
+      </div>
+      <a class="btn btn-nav" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+    </nav>
+
+    <!-- BLOCO 1 — Hero -->
+    <header class="hero reveal" id="topo">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow eyebrow-light">Produto Central eloo.digital</p>
+          <h1>A plataforma de gestão definitiva para quem lidera o acolhimento e a assistência social.</h1>
+          <p class="hero-sub">
+            Esqueça as planilhas soltas, a perda de históricos e os furos nas escalas. O PACCE
+            centraliza toda a administração da sua instituição em um ambiente seguro, profissional
+            e feito para durar.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+          </div>
+        </div>
+        <a href="https://pacce.app" target="_blank" rel="noopener" class="hero-shot">
+          <img src="/img/pacce-overview.png" alt="Painel Overview do PACCE, com atendimentos do dia e avanço por departamento" />
+        </a>
+      </div>
+    </header>
+
+    <!-- BLOCO 2 — A dor do setor vs. a realidade real -->
+    <section class="section">
+      <h2>Sua instituição lida com vidas. A gestão dela não pode depender de papéis ou mensagens de WhatsApp.</h2>
+      <p class="lede">
+        Fornecedores tradicionais tentam adaptar sistemas de empresas comerciais para a rotina do
+        Terceiro Setor. O resultado? Ferramentas rígidas que ninguém usa. O PACCE foi moldado por
+        7 anos de vivência prática na linha de frente de entidades assistenciais — a gente entende
+        a sua cultura, a sua rotina e as suas exigências de prestação de contas.
+      </p>
+    </section>
+
+    <!-- BLOCO 3 — Pilares de funcionalidade -->
+    <section class="section section-deep" id="pilares">
+      <h2>Tudo o que sua organização precisa em um único ecossistema.</h2>
+      <div class="pilares-grid">
+        {pilares.map((p) => (
+          <div class="pilar-card">
+            <h3>{p.nome}</h3>
+            <p>{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- BLOCO 4 — Maturidade digital, conexão com LUMEN -->
+    <section class="section" id="maturidade">
+      <p class="eyebrow">Conexão com a Metodologia LUMEN</p>
+      <h2>Em qual nível de maturidade digital sua instituição está hoje?</h2>
+      <p class="lede">
+        Através da nossa <a href="/#metodologia">Metodologia LUMEN</a>, avaliamos seu cenário atual
+        e usamos o PACCE como o motor para transformar sua operação:
+      </p>
+
+      <div class="matriz-table" role="table" aria-label="Tabela de maturidade digital e o impacto do PACCE em cada estágio">
+        <div class="matriz-row matriz-head" role="row">
+          <span role="columnheader">Estágio atual</span>
+          <span role="columnheader">A realidade</span>
+          <span role="columnheader">O impacto do PACCE</span>
+        </div>
+        {maturidade.map((m) => (
+          <div class={`matriz-row matriz-${m.n}`} role="row">
+            <span class="matriz-estagio" role="cell"><b>{m.n}</b> {m.nome}</span>
+            <span role="cell">{m.realidade}</span>
+            <span role="cell" class="matriz-impacto">{m.impacto}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- BLOCO 5 — Tecnologia validada -->
+    <section class="section section-deep">
+      <div class="tech-grid">
+        <div>
+          <h2>IA aplicada e produto de verdade. O PACCE já roda em produção.</h2>
+          <p class="lede">
+            Não vendemos ideias abstratas ou protótipos de prateleira. O PACCE é uma realidade
+            tecnológica validada, estável e em plena operação, desenhada para evoluir junto com
+            o tamanho e o impacto da sua causa.
+          </p>
+        </div>
+        <a href="https://pacce.app" target="_blank" rel="noopener" class="hero-shot hero-shot-small">
+          <img src="/img/pacce-atendimento.png" alt="Tela de Gestão de Atendimentos do PACCE, com a seleção de tratamentos por departamento" />
+        </a>
+      </div>
+    </section>
+
+    <!-- BLOCO 6 — CTA final -->
+    <section class="cta-final">
+      <p class="cta-kicker">Comece pelo diagnóstico</p>
+      <h2 class="cta-big">Pronto para levar governança e segurança para a sua diretoria?</h2>
+      <p class="lede">
+        Não mude sua operação de uma vez. Comece pelo primeiro passo do nosso método: faça o
+        Diagnóstico LUMEN gratuito online agora — leva poucos minutos e você recebe um relatório
+        completo em até 24 horas. Se preferir, também dá pra fazer numa conversa de 20 minutos.
+      </p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+        <a class="btn btn-ghost" href={WHATSAPP_URL}>Falar com um consultor via WhatsApp</a>
+      </div>
+      <p class="cta-support">O mesmo time, o mesmo compromisso de longo prazo. Uma parceria feita para durar.</p>
+    </section>
+
+    <footer>
+      <a href="/#topo" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <p>eloo.digital · PACCE, feito pela eloo.digital</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    padding: 1.1rem 2rem;
+    background: color-mix(in srgb, var(--parchment) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-wordmark { text-decoration: none; color: var(--deep); font-size: 1.15rem; }
+  .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
+  .navlinks a { text-decoration: none; color: var(--ink-muted); }
+  .navlinks a:hover { color: var(--ink); }
+  @media (max-width: 780px) { .navlinks { display: none; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 999px; padding: 0.85rem 1.7rem; font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; border: 1px solid transparent; cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
+  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--dourado); color: var(--parchment); }
+  .btn-nav:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
+  .btn-primary { background: var(--dourado); color: var(--parchment); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--dourado) 88%, black); }
+  .btn-ghost { background: transparent; color: var(--mint); border-color: color-mix(in srgb, var(--mint) 40%, transparent); }
+  .btn-ghost:hover { border-color: var(--mint); }
+
+  .hero { background: var(--deep); color: var(--mint); padding: 5.5rem 2rem; }
+  .hero-grid {
+    max-width: 1120px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; align-items: center;
+  }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+  .eyebrow {
+    font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600; color: var(--dourado); margin: 0 0 0.9rem;
+  }
+  .eyebrow-light { color: color-mix(in srgb, var(--mint) 80%, var(--dourado) 20%); }
+  h1 {
+    font-family: var(--font-title); font-size: clamp(2rem, 4.2vw, 2.9rem); font-weight: 700;
+    letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 1.2rem; text-wrap: balance; color: var(--mint);
+  }
+  .hero-sub {
+    font-family: var(--font-body); font-size: 1.05rem;
+    color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%);
+    max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;
+  }
+  .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+  .hero-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-deep); box-shadow: 0 24px 48px rgba(0,0,0,.32); }
+  .hero-shot img { width: 100%; height: auto; }
+  .hero-shot-small { max-width: 480px; margin: 0 auto; }
+
+  .section { max-width: 1120px; margin: 0 auto; padding: 5.5rem 2rem; }
+  .section-deep { max-width: none; background: var(--deep-2); color: var(--mint); }
+  .section-deep > * { max-width: 1120px; margin-left: auto; margin-right: auto; }
+  .section-deep .tech-grid { max-width: 1120px; margin: 0 auto; }
+  h2 {
+    font-family: var(--font-title); font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700;
+    letter-spacing: -0.01em; margin: 0 0 1.1rem; text-wrap: balance; max-width: 34ch;
+  }
+  .section-deep h2 { color: var(--mint); }
+  .lede {
+    font-family: var(--font-body); font-size: 1.02rem; color: var(--ink-muted);
+    line-height: 1.65; max-width: 66ch; margin: 0 0 1.2rem;
+  }
+  .section-deep .lede { color: color-mix(in srgb, var(--mint) 78%, var(--parchment) 22%); }
+  .lede a { color: var(--dourado); font-weight: 600; }
+
+  .pilares-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem; }
+  @media (max-width: 700px) { .pilares-grid { grid-template-columns: 1fr; } }
+  .pilar-card {
+    background: color-mix(in srgb, var(--mint) 8%, var(--deep-2));
+    border: 1px solid color-mix(in srgb, var(--mint) 16%, transparent);
+    border-radius: 14px; padding: 1.5rem 1.5rem;
+  }
+  .pilar-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--mint); }
+  .pilar-card p { font-family: var(--font-body); font-size: 0.9rem; margin: 0; color: color-mix(in srgb, var(--mint) 82%, var(--parchment) 18%); }
+
+  .matriz-table { margin-top: 2rem; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .matriz-row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.4fr; gap: 1.2rem; padding: 1rem 1.3rem; }
+  @media (max-width: 780px) { .matriz-row { grid-template-columns: 1fr; gap: 0.3rem; } }
+  .matriz-head { background: var(--deep); color: var(--mint); font-family: var(--font-title); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+  .matriz-row:not(.matriz-head) { border-top: 1px solid var(--line); font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-muted); }
+  .matriz-row:not(.matriz-head):nth-child(odd) { background: #fffdf8; }
+  .matriz-estagio { font-family: var(--font-title); font-weight: 600; color: var(--ink); }
+  .matriz-estagio b { color: var(--dourado); margin-right: 0.3rem; }
+  .matriz-impacto { color: var(--floresta); font-weight: 500; }
+  .matriz-4 { background: color-mix(in srgb, var(--dourado) 12%, transparent) !important; }
+
+  .tech-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; }
+  @media (max-width: 880px) { .tech-grid { grid-template-columns: 1fr; } }
+
+  .cta-final { text-align: center; padding: 6rem 2rem; }
+  .cta-kicker { font-family: var(--font-title); font-weight: 700; color: var(--dourado); margin: 0 0 0.6rem; font-size: 0.95rem; }
+  .cta-big {
+    font-family: var(--font-title); font-size: clamp(1.8rem, 4.2vw, 2.5rem); font-weight: 700;
+    letter-spacing: -0.01em; margin: 0 auto 0.8rem; max-width: 30ch; text-wrap: balance;
+  }
+  .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
+  .cta-support { font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-muted); margin-top: 1.6rem; }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 3rem 2rem; text-align: center;
+    color: var(--ink-muted); font-size: 0.85rem;
+  }
+  footer .wordmark { color: var(--deep); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
+  footer p { margin: 0; font-family: var(--font-body); }
+</style>
