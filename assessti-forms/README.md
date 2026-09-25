@@ -76,6 +76,24 @@ GitHub (fixos, não crescem por cliente):
 | `ASSESSMENT_SECRET_KEY` | chave dos tokens de todos os clientes/módulos (trocar invalida TODOS os links de TODOS os clientes de uma vez) |
 | `ASSESSMENT_INTERNAL_PIN` | PIN da tela de login interna (`/responder/entrar`), compartilhado entre clientes |
 | `ASSESSMENT_GOOGLE_CREDENTIALS_B64` | JSON da service account em base64 (`base64 -w0 credentials.json`) |
+| `ASSESSMENT_LEADS_CRM_PIN` | PIN da página oculta de gestão de leads (`/assessment/leads/crm`) — se não setado, cai no padrão `2424` do `config.py` |
+| `ASSESSMENT_GMAIL_USER` | conta Gmail usada para notificar novo lead por e-mail |
+| `ASSESSMENT_GMAIL_APP_PASSWORD` | senha de app do Gmail acima (myaccount.google.com/apppasswords — exige verificação em 2 etapas na conta) |
+| `ASSESSMENT_LEADS_NOTIFY_EMAIL` | pra onde a notificação vai — se vazio, usa o próprio `ASSESSMENT_GMAIL_USER` |
+
+**CRM de Leads:** o formulário de contato público de eloo.digital
+(`/#contato`) grava em `leads.py` → planilha Google Sheets própria (ID
+fixo em `leads.py`, aba "Leads") — campos do visitante (nome, instituição,
+cargo, e-mail, WhatsApp, interesse, origem, urgência, mensagem) mais 3
+colunas de CRM básico (Status, Próximo Retorno, Notas Internas) editadas
+só pela equipe. A cada novo lead, tenta notificar por e-mail
+(`leads_notify.py`, Gmail SMTP com senha de app) — falha no e-mail nunca
+impede o lead de ser salvo, a planilha é a fonte de verdade. Página de
+gestão oculta em `/assessment/leads/crm`, PIN próprio (gate separado do
+PIN interno do Assessment, `leads_crm_auth.py`) — edição inline salva
+automaticamente (mesmo padrão de UX do `modulo.html`). Nenhuma mudança de
+nginx foi necessária: `location /assessment/leads/` já era um prefixo
+(não regex), então já cobre qualquer sub-rota nova sob esse caminho.
 
 **Acesso interno da equipe:** tela de login própria do app, em
 `/assessment/_shared/responder/entrar` — pede só o PIN (`INTERNAL_PIN`

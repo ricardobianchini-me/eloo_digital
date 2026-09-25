@@ -137,6 +137,31 @@ textarea:focus, select:focus, input:focus{outline:2px solid var(--accent-fill); 
 .card-simples{max-width:520px; margin:80px auto; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:32px; text-align:center;}
 .card-simples h2{margin-top:0; font-size:24px;}
 
+/* CRM de Leads */
+.leads-table-wrap{overflow-x:auto; margin-top:20px; border:1px solid var(--border); border-radius:8px;}
+.leads-table{width:100%; border-collapse:collapse; font-size:13px; background:var(--surface);}
+.leads-table th, .leads-table td{padding:9px 11px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top;}
+.leads-table tbody tr:last-child td{border-bottom:none;}
+.leads-table th{
+  font-family:-apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size:10.5px;
+  text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); white-space:nowrap;
+  background:var(--surface-2); position:sticky; top:0;
+}
+.leads-table .nowrap{white-space:nowrap;}
+.leads-table .dim{color:var(--ink-faint); font-size:11.5px; margin-top:2px;}
+.leads-table .msg-cell{max-width:220px; white-space:pre-wrap;}
+.leads-table select, .leads-table input[type=date], .leads-table textarea{
+  font-size:12.5px; padding:5px 7px; width:auto;
+}
+.leads-table textarea{min-height:38px; width:180px; resize:vertical;}
+.status-select{font-weight:600; border-radius:14px !important; padding:4px 8px !important; cursor:pointer;}
+.status-novo{background:var(--surface-2); color:var(--ink-muted);}
+.status-em-contato{background:var(--amber-soft); color:var(--amber);}
+.status-qualificado{background:var(--accent-soft); color:var(--accent);}
+.status-proposta-enviada{background:var(--accent-soft); color:var(--accent);}
+.status-ganho{background:var(--good-soft); color:var(--good);}
+.status-perdido{background:var(--red-soft); color:var(--red);}
+
 footer.rodape-marca{
   text-align:center; padding:24px; font-size:11.5px; color:var(--ink-faint);
   font-family:'IBM Plex Mono',monospace; letter-spacing:.04em;

@@ -10,6 +10,8 @@ from fastapi.templating import Jinja2Templates
 from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
 import leads
+import leads_crm_auth
+import leads_notify
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
 import pin_auth
 import portal_auth
@@ -26,6 +28,7 @@ BASE_DIR = Path(__file__).parent
 # o nginx de novo, e estáticos/saúde também não precisam de location à parte.
 STATIC_PATH = "/assessment/_shared/responder/static"
 LOGIN_PATH = "/assessment/_shared/responder/entrar"
+LEADS_CRM_LOGIN_PATH = "/assessment/leads/crm/entrar"
 
 app = FastAPI(title="eloo Assessment")
 app.mount(STATIC_PATH, StaticFiles(directory=BASE_DIR / "static"), name="static")
@@ -354,8 +357,12 @@ async def enviar_lead(
     request: Request,
     nome: str = Form(...),
     empresa: str = Form(...),
+    cargo: str = Form(""),
     email: str = Form(...),
     telefone: str = Form(""),
+    interesse: str = Form(""),
+    origem: str = Form(""),
+    urgencia: str = Form(""),
     mensagem: str = Form(""),
     site: str = Form(""),  # honeypot — campo escondido no form; bot preenche, humano não
 ):
@@ -369,14 +376,81 @@ async def enviar_lead(
         )
 
     try:
-        leads.salvar_lead(nome.strip(), empresa.strip(), email.strip(), telefone.strip(), mensagem.strip())
+        lead_salvo = leads.salvar_lead(
+            nome.strip(), empresa.strip(), cargo.strip(), email.strip(), telefone.strip(),
+            interesse.strip(), origem.strip(), urgencia.strip(), mensagem.strip(),
+        )
     except Exception:
         logger.exception("Falha ao salvar lead")
         return templates.TemplateResponse(
             "lead_erro.html", {"request": request}, status_code=502
         )
 
+    leads_notify.notificar_novo_lead(lead_salvo)
+
     return templates.TemplateResponse("lead_obrigado.html", {"request": request})
+
+
+def _leads_crm_autenticado(request: Request) -> bool:
+    return leads_crm_auth.cookie_valido(request.cookies.get(leads_crm_auth.COOKIE_NOME))
+
+
+@app.get("/assessment/leads/crm/entrar", response_class=HTMLResponse)
+def leads_crm_tela_login(request: Request, next: str = "/assessment/leads/crm", erro: bool = False):
+    return templates.TemplateResponse("leads_crm_entrar.html", {"request": request, "next": next, "erro": erro})
+
+
+@app.post("/assessment/leads/crm/entrar")
+def leads_crm_processar_login(pin: str = Form(...), next: str = Form("/assessment/leads/crm")):
+    if not leads_crm_auth.pin_correto(pin):
+        return RedirectResponse(
+            url=f"{LEADS_CRM_LOGIN_PATH}?erro=1&next={quote(next)}", status_code=303
+        )
+    resposta = RedirectResponse(url=next, status_code=303)
+    resposta.set_cookie(
+        leads_crm_auth.COOKIE_NOME,
+        leads_crm_auth.valor_cookie(),
+        httponly=True,
+        samesite="lax",
+        secure=True,
+        max_age=60 * 60 * 24 * 7,  # 7 dias — uso comercial recorrente, não só uma sessão de trabalho
+    )
+    return resposta
+
+
+@app.get("/assessment/leads/crm", response_class=HTMLResponse)
+def leads_crm_painel(request: Request):
+    if not _leads_crm_autenticado(request):
+        return RedirectResponse(url=f"{LEADS_CRM_LOGIN_PATH}?next=/assessment/leads/crm")
+    try:
+        registros = leads.listar_leads()
+    except Exception:
+        logger.exception("Falha ao ler leads")
+        return templates.TemplateResponse(
+            "erro.html",
+            {"request": request, "mensagem": "Não foi possível carregar os leads agora. Tente novamente em instantes."},
+            status_code=502,
+        )
+    return templates.TemplateResponse("leads_crm.html", {"request": request, "leads": registros})
+
+
+@app.post("/assessment/leads/crm/salvar")
+async def leads_crm_salvar(
+    request: Request, linha: int = Form(...), campo: str = Form(...), valor: str = Form("")
+):
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+
+    if campo not in leads.CAMPOS_CRM_EDITAVEIS:
+        raise HTTPException(status_code=403, detail="Campo não editável por aqui")
+
+    try:
+        leads.atualizar_campo_lead(linha, campo, valor)
+    except Exception:
+        logger.exception("Falha ao salvar campo do lead")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+
+    return JSONResponse({"ok": True})
 
 
 app.include_router(router)

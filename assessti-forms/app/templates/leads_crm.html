@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}CRM de Leads — eloo.digital{% endblock %}
+{% block body %}
+
+<div class="topbar">
+  <div>
+    <div class="eyebrow"><span class="brandmark">eloo</span> · CRM de Leads</div>
+    <h1>Gestão de Leads</h1>
+    <div class="sub">{{ leads|length }} lead(s) registrados — edição salva automaticamente</div>
+  </div>
+</div>
+
+<main style="max-width:1280px;">
+  {% if not leads %}
+  <p style="color:var(--ink-muted); margin-top:24px;">Nenhum lead registrado ainda.</p>
+  {% else %}
+  <div class="leads-table-wrap">
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Nome</th>
+          <th>Instituição</th>
+          <th>Cargo</th>
+          <th>Contato</th>
+          <th>Interesse</th>
+          <th>Origem</th>
+          <th>Urgência</th>
+          <th>Mensagem</th>
+          <th>Status</th>
+          <th>Próximo retorno</th>
+          <th>Notas internas</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lead in leads %}
+        <tr data-linha="{{ lead['_row'] }}">
+          <td class="nowrap">{{ lead['Data/Hora'] }}</td>
+          <td>{{ lead['Nome'] }}</td>
+          <td>{{ lead['Instituição'] }}</td>
+          <td>{{ lead['Cargo'] }}</td>
+          <td>
+            <div>{{ lead['E-mail'] }}</div>
+            <div class="dim">{{ lead['WhatsApp'] }}</div>
+          </td>
+          <td>{{ lead['Interesse'] }}</td>
+          <td>{{ lead['Origem'] }}</td>
+          <td>{{ lead['Urgência'] }}</td>
+          <td class="msg-cell">{{ lead['Mensagem'] }}</td>
+          <td>
+            <select data-campo="Status" class="status-select status-{{ (lead['Status'] or 'novo')|lower|replace(' ', '-') }}">
+              {% for opcao in ["Novo", "Em contato", "Qualificado", "Proposta enviada", "Ganho", "Perdido"] %}
+              <option value="{{ opcao }}" {{ 'selected' if lead['Status']==opcao else '' }}>{{ opcao }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="date" data-campo="Próximo Retorno" value="{{ lead['Próximo Retorno'] }}"></td>
+          <td><textarea data-campo="Notas Internas" placeholder="Histórico de contato...">{{ lead['Notas Internas'] }}</textarea></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</main>
+
+<footer class="rodape-marca">eloo.digital · CRM de Leads (uso interno)</footer>
+
+<script>
+function debounce(fn, ms){
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+async function salvarCampo(row, campo, valor, onOk){
+  const linha = row.dataset.linha;
+  try{
+    const resp = await fetch("/assessment/leads/crm/salvar", {
+      method: "POST",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: new URLSearchParams({linha, campo, valor}),
+    });
+    if(!resp.ok) throw new Error(await resp.text());
+    if(onOk) onOk();
+  }catch(e){
+    alert("Erro ao salvar — tente de novo.");
+  }
+}
+
+const salvarDebounced = debounce(salvarCampo, 500);
+
+document.querySelectorAll("tr[data-linha]").forEach(row => {
+  row.querySelectorAll("[data-campo]").forEach(el => {
+    const evento = (el.tagName === "SELECT" || el.type === "date") ? "change" : "input";
+    el.addEventListener(evento, () => {
+      const onOk = el.tagName === "SELECT"
+        ? () => { el.className = "status-select status-" + el.value.toLowerCase().replace(/ /g, "-"); }
+        : null;
+      salvarDebounced(row, el.dataset.campo, el.value, onOk);
+    });
+  });
+});
+</script>
+{% endblock %}

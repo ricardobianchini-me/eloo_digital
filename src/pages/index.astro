@@ -332,44 +332,73 @@ const ofertas = [
             <a href="mailto:contato@eloo.digital">→ contato@eloo.digital</a>
           </div>
         </div>
-        <form class="mock-form" onsubmit="return false;">
+        <div class="contato-form-wrap">
+        <form class="mock-form" id="contato-form">
           <div class="f-row">
             <div class="f-field">
               <label for="f-nome">Nome</label>
-              <input id="f-nome" name="nome" type="text" placeholder="Seu nome" />
+              <input id="f-nome" name="nome" type="text" placeholder="Seu nome" required />
             </div>
             <div class="f-field">
               <label for="f-instituicao">Instituição</label>
-              <input id="f-instituicao" name="instituicao" type="text" placeholder="Nome da organização" />
+              <input id="f-instituicao" name="empresa" type="text" placeholder="Nome da organização" required />
             </div>
           </div>
           <div class="f-row">
             <div class="f-field">
-              <label for="f-email">E-mail</label>
-              <input id="f-email" name="email" type="email" placeholder="voce@instituicao.org" />
+              <label for="f-cargo">Cargo / função</label>
+              <input id="f-cargo" name="cargo" type="text" placeholder="Ex.: Coordenador de Atendimento" />
             </div>
             <div class="f-field">
               <label for="f-whats">WhatsApp</label>
-              <input id="f-whats" name="whatsapp" type="tel" placeholder="(11) 90000-0000" />
+              <input id="f-whats" name="telefone" type="tel" placeholder="(11) 90000-0000" />
             </div>
           </div>
           <div class="f-field">
-            <label for="f-interesse">O que você procura</label>
-            <select id="f-interesse" name="interesse">
-              <option>Diagnóstico gratuito</option>
-              <option>PACCE</option>
-              <option>Criação de Sites</option>
-              <option>Marketing Digital</option>
-              <option>Canais Digitais</option>
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" placeholder="voce@instituicao.org" required />
+          </div>
+          <div class="f-row">
+            <div class="f-field">
+              <label for="f-interesse">O que você procura</label>
+              <select id="f-interesse" name="interesse">
+                <option>Diagnóstico gratuito</option>
+                <option>PACCE</option>
+                <option>Sites Institucionais Inteligentes (com CMS)</option>
+                <option>Marketing Digital e Captação Estratégica</option>
+                <option>Sincronização de Canais Digitais</option>
+                <option>Assessment de TI</option>
+                <option>Soluções Digitais</option>
+              </select>
+            </div>
+            <div class="f-field">
+              <label for="f-urgencia">Prazo desejado</label>
+              <select id="f-urgencia" name="urgencia">
+                <option>Só pesquisando</option>
+                <option>Até 30 dias</option>
+                <option>Imediato</option>
+              </select>
+            </div>
+          </div>
+          <div class="f-field">
+            <label for="f-origem">Como conheceu a eloo.digital</label>
+            <select id="f-origem" name="origem">
+              <option>Indicação</option>
+              <option>Google / busca</option>
+              <option>Redes sociais</option>
+              <option>Evento</option>
+              <option>Outro</option>
             </select>
           </div>
           <div class="f-field">
             <label for="f-msg">Mensagem (opcional)</label>
             <textarea id="f-msg" name="mensagem" rows="3" placeholder="Conte um pouco do que está acontecendo hoje"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Solicitar contato</button>
-          <p class="form-note">Formulário ainda sem envio automático — próximo passo é conectar a um CRM real.</p>
+          <input type="text" name="site" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit" class="btn btn-primary" id="contato-submit">Solicitar contato</button>
         </form>
+        <p class="form-note" id="contato-status" role="status"></p>
+        </div>
       </div>
     </section>
 
@@ -377,6 +406,36 @@ const ofertas = [
       <a href="#topo" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
       <p>eloo.digital · PACCE, feito pela eloo.digital</p>
     </footer>
+
+    <script>
+      const form = document.getElementById("contato-form");
+      const status = document.getElementById("contato-status");
+      const submitBtn = document.getElementById("contato-submit");
+
+      form?.addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        submitBtn.disabled = true;
+        status.textContent = "Enviando...";
+        status.className = "form-note";
+
+        try {
+          const resp = await fetch("/assessment/leads/enviar", {
+            method: "POST",
+            body: new FormData(form),
+          });
+          if (!resp.ok) throw new Error(`status ${resp.status}`);
+          form.reset();
+          form.hidden = true;
+          status.textContent = "Recebemos seu contato — a gente responde em breve. Obrigado!";
+          status.className = "form-note is-ok";
+        } catch (err) {
+          status.textContent = "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp / e-mail ao lado.";
+          status.className = "form-note is-error";
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>
 
@@ -646,7 +705,10 @@ const ofertas = [
   }
   .f-field input:focus, .f-field select:focus, .f-field textarea:focus { outline: none; border-color: var(--accent); }
   .mock-form .btn { margin-top: 0.2rem; }
-  .form-note { font-family: var(--font-body); font-size: 0.72rem; color: var(--ink-soft); margin: 0; }
+  .form-note { font-family: var(--font-body); font-size: 0.72rem; color: var(--ink-soft); margin: 0; min-height: 1.1em; }
+  .form-note.is-error { color: var(--accent); font-weight: 600; }
+  .form-note.is-ok { color: var(--support); font-weight: 600; }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
   footer {
     border-top: 1px solid var(--line);
