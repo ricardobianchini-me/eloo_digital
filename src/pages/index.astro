@@ -496,8 +496,10 @@ const ofertas = [
   }
 
   /* Hub — o que fazemos */
-  .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
-  @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
+  .hub-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 2rem; }
+  @media (max-width: 1000px) { .hub-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .hub-grid { grid-template-columns: 1fr; } }
   .hub-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem;
     display: block; text-decoration: none; color: inherit;
@@ -553,12 +555,13 @@ const ofertas = [
   .pacce-feats li::before { content: "—"; color: var(--accent); font-weight: 700; flex: none; }
 
   /* Serviços */
-  .servicos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.3rem; margin-top: 2rem; }
-  @media (max-width: 560px) { .servicos-grid { grid-template-columns: 1fr; } }
+  .servicos-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.3rem; margin-top: 2rem; }
   .servico-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.5rem 1.4rem;
     display: block; text-decoration: none; color: inherit;
+    flex: 1 1 300px; max-width: 340px;
   }
+  @media (max-width: 560px) { .servico-card { max-width: 100%; } }
   .servico-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.5rem; font-weight: 600; }
   .servico-card p { font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
   .servico-card-link {
