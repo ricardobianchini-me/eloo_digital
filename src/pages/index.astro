@@ -94,9 +94,9 @@ const servicos = [
       <a href="#topo" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
       <div class="navlinks">
         <a href="#sobre">Sobre</a>
+        <a href="#metodologia">Metodologia</a>
         <a href="/pacce">PACCE</a>
         <a href="#servicos">Serviços</a>
-        <a href="#metodologia">Metodologia</a>
         <a href="#contato">Contato</a>
       </div>
       <a class="btn btn-nav" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
@@ -107,8 +107,9 @@ const servicos = [
         <span class="badge">Sete anos de campo no acolhimento e na assistência social, hoje a serviço de qualquer organização do terceiro setor</span>
         <h1>O nível de parceria em tecnologia que a sua organização <span class="accent">nunca experimentou</span>.</h1>
         <p class="hero-sub">
-          Uma única plataforma de gestão, presença digital e marketing. Mais do que um fornecedor
-          que some após a entrega, somos o parceiro estratégico que cresce junto com o seu negócio.
+          O parceiro na sua transformação digital — o seu <em>elo</em> com o mundo digital, em
+          gestão, presença e marketing. Mais do que um fornecedor que some após a entrega, somos o
+          parceiro estratégico que cresce junto com o seu negócio.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
@@ -178,56 +179,6 @@ const servicos = [
       </div>
     </section>
 
-    <section class="section band" id="pacce">
-      <div class="pacce-grid">
-        <div>
-          <a href={PACCE_URL} target="_blank" rel="noopener" class="pacce-shot">
-            <img src="/img/pacce-atendimento.png" alt="Tela de Gestão de Atendimentos do PACCE, com a seleção de tratamentos por departamento" />
-          </a>
-          <p class="pacce-shot-caption">Tela real do PACCE — base de demonstração.</p>
-        </div>
-        <div>
-          <p class="eyebrow">Produto principal</p>
-          <h2>PACCE — a plataforma de gestão que fica</h2>
-          <p class="lede">
-            Cadastro, atendimento e histórico organizados num só lugar. Multi-instituição, feito
-            pra crescer junto com quem usa — não pra ser trocado em dois anos.
-          </p>
-          <p class="lede">
-            Por dentro, o PACCE é simples: <strong>Overview</strong> pra ver o dia inteiro num
-            relance, <strong>Atendimento</strong> pra abrir e acompanhar cada caso por
-            departamento, <strong>Assistidos</strong> pra manter o cadastro e o histórico de cada
-            um, e a área de <strong>Coordenação/Administração</strong> pra configurar tratamentos,
-            turnos, instituição e equipe.
-          </p>
-          <ul class="pacce-feats">
-            <li>Cadastro por QR Code ou recepção, sem depender de computador livre</li>
-            <li>Histórico de atendimento com orientação e data de retorno</li>
-            <li>Filas por setor com baixa — Passe, Cromoterapia, Desobsessão e mais</li>
-            <li>Isolamento total de dados entre instituições diferentes</li>
-          </ul>
-          <a href="/pacce" class="btn btn-primary">Ver o PACCE de perto</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="servicos">
-      <p class="eyebrow">Serviços</p>
-      <h2>O que sustenta o PACCE por fora</h2>
-      <p class="lede">
-        Presença, comunicação e crescimento — pra quem já resolveu a gestão interna e agora
-        precisa aparecer, ou pra quem ainda está começando essa jornada.
-      </p>
-      <div class="servicos-grid">
-        {servicos.map((s) => (
-          <div class="servico-card">
-            <h3>{s.nome}</h3>
-            <p>{s.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-
     <section class="section band" id="metodologia">
       <p class="eyebrow">Como trabalhamos</p>
       <h2>Metodologia LUMEN — o que avaliamos antes de propor qualquer solução</h2>
@@ -276,6 +227,56 @@ const servicos = [
       </div>
 
       <a class="btn btn-primary" style="margin-top:2.5rem;" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+    </section>
+
+    <section class="section band" id="pacce">
+      <div class="pacce-grid">
+        <div>
+          <a href={PACCE_URL} target="_blank" rel="noopener" class="pacce-shot">
+            <img src="/img/pacce-atendimento.png" alt="Tela de Gestão de Atendimentos do PACCE, com a seleção de tratamentos por departamento" />
+          </a>
+          <p class="pacce-shot-caption">Tela real do PACCE — base de demonstração.</p>
+        </div>
+        <div>
+          <p class="eyebrow">Produto principal</p>
+          <h2>PACCE — a plataforma de gestão que fica</h2>
+          <p class="lede">
+            Cadastro, atendimento e histórico organizados num só lugar. Multi-instituição, feito
+            pra crescer junto com quem usa — não pra ser trocado em dois anos.
+          </p>
+          <p class="lede">
+            Por dentro, o PACCE é simples: <strong>Overview</strong> pra ver o dia inteiro num
+            relance, <strong>Atendimento</strong> pra abrir e acompanhar cada caso por
+            departamento, <strong>Assistidos</strong> pra manter o cadastro e o histórico de cada
+            um, e a área de <strong>Coordenação/Administração</strong> pra configurar tratamentos,
+            turnos, instituição e equipe.
+          </p>
+          <ul class="pacce-feats">
+            <li>Cadastro por QR Code ou recepção, sem depender de computador livre</li>
+            <li>Histórico de atendimento com orientação e data de retorno</li>
+            <li>Filas por setor com baixa — Passe, Cromoterapia, Desobsessão e mais</li>
+            <li>Isolamento total de dados entre instituições diferentes</li>
+          </ul>
+          <a href="/pacce" class="btn btn-primary">Ver o PACCE de perto</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicos">
+      <p class="eyebrow">Serviços</p>
+      <h2>O que sustenta o PACCE por fora</h2>
+      <p class="lede">
+        Presença, comunicação e crescimento — pra quem já resolveu a gestão interna e agora
+        precisa aparecer, ou pra quem ainda está começando essa jornada.
+      </p>
+      <div class="servicos-grid">
+        {servicos.map((s) => (
+          <div class="servico-card">
+            <h3>{s.nome}</h3>
+            <p>{s.desc}</p>
+          </div>
+        ))}
+      </div>
     </section>
 
     <section class="cta-final">
@@ -423,6 +424,7 @@ const servicos = [
     margin: 0 auto 2.4rem;
     line-height: 1.6;
   }
+  .hero-sub em { font-style: normal; font-weight: 600; color: var(--accent); }
   .hero-actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
 
   .section { max-width: 1080px; margin: 0 auto; padding: 6rem 2rem; }
