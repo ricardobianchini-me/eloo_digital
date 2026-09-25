@@ -136,12 +136,15 @@ const servicos = [
         {ofertas.map((o) => (
           o.core ? (
             <a href="/pacce" class="hub-card hub-card-core" aria-label="Conhecer o PACCE de perto">
-              <span class="hub-tag">{o.tag}</span>
               <div class="hub-core-head">
-                <img src="/img/pacce-icon.png" alt="" class="pacce-mark" width="28" height="28" />
-                <h3>{o.nome}</h3>
+                <img src="/img/pacce-icon.png" alt="" class="pacce-mark" width="32" height="32" />
+                <div>
+                  <span class="hub-tag">{o.tag}</span>
+                  <h3>{o.nome}</h3>
+                </div>
               </div>
               <p>{o.desc}</p>
+              <span class="hub-core-cta">Conhecer o PACCE →</span>
             </a>
           ) : o.href ? (
             <a href={o.href} class="hub-card">
@@ -491,14 +494,19 @@ const servicos = [
   }
 
   /* Hub — o que fazemos */
-  .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .hub-grid { grid-template-columns: 1fr; } }
   .hub-card {
     background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.4rem 1.3rem;
     display: block; text-decoration: none; color: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
-  .hub-card-core { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .hub-card-core {
+    background: var(--ink); color: var(--bg); border-color: var(--ink);
+    grid-column: 1 / -1; order: 99;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 1.6rem; padding: 1.3rem 1.6rem;
+  }
   a.hub-card { cursor: pointer; }
   a.hub-card:hover, a.hub-card:focus-visible {
     transform: translateY(-2px);
@@ -510,10 +518,16 @@ const servicos = [
   }
   .hub-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
   .hub-card-core .hub-tag { color: color-mix(in srgb, var(--accent) 70%, white); }
-  .hub-core-head { display: flex; align-items: center; gap: 0.55rem; margin: 0.5rem 0 0.4rem; }
-  .pacce-mark { flex: none; width: 1.7rem; height: 1.7rem; object-fit: contain; }
+  .hub-core-head { display: flex; align-items: center; gap: 0.7rem; flex: none; }
+  .pacce-mark { flex: none; width: 2rem; height: 2rem; object-fit: contain; }
   .hub-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0.5rem 0 0.4rem; font-weight: 600; }
-  .hub-core-head h3 { margin: 0; }
+  .hub-core-head h3 { margin: 0.1rem 0 0; }
+  .hub-card-core p { flex: 1 1 260px; margin: 0; min-width: 0; }
+  .hub-core-cta {
+    flex: none; font-family: var(--font-title); font-size: 0.85rem; font-weight: 600;
+    color: var(--accent-ink); background: var(--accent); border-radius: 999px; padding: 0.5rem 1.1rem;
+    white-space: nowrap;
+  }
   .hub-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-soft); }
   .hub-card-core p { color: color-mix(in srgb, var(--bg) 85%, transparent); }
 
