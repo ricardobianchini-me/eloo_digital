@@ -486,14 +486,23 @@ const ofertas = [
     justify-content: space-between;
     gap: 1.5rem;
     padding: 1.1rem 2rem;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    background: color-mix(in srgb, var(--card) 92%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
   .nav-wordmark { text-decoration: none; color: var(--ink); font-size: 1.15rem; }
   .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
-  .navlinks a { text-decoration: none; color: var(--ink-soft); }
-  .navlinks a:hover { color: var(--ink); }
+  .navlinks a {
+    text-decoration: none; color: var(--ink-soft); position: relative;
+    padding-bottom: 0.3rem; transition: color 0.2s ease;
+  }
+  .navlinks a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px;
+    background: var(--accent); border-radius: 2px;
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .navlinks a:hover { color: var(--accent); }
+  .navlinks a:hover::after { width: 100%; }
   @media (max-width: 900px) { .navlinks { display: none; } }
 
   .btn {
