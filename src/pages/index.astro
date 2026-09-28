@@ -260,16 +260,20 @@ const ofertas = [
       <p class="lede">Dividida em quatro etapas claras, focadas em dar segurança e previsibilidade pra sua diretoria:</p>
 
       <div class="jornada-grid">
-        {jornada.map((j) => (
-          <div class={`j-step j-step-${j.status}`}>
-            <p class="j-num">{j.n}</p>
-            <h4>{j.nome}</h4>
-            <p class="j-resumo">{j.resumo}</p>
-            <p class="j-sub"><strong>Como funciona:</strong> {j.como}</p>
-            {j.recebe && <p class="j-sub"><strong>Você recebe:</strong> {j.recebe}</p>}
-            {j.status === "live" && <span class="badge-status">Disponível hoje</span>}
-          </div>
-        ))}
+        {jornada.map((j) => {
+          const Tag = j.status === "live" ? "a" : "div";
+          const linkProps = j.status === "live" ? { href: DIAGNOSTICO_URL } : {};
+          return (
+            <Tag class={`j-step j-step-${j.status}`} {...linkProps}>
+              <p class="j-num">{j.n}</p>
+              <h4>{j.nome}</h4>
+              <p class="j-resumo">{j.resumo}</p>
+              <p class="j-sub"><strong>Como funciona:</strong> {j.como}</p>
+              {j.recebe && <p class="j-sub"><strong>Você recebe:</strong> {j.recebe}</p>}
+              {j.status === "live" && <span class="badge-status">Disponível hoje →</span>}
+            </Tag>
+          );
+        })}
       </div>
 
       <p class="eyebrow" style="margin-top:3rem;">As 6 dimensões do Diagnóstico</p>
@@ -723,8 +727,18 @@ const ofertas = [
   .jornada-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; margin-top: 1.6rem; }
   @media (max-width: 900px) { .jornada-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .jornada-grid { grid-template-columns: 1fr; } }
-  .j-step { border-radius: 14px; padding: 1.3rem 1.2rem; background: var(--card); border: 1px solid var(--line); }
-  .j-step-live { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .j-step {
+    display: block; border-radius: 14px; padding: 1.3rem 1.2rem;
+    background: var(--card); border: 1px solid var(--line); text-decoration: none;
+  }
+  .j-step-live {
+    background: var(--ink); color: var(--bg); border-color: var(--ink);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  a.j-step-live:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px -12px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
   .j-num { font-family: var(--font-title); font-size: 0.8rem; opacity: 0.7; margin: 0 0 0.5rem; }
   .j-step h4 { font-family: var(--font-title); font-size: 1rem; margin: 0 0 0.4rem; font-weight: 600; color: var(--ink); }
   .j-step-live h4 { color: var(--bg); }
