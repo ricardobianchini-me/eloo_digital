@@ -58,29 +58,47 @@ const servicos = [
   {
     nome: "Sites Institucionais Inteligentes (com CMS)",
     desc: "Presença digital forte e sob controle. Cuidamos do design, da tecnologia e da manutenção contínua pós-entrega — uma parceria de longo prazo para garantir que seu site cresça junto com a sua causa.",
+    icone: "monitor",
   },
   {
     nome: "Marketing Digital e Captação Estratégica",
     desc: "Fluência real no seu nicho para atrair quem importa. Criamos conteúdos autênticos, eliminando textos genéricos e robóticos, garantindo uma comunicação que gera identificação e confiança imediatas.",
+    icone: "alcance",
   },
   {
     nome: "Sincronização de Canais Digitais",
     desc: "Suas redes sociais integradas ao seu sistema de gestão. Publique e atualize seus conteúdos no Instagram, Facebook e YouTube a partir de um único lugar, sem depender de voluntário disponível.",
+    icone: "rede",
   },
   {
     nome: "Assessment de TI",
     desc: "Diagnóstico técnico de infraestrutura, sistemas e governança de TI, com rigor de auditoria — pra empresas que precisam saber onde estão antes de investir em evolução tecnológica.",
     href: "/assessment",
+    icone: "escudo",
   },
   {
     nome: "Soluções Digitais",
     desc: "Transformamos suas ideias em soluções reais. Desenvolvimento sob medida de sistemas, aplicativos e ferramentas digitais — para quem precisa de algo que o mercado ainda não vende pronto.",
+    icone: "chave",
   },
 ];
 
+// Ícones de linha, autorais (sem biblioteca externa) — 24x24, stroke único,
+// currentColor, pra herdar a cor do card automaticamente.
+const ICONES = {
+  monitor: '<rect x="3" y="4" width="18" height="13" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  alcance: '<circle cx="5" cy="19" r="1.4"/><path d="M5 15a4 4 0 0 1 4 4"/><path d="M5 11a8 8 0 0 1 8 8"/><path d="M5 7a12 12 0 0 1 12 12"/>',
+  rede: '<circle cx="6" cy="6" r="2.1"/><circle cx="18" cy="6" r="2.1"/><circle cx="12" cy="18" r="2.1"/><line x1="7.8" y1="7.2" x2="10.5" y2="16.2"/><line x1="16.2" y1="7.2" x2="13.5" y2="16.2"/><line x1="8.1" y1="6" x2="15.9" y2="6"/>',
+  escudo: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
+  chave: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6z"/>',
+  chip: '<rect x="8" y="8" width="8" height="8" rx="1"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/>',
+  bussola: '<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-6 2 2-6 6-2z"/>',
+  coracao: '<path d="M12 20s-7-4.5-9.3-9A5 5 0 0 1 12 6.5 5 5 0 0 1 21.3 11c-2.3 4.5-9.3 9-9.3 9z"/>',
+};
+
 const ofertas = [
   { tag: "Produto", nome: "PACCE", desc: "Plataforma de gestão e atendimento — o núcleo de tudo.", core: true },
-  ...servicos.map((s) => ({ tag: "Serviço", nome: s.nome, desc: s.desc, href: s.href })),
+  ...servicos.map((s) => ({ tag: "Serviço", nome: s.nome, desc: s.desc, href: s.href, icone: s.icone })),
 ];
 ---
 
@@ -111,16 +129,21 @@ const ofertas = [
 
     <header class="hero reveal" id="topo">
       <div class="hero-inner">
-        <span class="badge">O seu <em>eloo</em> com o mundo digital</span>
-        <h1>O nível de parceria em tecnologia que a sua organização <span class="accent">nunca experimentou</span>.</h1>
-        <p class="hero-sub">
-          O parceiro na sua transformação digital — o seu <em>eloo</em> com o mundo digital, em
-          gestão, presença e marketing. Mais do que um fornecedor que some após a entrega, somos o
-          parceiro estratégico que cresce junto com o seu negócio.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
-          <a class="btn btn-ghost" href="/pacce">Conhecer o PACCE</a>
+        <div class="hero-copy">
+          <span class="badge">O seu <em>eloo</em> com o mundo digital</span>
+          <h1>O nível de parceria em tecnologia que a sua organização <span class="accent">nunca experimentou</span>.</h1>
+          <p class="hero-sub">
+            O parceiro na sua transformação digital — o seu <em>eloo</em> com o mundo digital, em
+            gestão, presença e marketing. Mais do que um fornecedor que some após a entrega, somos o
+            parceiro estratégico que cresce junto com o seu negócio.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+            <a class="btn btn-ghost" href="/pacce">Conhecer o PACCE</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="/img/hero-elo-maos.jpg" alt="Mãos dadas em círculo, vistas de cima — o elo entre pessoas que uma organização sustenta" width="640" height="640" />
         </div>
       </div>
     </header>
@@ -149,12 +172,14 @@ const ofertas = [
             </a>
           ) : o.href ? (
             <a href={o.href} class="hub-card">
+              <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[o.icone] || ""}</svg>`} />
               <span class="hub-tag">{o.tag}</span>
               <h3>{o.nome}</h3>
               <p>{o.desc}</p>
             </a>
           ) : (
             <div class="hub-card">
+              <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[o.icone] || ""}</svg>`} />
               <span class="hub-tag">{o.tag}</span>
               <h3>{o.nome}</h3>
               <p>{o.desc}</p>
@@ -190,15 +215,21 @@ const ofertas = [
           </div>
         </div>
         <div class="comp-list">
+          <div class="sobre-foto">
+            <img src="/img/sobre-acolhimento.jpg" alt="Conversa próxima e atenta — o tipo de escuta que as instituições que apoiamos praticam todos os dias" width="900" height="600" />
+          </div>
           <div class="comp-card">
+            <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES.chip}</svg>`} />
             <h4>Tecnologia e Inteligência Artificial Aplicadas</h4>
             <p>Tecnologia real, validada e pronta para o mercado. O PACCE não é uma promessa de futuro: ele já opera em produção e entrega resultados hoje.</p>
           </div>
           <div class="comp-card">
+            <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES.bussola}</svg>`} />
             <h4>Consultoria Estratégica e Direcionada</h4>
             <p>Entender primeiro, propor depois. Através da Metodologia LUMEN, realizamos um diagnóstico preciso para garantir que a tecnologia atenda às reais necessidades do seu negócio.</p>
           </div>
           <div class="comp-card">
+            <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES.coracao}</svg>`} />
             <h4>Fluência Real na Linguagem do Terceiro Setor</h4>
             <p>São 7 anos de experiência de campo aplicados ao seu projeto. Falamos a mesma língua e entregamos soluções sob medida para quem atua no acolhimento e na assistência.</p>
           </div>
@@ -207,15 +238,22 @@ const ofertas = [
     </section>
 
     <section class="section band" id="metodologia">
-      <p class="eyebrow">Como trabalhamos</p>
-      <h2>Metodologia LUMEN — o que avaliamos antes de propor qualquer solução</h2>
-      <p class="lede">
-        A Metodologia LUMEN nasceu de 7 anos de vivência real na linha de frente de entidades de
-        acolhimento. Ela não é um modelo teórico ou genérico copiado do mercado corporativo
-        tradicional — desenvolvemos um método estruturado de <strong>Maturidade Digital</strong>{" "}
-        desenhado sob medida para as necessidades e dores específicas do atendimento assistencial
-        e do terceiro setor.
-      </p>
+      <div class="metodologia-intro">
+        <div>
+          <p class="eyebrow">Como trabalhamos</p>
+          <h2>Metodologia LUMEN — o que avaliamos antes de propor qualquer solução</h2>
+          <p class="lede">
+            A Metodologia LUMEN nasceu de 7 anos de vivência real na linha de frente de entidades de
+            acolhimento. Ela não é um modelo teórico ou genérico copiado do mercado corporativo
+            tradicional — desenvolvemos um método estruturado de <strong>Maturidade Digital</strong>{" "}
+            desenhado sob medida para as necessidades e dores específicas do atendimento assistencial
+            e do terceiro setor.
+          </p>
+        </div>
+        <div class="metodologia-foto">
+          <img src="/img/metodologia-grupo.jpg" alt="Roda de conversa — o método nasceu observando essa dinâmica real de trabalho em equipe" width="900" height="600" />
+        </div>
+      </div>
 
       <p class="eyebrow" style="margin-top:3rem;">A jornada da sua organização</p>
       <p class="lede">Dividida em quatro etapas claras, focadas em dar segurança e previsibilidade pra sua diretoria:</p>
@@ -300,12 +338,14 @@ const ofertas = [
         {servicos.map((s) => (
           s.href ? (
             <a href={s.href} class="servico-card servico-card-link">
+              <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[s.icone] || ""}</svg>`} />
               <h3>{s.nome}</h3>
               <p>{s.desc}</p>
               <span class="servico-link-cta">Ver o Assessment →</span>
             </a>
           ) : (
             <div class="servico-card">
+              <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[s.icone] || ""}</svg>`} />
               <h3>{s.nome}</h3>
               <p>{s.desc}</p>
             </div>
@@ -478,10 +518,25 @@ const ofertas = [
   .btn-ghost:hover { border-color: var(--ink-soft); }
 
   .hero {
-    padding: 7rem 2rem 6rem;
-    text-align: center;
+    padding: 6rem 2rem 5rem;
   }
-  .hero-inner { max-width: 760px; margin: 0 auto; }
+  .hero-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; align-items: center;
+  }
+  .hero-copy { text-align: left; }
+  .hero-visual { position: relative; }
+  .hero-visual img {
+    width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 28px;
+    box-shadow: 0 30px 60px -18px rgba(36,38,31,.35);
+  }
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; text-align: center; }
+    .hero-copy { text-align: center; }
+    .hero-visual { max-width: 420px; margin: 0 auto 1rem; order: -1; }
+    .hero-sub { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+  }
   .badge {
     display: inline-block;
     max-width: 60ch;
@@ -513,11 +568,11 @@ const ofertas = [
     font-size: 1.1rem;
     color: var(--ink-soft);
     max-width: 54ch;
-    margin: 0 auto 2.4rem;
+    margin: 0 0 2.4rem;
     line-height: 1.6;
   }
   .hero-sub em { font-style: normal; font-weight: 600; color: var(--accent); }
-  .hero-actions { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+  .hero-actions { display: flex; gap: 0.9rem; justify-content: flex-start; flex-wrap: wrap; }
 
   .section { max-width: 1080px; margin: 0 auto; padding: 6rem 2rem; }
   .band { max-width: none; background: var(--bg-alt); }
@@ -576,6 +631,12 @@ const ofertas = [
   }
   .hub-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
   .hub-card-core .hub-tag { color: color-mix(in srgb, var(--accent) 70%, white); }
+  .card-icon {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 2.5rem; height: 2.5rem; border-radius: 10px; margin-bottom: 0.9rem;
+    background: var(--support-tint); color: var(--support);
+  }
+  .card-icon svg { width: 1.3rem; height: 1.3rem; }
   .hub-core-head { display: flex; align-items: center; gap: 0.7rem; flex: none; }
   .pacce-mark { flex: none; width: 2rem; height: 2rem; object-fit: contain; }
   .hub-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0.5rem 0 0.4rem; font-weight: 600; }
@@ -595,6 +656,13 @@ const ofertas = [
   .pills { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.2rem; }
   .pill { font-family: var(--font-title); font-size: 0.78rem; font-weight: 600; color: var(--support); background: var(--support-tint); border-radius: 999px; padding: 0.4rem 0.9rem; }
   .comp-list { display: flex; flex-direction: column; gap: 1rem; }
+  .sobre-foto { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px -14px rgba(36,38,31,.28); }
+  .sobre-foto img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+
+  .metodologia-intro { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 3rem; align-items: center; }
+  @media (max-width: 880px) { .metodologia-intro { grid-template-columns: 1fr; } }
+  .metodologia-foto { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px -14px rgba(36,38,31,.24); }
+  .metodologia-foto img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
   .comp-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; }
   .comp-card h4 { font-family: var(--font-title); font-size: 0.95rem; margin: 0 0 0.4rem; font-weight: 600; }
   .comp-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-soft); }
@@ -602,7 +670,13 @@ const ofertas = [
   /* PACCE showcase */
   .pacce-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
   @media (max-width: 880px) { .pacce-grid { grid-template-columns: 1fr; } }
-  .pacce-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(36,38,31,.16); }
+  .pacce-shot {
+    display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line);
+    box-shadow: 0 36px 60px -18px rgba(36,38,31,.4);
+    transform: perspective(1400px) rotateY(4deg) rotateX(1.5deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pacce-shot:hover { transform: perspective(1400px) rotateY(0deg) rotateX(0deg); }
   .pacce-shot img { width: 100%; height: auto; }
   .pacce-shot-caption { font-family: var(--font-body); font-size: 0.78rem; color: var(--ink-soft); margin: 0.7rem 0.2rem 0; }
   .pacce-feats { list-style: none; margin: 0 0 1.6rem; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
