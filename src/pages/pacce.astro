@@ -13,20 +13,33 @@ const pilares = [
   {
     nome: "Prontuário Social e Acolhimento",
     desc: "Centralize o cadastro, pré-cadastro e todo o histórico de evolução das pessoas assistidas. Garanta a continuidade do atendimento, mesmo com a rotatividade de voluntários.",
+    icone: "prontuario",
   },
   {
     nome: "Escalas de Trabalhadores Inteligentes",
     desc: "Organize os turnos de funcionários, plantonistas e voluntários de forma simples. Monitore presenças e evite buracos na escala de atendimento.",
+    icone: "escala",
   },
   {
     nome: "Transparência Pronta para Assembleias",
     desc: "Dados financeiros e operacionais estruturados de ponta a ponta. Extraia relatórios claros e seguros para auditorias, editais e prestações de contas em assembleias formais.",
+    icone: "grafico",
   },
   {
     nome: "Segurança e Conformidade Rígida",
     desc: "Proteja informações altamente sensíveis dos seus assistidos em conformidade com as exigências legais, eliminando o trânsito de dados vulneráveis.",
+    icone: "escudoLock",
   },
 ];
+
+// Ícones de linha, autorais (mesmo padrão de index.astro) — 24x24, stroke
+// único, currentColor.
+const ICONES = {
+  prontuario: '<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="3" rx="1"/><path d="M12 17s-3-2-3-4a2 2 0 0 1 3-1.7A2 2 0 0 1 15 13c0 2-3 4-3 4z"/>',
+  escala: '<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><circle cx="8" cy="15" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="16" cy="15" r="1"/>',
+  grafico: '<line x1="4" y1="21" x2="20" y2="21"/><rect x="6" y="13" width="3" height="8"/><rect x="11" y="9" width="3" height="12"/><rect x="16" y="5" width="3" height="16"/>',
+  escudoLock: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><rect x="9.5" y="11" width="5" height="4" rx="1"/><path d="M10.5 11v-1.5a1.5 1.5 0 0 1 3 0V11"/>',
+};
 
 const maturidade = [
   { n: "1", nome: "Manual", realidade: "Dependência de papel, memória ou conversas informais.", impacto: "Digitalização imediata e centralizada de dados." },
@@ -97,6 +110,7 @@ const maturidade = [
       <div class="pilares-grid">
         {pilares.map((p) => (
           <div class="pilar-card">
+            <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[p.icone] || ""}</svg>`} />
             <h3>{p.nome}</h3>
             <p>{p.desc}</p>
           </div>
@@ -217,7 +231,13 @@ const maturidade = [
     max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;
   }
   .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
-  .hero-shot { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 48px rgba(36,38,31,.18); }
+  .hero-shot {
+    display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line);
+    box-shadow: 0 36px 60px -18px rgba(36,38,31,.4);
+    transform: perspective(1400px) rotateY(-4deg) rotateX(1.5deg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-shot:hover { transform: perspective(1400px) rotateY(0deg) rotateX(0deg); }
   .hero-shot img { width: 100%; height: auto; }
   .hero-shot-small { max-width: 480px; margin: 0 auto; }
 
@@ -244,6 +264,12 @@ const maturidade = [
   }
   .pilar-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--ink); }
   .pilar-card p { font-family: var(--font-body); font-size: 0.9rem; margin: 0; color: var(--ink-soft); }
+  .card-icon {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 2.5rem; height: 2.5rem; border-radius: 10px; margin-bottom: 0.9rem;
+    background: var(--support-tint); color: var(--support);
+  }
+  .card-icon svg { width: 1.3rem; height: 1.3rem; }
 
   .matriz-table { margin-top: 2rem; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .matriz-row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.4fr; gap: 1.2rem; padding: 1rem 1.3rem; }
