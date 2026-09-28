@@ -14,22 +14,25 @@
 }
 
 :root {
-  /* Paleta "Fibra" — substitui a paleta verde-preto/mint/dourado em 2026-09-25.
-     Nomes de variável alinhados 1:1 com o mockup de referência
-     (https://claude.ai/artifact/4iLeBtsUtkAinFzKh2BjR7) de propósito: o site é
-     claro (fundo Pedra) do topo ao fim — o escuro (--ink) é reservado como
+  /* Paleta "Fibra" v2 — ajustada em 2026-09-28: a v1 (fundo bege Pedra +
+     acento terracota Tijolo) estava lendo como "identidade genérica de IA"
+     (feedback direto de sócio). Mesma estrutura de tokens, cores puxadas pra
+     cinza neutro (fundo) e vermelho mais saturado (acento), inspirado no
+     case de referência https://www.behance.net/gallery/244352719 — mas sem
+     importar a cor deles: continua sendo nosso próprio vermelho de marca.
+     O site continua claro do topo ao fim — o escuro (--ink) é reservado como
      acento pequeno e esparso (um card no hub, um card na jornada, nada mais).
      Ver 01_brand_book.md (playbook pacce-co) para o histórico da decisão. */
-  --bg: #e8e4dc;         /* Pedra — fundo padrão de toda a página */
-  --bg-alt: #ddd6c6;     /* Pedra escurecida — faixas alternadas (.band), ainda claras */
-  --card: #fffdf8;       /* quase-branco — fundo de cards sobre --bg */
-  --ink: #24261f;        /* Tinta — texto padrão; também fundo dos 2 cards de acento escuro */
-  --ink-soft: #5c5d50;   /* Tinta suavizada — texto secundário */
-  --accent: #a6472e;     /* Tijolo — único acento de ação (CTAs, links, destaques) */
-  --accent-ink: #f6eee7; /* texto sobre fundo --accent */
-  --support: #4a5a4e;    /* Floresta — cor de apoio (tags/estados), nunca cor de ação */
-  --support-tint: #dee3dc;
-  --line: #cbc4b2;
+  --bg: #ececea;         /* Cinza neutro claro — fundo padrão de toda a página */
+  --bg-alt: #e0e0dd;     /* Cinza um pouco mais escuro — faixas alternadas (.band) */
+  --card: #fafaf9;       /* quase-branco — fundo de cards sobre --bg */
+  --ink: #1e1e1c;        /* Quase-preto neutro — texto padrão; também fundo dos 2 cards de acento escuro */
+  --ink-soft: #5a5a57;   /* Cinza médio — texto secundário */
+  --accent: #d6402a;     /* Vermelho — único acento de ação (CTAs, links, destaques) */
+  --accent-ink: #fff3ef; /* texto sobre fundo --accent */
+  --support: #4f5e52;    /* verde apagado — cor de apoio (tags/estados), nunca cor de ação */
+  --support-tint: #e3e5e1;
+  --line: #d6d6d3;
 
   --font-title: 'Lora', Georgia, serif;
   --font-body: 'Work Sans', -apple-system, "Segoe UI", Arial, sans-serif;
