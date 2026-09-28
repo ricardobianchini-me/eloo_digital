@@ -352,13 +352,18 @@ const DIMENSOES = {
 
     <header class="hero reveal" id="topo">
       <div class="hero-inner">
-        <span class="badge">Diagnóstico gratuito</span>
-        <h1>Onde a sua organização está <span class="accent">hoje</span>?</h1>
-        <p class="hero-sub">
-          Perguntas rápidas, clique único cada uma, ajustadas pro que você busca — gestão interna
-          (PACCE) ou presença digital e marketing (Serviços). No fim, você vê o resultado na hora,
-          sem esperar e-mail nenhum.
-        </p>
+        <div class="hero-copy">
+          <span class="badge">Diagnóstico gratuito</span>
+          <h1>Onde a sua organização está <span class="accent">hoje</span>?</h1>
+          <p class="hero-sub">
+            Perguntas rápidas, clique único cada uma, ajustadas pro que você busca — gestão interna
+            (PACCE) ou presença digital e marketing (Serviços). No fim, você vê o resultado na hora,
+            sem esperar e-mail nenhum.
+          </p>
+        </div>
+        <div class="hero-visual">
+          <img src="/img/diagnostico-analise-noturna.jpg" alt="Equipe analisando indicadores à noite, com atenção aos detalhes" />
+        </div>
       </div>
     </header>
 
@@ -701,6 +706,23 @@ const DIMENSOES = {
 </html>
 
 <style is:global>
+  /* Paleta exclusiva desta página — pedido explícito de "abusar" do
+     vermelho/preto/cinza pra essa ferramenta interativa se destacar do
+     resto do site (que segue claro). Reaproveita os nomes de token do
+     global.css pra não duplicar nenhuma regra abaixo — só os valores mudam. */
+  :root {
+    --bg: #101010;
+    --bg-alt: #1a1a1a;
+    --card: #1c1c1b;
+    --ink: #f5f4f1;
+    --ink-soft: #9a9994;
+    --line: #333230;
+    --accent: #ff2d20;
+    --accent-deep: #ff5b4c;
+    --support: #93b399;
+    --support-tint: #1e2a1f;
+  }
+
   nav {
     position: sticky;
     top: 0;
@@ -740,8 +762,17 @@ const DIMENSOES = {
   .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
   .btn-ghost:hover { border-color: var(--ink-soft); }
 
-  .hero { padding: 5.5rem 2rem 4rem; text-align: center; }
-  .hero-inner { max-width: 720px; margin: 0 auto; }
+  .hero { padding: 5rem 2rem 4rem; }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem; align-items: center;
+  }
+  @media (max-width: 860px) { .hero-inner { grid-template-columns: 1fr; text-align: center; } }
+  .hero-visual {
+    border-radius: 20px; overflow: hidden; border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.65), 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+  .hero-visual img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; filter: saturate(1.05) contrast(1.05); }
   .badge {
     display: inline-block; border: 1px solid var(--line); border-radius: 999px;
     padding: 0.5rem 1.2rem; font-family: var(--font-title); font-size: 0.85rem; font-weight: 700;
@@ -775,7 +806,11 @@ const DIMENSOES = {
     padding: 1.4rem 1.3rem; cursor: pointer; font-family: inherit;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
-  .interesse-card:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(36,38,31,.12); border-color: var(--accent); }
+  .interesse-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px -10px color-mix(in srgb, var(--accent) 45%, transparent);
+    border-color: var(--accent);
+  }
   .interesse-card.is-selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
   .interesse-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
   .interesse-card h3 { font-family: var(--font-title); font-size: 1.1rem; margin: 0.5rem 0 0.4rem; font-weight: 600; color: var(--ink); }
