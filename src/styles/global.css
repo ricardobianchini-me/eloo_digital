@@ -28,14 +28,15 @@
   --card: #fafaf9;       /* quase-branco — fundo de cards sobre --bg */
   --ink: #1e1e1c;        /* Quase-preto neutro — texto padrão; também fundo dos 2 cards de acento escuro */
   --ink-soft: #5a5a57;   /* Cinza médio — texto secundário */
-  --accent: #d6402a;     /* Vermelho — único acento de ação (CTAs, links, destaques) */
-  --accent-ink: #fff3ef; /* texto sobre fundo --accent */
+  --accent: #e0201a;     /* Vermelho puro — único acento de ação (CTAs, links, destaques) */
+  --accent-ink: #fff3f2; /* texto sobre fundo --accent */
+  --accent-deep: #a8140f; /* Vermelho escurecido — degradê nos ícones, hover de botão */
   --support: #4f5e52;    /* verde apagado — cor de apoio (tags/estados), nunca cor de ação */
   --support-tint: #e3e5e1;
   --line: #d6d6d3;
 
-  --font-title: 'Lora', Georgia, serif;
-  --font-body: 'Work Sans', -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-title: 'Bricolage Grotesque', 'Arial Black', sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, "Segoe UI", Arial, sans-serif;
   --font-brand: 'Montserrat', var(--font-title);
 
   /* Aliases de compatibilidade — nomes antigos usados em páginas que ainda
