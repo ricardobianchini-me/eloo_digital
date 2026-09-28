@@ -1,0 +1,56 @@
+/* Tema exclusivo das páginas de CRM de Leads (/assessment/leads/crm*) —
+   segue a paleta "Fibra v3" do eloo.digital (cinza + vermelho, Bricolage
+   Grotesque + IBM Plex Sans), a mesma do site público. Escopo local: não
+   toca em style.css, que continua servindo os outros produtos de assessment
+   (JC Gestão de Risco, Super Logística etc.), com sua própria identidade. */
+:root{
+  --bg:#ececea;
+  --surface:#fafaf9;
+  --surface-2:#e0e0dd;
+  --ink:#1e1e1c;
+  --ink-muted:#5a5a57;
+  --ink-faint:#8c8c88;
+  --border:#d6d6d3; --border-strong:#c3c3bf;
+  --accent:#e0201a;
+  --accent-fill:#e0201a;
+  --accent-ink:#fff3f2;
+  --accent-soft:#fbe1df;
+  --amber:#a6631f; --amber-soft:#f1e2cc;
+  --good:#3f7a5c; --good-soft:#dceee2;
+  --red:#a8402f; --red-soft:#f3ddd8;
+  color-scheme:light;
+}
+body{
+  font-family:'IBM Plex Sans', -apple-system, "Segoe UI", Arial, sans-serif;
+}
+h1, h2, .sans-title{
+  font-family:'Bricolage Grotesque', 'Arial Black', sans-serif;
+  letter-spacing:-0.01em;
+}
+.eyebrow{ font-family:'IBM Plex Sans', sans-serif; font-weight:600; }
+.topbar .brandmark{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; }
+textarea, select, input[type=text], input[type=password], input[type=date]{
+  font-family:'IBM Plex Sans', sans-serif;
+}
+.status-btn{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:700;
+  border-radius:999px; background:var(--accent-fill); color:var(--accent-ink); border-color:var(--accent-fill);
+}
+.status-btn:hover{ background:color-mix(in srgb, var(--accent-fill) 88%, black); }
+.leads-table th{ font-family:'IBM Plex Sans', sans-serif; }
+
+/* Coluna "Respostas do diagnóstico" — colapsada por padrão, texto completo
+   em <details> pra não estourar a largura da tabela com 24 respostas. */
+.respostas-cell{ max-width:160px; }
+.respostas-cell details summary{
+  cursor:pointer; font-size:12px; font-weight:600; color:var(--accent);
+  list-style:none;
+}
+.respostas-cell details summary::-webkit-details-marker{ display:none; }
+.respostas-cell details summary::before{ content:"▸ "; }
+.respostas-cell details[open] summary::before{ content:"▾ "; }
+.respostas-cell .respostas-texto{
+  white-space:pre-wrap; font-size:12px; color:var(--ink-muted); margin-top:6px;
+  max-width:340px; max-height:220px; overflow-y:auto; background:var(--surface-2);
+  border-radius:6px; padding:8px 10px;
+}

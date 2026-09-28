@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block title %}CRM de Leads — eloo.digital{% endblock %}
+{% block head_extra %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>{% include "leads_crm_tema.css" %}</style>
+{% endblock %}
 {% block body %}
 
 <div class="topbar">
@@ -32,6 +38,7 @@
           <th>Controle de processos</th>
           <th>Nível</th>
           <th>Lacunas prioritárias</th>
+          <th>Respostas do diagnóstico</th>
           <th>Status</th>
           <th>Próximo retorno</th>
           <th>Notas internas</th>
@@ -57,6 +64,14 @@
           <td class="nowrap">{{ lead['Controle de Processos'] }}</td>
           <td class="nowrap">{{ lead['Nível'] }}</td>
           <td class="msg-cell">{{ lead['Lacunas Prioritárias'] }}</td>
+          <td class="respostas-cell">
+            {% if lead['Respostas do Diagnóstico'] %}
+            <details>
+              <summary>Ver respostas</summary>
+              <div class="respostas-texto">{{ lead['Respostas do Diagnóstico'] }}</div>
+            </details>
+            {% endif %}
+          </td>
           <td>
             <select data-campo="Status" class="status-select status-{{ (lead['Status'] or 'novo')|lower|replace(' ', '-') }}">
               {% for opcao in ["Novo", "Em contato", "Qualificado", "Proposta enviada", "Ganho", "Perdido"] %}

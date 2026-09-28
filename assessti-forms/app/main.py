@@ -402,6 +402,7 @@ async def enviar_diagnostico(
     controle_processos: str = Form(""),
     nivel: str = Form(""),
     lacunas: str = Form(""),
+    respostas: str = Form(""),
     site: str = Form(""),  # honeypot
 ):
     """Lead do Diagnóstico LUMEN (/diagnostico) — o resultado já vem calculado
@@ -418,7 +419,7 @@ async def enviar_diagnostico(
         lead_salvo = leads.salvar_diagnostico(
             nome.strip(), email.strip(), whatsapp.strip(), interesse.strip(),
             indice_geral.strip(), maturidade_digital.strip(), controle_processos.strip(),
-            nivel.strip(), lacunas.strip(),
+            nivel.strip(), lacunas.strip(), respostas.strip(),
         )
     except Exception:
         logger.exception("Falha ao salvar diagnóstico")

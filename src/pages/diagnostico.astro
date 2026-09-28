@@ -679,6 +679,10 @@ const DIMENSOES = {
           .map((d) => `${d.nome} (${d.score.toFixed(2)})`)
           .join("; ");
 
+        const respostas = state.perguntasAtivas
+          .map((p, i) => `${p.texto} → ${p.opcoes[state.respostas[i]]}`)
+          .join("\n");
+
         const formData = new FormData(contatoForm);
         formData.set("interesse", state.interesse || "");
         formData.set("indice_geral", r.indiceGeral.toFixed(2));
@@ -686,6 +690,7 @@ const DIMENSOES = {
         formData.set("controle_processos", r.controleProcessos.toFixed(2));
         formData.set("nivel", nivelDe(r.indiceGeral));
         formData.set("lacunas", lacunas);
+        formData.set("respostas", respostas);
 
         try {
           const resp = await fetch("/assessment/leads/diagnostico", { method: "POST", body: formData });

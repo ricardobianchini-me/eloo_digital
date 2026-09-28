@@ -37,6 +37,7 @@ COLUNAS = [
     "Data/Hora", "Nome", "Instituição", "Cargo", "E-mail", "WhatsApp",
     "Interesse", "Origem", "Urgência", "Mensagem",
     "Índice Geral", "Maturidade Digital", "Controle de Processos", "Nível", "Lacunas Prioritárias",
+    "Respostas do Diagnóstico",
     "Status", "Próximo Retorno", "Notas Internas",
 ]
 
@@ -86,7 +87,7 @@ def salvar_lead(
     linha = [
         agora, nome, instituicao, cargo, email, whatsapp,
         interesse, origem, urgencia, mensagem,
-        "", "", "", "", "",
+        "", "", "", "", "", "",
         STATUS_PADRAO, "", "",
     ]
     ws.append_row(linha)
@@ -97,17 +98,19 @@ def salvar_lead(
 def salvar_diagnostico(
     nome: str, email: str, whatsapp: str, interesse: str,
     indice_geral: str, maturidade_digital: str, controle_processos: str,
-    nivel: str, lacunas: str,
+    nivel: str, lacunas: str, respostas: str,
 ) -> dict[str, str]:
     """Lead vindo do Diagnóstico LUMEN (/diagnostico) — sem Instituição/Cargo/
     Urgência/Mensagem (não perguntados nesse fluxo, pra manter fricção baixa),
-    com o resultado do diagnóstico já calculado no navegador."""
+    com o resultado do diagnóstico já calculado no navegador. `respostas` traz
+    cada pergunta respondida com a opção escolhida, pra dar contexto completo
+    à equipe comercial (não só as lacunas prioritárias)."""
     ws = _worksheet()
     agora = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S")
     linha = [
         agora, nome, "", "", email, whatsapp,
         interesse, "Diagnóstico Online", "", "",
-        indice_geral, maturidade_digital, controle_processos, nivel, lacunas,
+        indice_geral, maturidade_digital, controle_processos, nivel, lacunas, respostas,
         STATUS_PADRAO, "", "",
     ]
     ws.append_row(linha)
