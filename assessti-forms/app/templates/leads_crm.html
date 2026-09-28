@@ -27,6 +27,11 @@
           <th>Origem</th>
           <th>Urgência</th>
           <th>Mensagem</th>
+          <th>Índice geral</th>
+          <th>Maturidade digital</th>
+          <th>Controle de processos</th>
+          <th>Nível</th>
+          <th>Lacunas prioritárias</th>
           <th>Status</th>
           <th>Próximo retorno</th>
           <th>Notas internas</th>
@@ -47,6 +52,11 @@
           <td>{{ lead['Origem'] }}</td>
           <td>{{ lead['Urgência'] }}</td>
           <td class="msg-cell">{{ lead['Mensagem'] }}</td>
+          <td class="nowrap">{{ lead['Índice Geral'] }}</td>
+          <td class="nowrap">{{ lead['Maturidade Digital'] }}</td>
+          <td class="nowrap">{{ lead['Controle de Processos'] }}</td>
+          <td class="nowrap">{{ lead['Nível'] }}</td>
+          <td class="msg-cell">{{ lead['Lacunas Prioritárias'] }}</td>
           <td>
             <select data-campo="Status" class="status-select status-{{ (lead['Status'] or 'novo')|lower|replace(' ', '-') }}">
               {% for opcao in ["Novo", "Em contato", "Qualificado", "Proposta enviada", "Ganho", "Perdido"] %}

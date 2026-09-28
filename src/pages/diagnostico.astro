@@ -1,0 +1,769 @@
+---
+import '../styles/global.css';
+import '@fontsource/lora/500.css';
+import '@fontsource/lora/600.css';
+import '@fontsource/lora/700.css';
+import '@fontsource/work-sans/400.css';
+import '@fontsource/work-sans/500.css';
+import '@fontsource/work-sans/600.css';
+
+// Modelo LUMEN completo (2 eixos ponderados: Maturidade Digital + Controle de
+// Processos) — 19 perguntas em 6 dimensões, preparado por Alessandro a partir
+// da prática real de 7 anos de campo. A página pública continua vendendo
+// "rápido" (é clique único por pergunta); o motor por baixo é o rico.
+const PERGUNTAS = [
+  {
+    id: "Q01", dimensao: "atendimento-dados",
+    texto: "Como é realizado o cadastro de um assistido novo?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Somente presencial e em papel",
+      "Em papel e depois digitado manualmente",
+      "Digital, mas em planilha ou ferramenta não integrada",
+      "Em sistema, com campos e rotina padronizados",
+      "Pré-cadastro digital + validações + integração com o atendimento",
+    ],
+  },
+  {
+    id: "Q02", dimensao: "atendimento-dados",
+    texto: "Como é feita a atualização dos dados cadastrais dos assistidos?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não existe rotina definida",
+      "Cada trabalhador atualiza de um jeito",
+      "Atualizamos em planilha ou registros separados",
+      "Há responsável e periodicidade definidos no sistema",
+      "O cadastro tem histórico, validações e revisão periódica controlada",
+    ],
+  },
+  {
+    id: "Q03", dimensao: "atendimento-dados",
+    texto: "Como são registrados os atendimentos e a evolução de cada caso?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Em papel, caderneta ou ficha física",
+      "Cada trabalhador registra de maneira própria",
+      "Em planilha compartilhada ou arquivos separados",
+      "No mesmo sistema do cadastro, com padrão de registro",
+      "Registro estruturado, histórico por assistido, permissões e rastreabilidade",
+    ],
+  },
+  {
+    id: "Q04", dimensao: "processos-rotinas",
+    texto: "Quanto os processos de atendimento estão padronizados e documentados?",
+    pesoDig: 0.5, pesoProc: 1,
+    opcoes: [
+      "Não há processo definido",
+      "O processo é conhecido informalmente pelos trabalhadores",
+      "Existem algumas orientações, mas variam entre equipes",
+      "Processo documentado, com responsáveis e treinamento",
+      "Processo documentado, medido e revisado periodicamente",
+    ],
+  },
+  {
+    id: "Q05", dimensao: "indicadores-melhoria",
+    texto: "Com que facilidade a instituição acompanha indicadores de atendimento?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não temos os números",
+      "Apenas estimamos ou avaliamos informalmente",
+      "É possível levantar, mas exige contagem manual",
+      "Os indicadores são atualizados em relatórios ou painel",
+      "Indicadores são atualizados automaticamente e mostram tendências",
+    ],
+  },
+  {
+    id: "Q06", dimensao: "indicadores-melhoria",
+    texto: "Como a instituição identifica faltas, interrupções e possível abandono do acompanhamento?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não acompanhamos",
+      "Descobrimos apenas quando alguém percebe",
+      "Conseguimos identificar manualmente",
+      "Há rotina de acompanhamento e contato de retorno",
+      "Há alertas, histórico e segmentação para acompanhamento estruturado",
+    ],
+  },
+  {
+    id: "Q07", dimensao: "comunicacao-relacionamento",
+    texto: "Como são enviados lembretes de retorno, próxima sessão ou outros compromissos?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não enviamos lembretes",
+      "Apenas quando alguém se lembra",
+      "Existe rotina, mas o envio é manual",
+      "Há lembretes automáticos ou semiautomáticos",
+      "Lembretes personalizados e integrados ao fluxo de atendimento",
+    ],
+  },
+  {
+    id: "Q08", dimensao: "processos-rotinas",
+    texto: "Como as escalas de atendimento são montadas e acompanhadas?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Principalmente por mensagens, sem controle estruturado",
+      "Planilha, quadro físico ou controle manual",
+      "Sistema/planilha estruturada, mas sem alertas",
+      "Sistema com lembretes e confirmação de participação",
+      "Sistema com alertas, conflitos, confirmações e histórico de escala",
+    ],
+  },
+  {
+    id: "Q09", dimensao: "processos-rotinas",
+    texto: "O que acontece quando um trabalhador escalado não pode comparecer?",
+    pesoDig: 0.5, pesoProc: 1,
+    opcoes: [
+      "Não existe plano de substituição",
+      "Depende de uma pessoa encontrar alguém",
+      "Existe substituição manual, mas sem rotina documentada",
+      "Há regra de substituição e responsáveis definidos",
+      "Há plano de contingência, alertas e acompanhamento de cobertura",
+    ],
+  },
+  {
+    id: "Q10", dimensao: "tecnologia-seguranca",
+    texto: "Como são armazenados e localizados documentos, formulários e registros administrativos?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Principalmente em papel ou arquivos dispersos",
+      "Em pastas locais, computadores ou pendrives",
+      "Em nuvem, mas sem padrão consistente de organização",
+      "Em repositório estruturado, com pastas e regras definidas",
+      "Com pesquisa, controle de versões, permissões e política de retenção",
+    ],
+  },
+  {
+    id: "Q11", dimensao: "tecnologia-seguranca",
+    texto: "Como é controlado quem pode acessar os dados dos assistidos e os documentos internos?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Praticamente qualquer pessoa autorizada a usar o dispositivo consegue acessar",
+      "Há contas ou acessos compartilhados",
+      "Alguns dados têm restrição, mas sem padrão completo",
+      "Existem perfis de acesso por função",
+      "Perfis são revisados periodicamente e há rastreabilidade de acessos",
+    ],
+  },
+  {
+    id: "Q12", dimensao: "tecnologia-seguranca",
+    texto: "Se o sistema ou computador principal ficar indisponível amanhã, o que acontece com os dados?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Podemos perder dados ou não sabemos informar",
+      "Temos algum backup, mas nunca testamos",
+      "Fazemos backups regulares, porém com controle limitado",
+      "Backup e recuperação já foram testados",
+      "Há cópias redundantes, monitoramento e plano de continuidade",
+    ],
+  },
+  {
+    id: "Q13", dimensao: "tecnologia-seguranca",
+    texto: "Como a instituição utiliza sistemas ou ferramentas digitais para a gestão?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não utiliza ferramenta de gestão",
+      "Utiliza ferramentas isoladas e independentes",
+      "Possui sistema para parte dos processos",
+      "Possui sistema central para os principais processos",
+      "Sistemas e formulários estão integrados, evitando retrabalho e duplicidade",
+    ],
+  },
+  {
+    id: "Q14", dimensao: "tecnologia-seguranca",
+    texto: "Como a instituição acompanha atualizações, mudanças e melhorias nas ferramentas digitais que utiliza?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não sabemos se as ferramentas estão atualizadas",
+      "Fazemos atualizações somente quando surgem problemas",
+      "Atualizamos eventualmente e de forma manual",
+      "As principais ferramentas permanecem atualizadas",
+      "Há responsável, calendário de revisão e avaliação de melhorias/integrações",
+    ],
+  },
+  {
+    id: "Q15", dimensao: "gestao-prestacao-contas",
+    texto: "Como é feita a prestação de contas para a diretoria/assembleia?",
+    pesoDig: 0.5, pesoProc: 1,
+    opcoes: [
+      "Não há processo definido",
+      "Manual, em papel ou controles dispersos",
+      "Feita por planilha e exige bastante retrabalho",
+      "Sistema gera relatórios padronizados com pouca intervenção",
+      "Processo fechado, rastreável e acompanhado por indicadores",
+    ],
+  },
+  {
+    id: "Q16", dimensao: "comunicacao-relacionamento",
+    texto: "Qual é o nível de atualização e utilidade do site da instituição?",
+    pesoDig: 1, pesoProc: 0,
+    opcoes: [
+      "Não temos site",
+      "Temos, mas está desatualizado",
+      "Atualizamos eventualmente",
+      "Site ativo, atualizado e com informações essenciais",
+      "Site ativo com serviços, formulários/canais úteis e acompanhamento de acesso",
+    ],
+  },
+  {
+    id: "Q17", dimensao: "comunicacao-relacionamento",
+    texto: "Como as redes sociais são administradas?",
+    pesoDig: 1, pesoProc: 0,
+    opcoes: [
+      "Não há presença ativa",
+      "Publicamos esporadicamente, sem rotina",
+      "Há alguém responsável, mas sem calendário consistente",
+      "Existe calendário editorial e acompanhamento básico de métricas",
+      "Há planejamento, métricas e integração com os objetivos de comunicação da casa",
+    ],
+  },
+  {
+    id: "Q18", dimensao: "comunicacao-relacionamento",
+    texto: "Como a instituição recebe dúvidas, solicitações e feedback dos assistidos?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Somente presencialmente, sem registro estruturado",
+      "Por canais informais, sem padrão de resposta",
+      "Existem canais definidos, mas o controle ainda é manual",
+      "Há canal estruturado, responsáveis e registro das solicitações",
+      "Há triagem, acompanhamento de prazo e indicadores de satisfação/retorno",
+    ],
+  },
+  {
+    id: "Q19", dimensao: "indicadores-melhoria",
+    texto: "Com que frequência os dados e resultados são usados para decidir melhorias nos processos?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não usamos dados para decidir melhorias",
+      "As decisões dependem principalmente de percepção e experiência",
+      "Consultamos dados de forma ocasional",
+      "Há reuniões/rotinas periódicas para analisar indicadores e definir ações",
+      "Existe ciclo contínuo de medir, agir, revisar resultados e ajustar processos",
+    ],
+  },
+];
+
+const DIMENSOES = {
+  "atendimento-dados": { nome: "Atendimento e Dados", ofertas: ["PACCE"] },
+  "processos-rotinas": { nome: "Processos e Rotinas", ofertas: ["PACCE"] },
+  "indicadores-melhoria": { nome: "Indicadores e Melhoria", ofertas: ["PACCE"] },
+  "comunicacao-relacionamento": {
+    nome: "Comunicação e Relacionamento",
+    ofertas: ["Sites Institucionais Inteligentes (com CMS)", "Marketing Digital e Captação Estratégica", "Sincronização de Canais Digitais"],
+  },
+  "tecnologia-seguranca": { nome: "Tecnologia, Segurança e Continuidade", ofertas: ["Assessment de TI", "Soluções Digitais"] },
+  "gestao-prestacao-contas": { nome: "Gestão e Prestação de Contas", ofertas: ["PACCE"] },
+};
+
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnóstico LUMEN — eloo.digital</title>
+    <meta
+      name="description"
+      content="Descubra em poucos minutos o nível de maturidade digital da sua instituição — cadastro, processos, indicadores, comunicação, tecnologia e prestação de contas — e receba um retrato imediato, na tela, com os próximos passos recomendados."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <nav>
+      <a href="/#topo" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <div class="navlinks">
+        <a href="/">← eloo.digital</a>
+      </div>
+    </nav>
+
+    <header class="hero reveal" id="topo">
+      <div class="hero-inner">
+        <span class="badge">Diagnóstico gratuito</span>
+        <h1>Onde a sua organização está <span class="accent">hoje</span>?</h1>
+        <p class="hero-sub">
+          19 perguntas rápidas, clique único cada uma, sobre 6 frentes da sua rotina — cadastro,
+          processos, indicadores, comunicação, tecnologia e prestação de contas. No fim, você vê o
+          resultado na hora, sem esperar e-mail nenhum.
+        </p>
+      </div>
+    </header>
+
+    <main id="app" class="section">
+      <!-- Etapa 0 — interesse declarado -->
+      <section id="step-interesse" class="diag-step">
+        <p class="eyebrow">Antes de começar</p>
+        <h2>O que você está buscando?</h2>
+        <p class="lede">Isso não muda as perguntas — só ajuda a gente a te dar uma recomendação mais certeira no final.</p>
+        <div class="interesse-grid">
+          <button type="button" class="interesse-card" data-interesse="PACCE">
+            <span class="interesse-tag">Produto</span>
+            <h3>PACCE</h3>
+            <p>Gestão de cadastro, atendimento, escalas e histórico.</p>
+          </button>
+          <button type="button" class="interesse-card" data-interesse="Serviços">
+            <span class="interesse-tag">Serviços</span>
+            <h3>Serviços</h3>
+            <p>Site, marketing digital, canais, assessment de TI, soluções sob medida.</p>
+          </button>
+          <button type="button" class="interesse-card" data-interesse="PACCE + Serviços">
+            <span class="interesse-tag">Ambos</span>
+            <h3>PACCE + Serviços</h3>
+            <p>Ainda não sei — quero um retrato completo antes de decidir.</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Etapa 1 — perguntas, uma de cada vez -->
+      <section id="step-perguntas" class="diag-step" hidden>
+        <div class="diag-progress">
+          <div class="diag-progress-bar"><div id="diag-progress-fill"></div></div>
+          <span id="diag-progress-label">Pergunta 1 de 19</span>
+        </div>
+        <p class="eyebrow" id="diag-dimensao-atual"></p>
+        <h2 id="diag-pergunta-atual"></h2>
+        <div class="diag-opcoes" id="diag-opcoes"></div>
+        <div class="diag-nav">
+          <button type="button" class="btn btn-ghost" id="diag-voltar">← Voltar</button>
+        </div>
+      </section>
+
+      <!-- Etapa 2 — resultado -->
+      <section id="step-resultado" class="diag-step" hidden>
+        <p class="eyebrow">Resultado</p>
+        <h2>O retrato da sua organização agora</h2>
+
+        <div class="resultado-eixos">
+          <div class="eixo-card eixo-geral">
+            <span class="eixo-label">Índice geral</span>
+            <span class="eixo-score" id="score-geral"></span>
+            <span class="eixo-nivel" id="nivel-geral"></span>
+          </div>
+          <div class="eixo-card">
+            <span class="eixo-label">Maturidade Digital</span>
+            <span class="eixo-score" id="score-digital"></span>
+            <span class="eixo-nivel" id="nivel-digital"></span>
+          </div>
+          <div class="eixo-card">
+            <span class="eixo-label">Controle de Processos</span>
+            <span class="eixo-score" id="score-processos"></span>
+            <span class="eixo-nivel" id="nivel-processos"></span>
+          </div>
+        </div>
+
+        <p class="eyebrow" style="margin-top:3rem;">Por dimensão</p>
+        <div class="dim-resultado-list" id="dim-resultado-list"></div>
+
+        <p class="eyebrow" style="margin-top:3rem;">Recomendado para você</p>
+        <p class="lede" id="recomendacao-texto"></p>
+        <div class="recomendacao-chips" id="recomendacao-chips"></div>
+
+        <div class="diag-contato">
+          <p class="eyebrow" style="margin-top:0;">Quer essa devolutiva com a gente?</p>
+          <h3>Deixe pelo menos um contato e falamos com você</h3>
+          <p class="lede">Nada aqui é obrigatório, mas precisamos de e-mail ou WhatsApp pra te responder.</p>
+          <form id="diag-contato-form" class="mock-form">
+            <div class="f-row">
+              <div class="f-field">
+                <label for="d-nome">Nome</label>
+                <input id="d-nome" name="nome" type="text" placeholder="Seu nome (opcional)" />
+              </div>
+              <div class="f-field">
+                <label for="d-email">E-mail</label>
+                <input id="d-email" name="email" type="email" placeholder="voce@instituicao.org" />
+              </div>
+            </div>
+            <div class="f-field">
+              <label for="d-whats">WhatsApp</label>
+              <input id="d-whats" name="whatsapp" type="tel" placeholder="(11) 90000-0000" />
+            </div>
+            <input type="text" name="site" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" class="btn btn-primary" id="diag-contato-submit">Quero falar com a eloo.digital</button>
+          </form>
+          <p class="form-note" id="diag-contato-status" role="status"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a href="/#topo" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
+      <p>eloo.digital · Metodologia LUMEN</p>
+    </footer>
+
+    <script define:vars={{ PERGUNTAS, DIMENSOES }}>
+      function nivelDe(score) {
+        if (score < 1) return "Inicial";
+        if (score < 2) return "Básico";
+        if (score < 3) return "Em desenvolvimento";
+        if (score < 3.5) return "Consolidado";
+        return "Avançado / Integrado";
+      }
+      function prioridadeDe(score) {
+        if (score < 2) return "Alta";
+        if (score < 3) return "Média";
+        return "Baixa";
+      }
+
+      const state = {
+        interesse: null,
+        indice: -1,
+        respostas: new Array(PERGUNTAS.length).fill(null),
+      };
+
+      const stepInteresse = document.getElementById("step-interesse");
+      const stepPerguntas = document.getElementById("step-perguntas");
+      const stepResultado = document.getElementById("step-resultado");
+
+      // Etapa 0
+      document.querySelectorAll(".interesse-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          state.interesse = card.dataset.interesse;
+          document.querySelectorAll(".interesse-card").forEach((c) => c.classList.remove("is-selected"));
+          card.classList.add("is-selected");
+          stepInteresse.hidden = true;
+          stepPerguntas.hidden = false;
+          state.indice = 0;
+          renderPergunta();
+          stepPerguntas.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      // Etapa 1 — uma pergunta por vez
+      const elProgressFill = document.getElementById("diag-progress-fill");
+      const elProgressLabel = document.getElementById("diag-progress-label");
+      const elDimensaoAtual = document.getElementById("diag-dimensao-atual");
+      const elPerguntaAtual = document.getElementById("diag-pergunta-atual");
+      const elOpcoes = document.getElementById("diag-opcoes");
+      const elVoltar = document.getElementById("diag-voltar");
+
+      function renderPergunta() {
+        const p = PERGUNTAS[state.indice];
+        const total = PERGUNTAS.length;
+        elProgressFill.style.width = `${((state.indice) / total) * 100}%`;
+        elProgressLabel.textContent = `Pergunta ${state.indice + 1} de ${total}`;
+        elDimensaoAtual.textContent = DIMENSOES[p.dimensao].nome;
+        elPerguntaAtual.textContent = p.texto;
+        elVoltar.style.visibility = state.indice === 0 ? "hidden" : "visible";
+
+        elOpcoes.innerHTML = "";
+        p.opcoes.forEach((texto, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "diag-opcao";
+          if (state.respostas[state.indice] === i) btn.classList.add("is-selected");
+          btn.innerHTML = `<span class="diag-opcao-n">${i}</span><span>${texto}</span>`;
+          btn.addEventListener("click", () => {
+            state.respostas[state.indice] = i;
+            avancar();
+          });
+          elOpcoes.appendChild(btn);
+        });
+      }
+
+      function avancar() {
+        if (state.indice < PERGUNTAS.length - 1) {
+          state.indice += 1;
+          renderPergunta();
+        } else {
+          elProgressFill.style.width = "100%";
+          calcularEExibirResultado();
+          stepPerguntas.hidden = true;
+          stepResultado.hidden = false;
+          stepResultado.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      elVoltar.addEventListener("click", () => {
+        if (state.indice > 0) {
+          state.indice -= 1;
+          renderPergunta();
+        }
+      });
+
+      // Etapa 2 — cálculo e exibição
+      let resultadoCalculado = null;
+
+      function calcularEExibirResultado() {
+        let somaDig = 0, pesoDig = 0, somaProc = 0, pesoProc = 0;
+        const porDimensao = {};
+
+        PERGUNTAS.forEach((p, i) => {
+          const score = state.respostas[i];
+          somaDig += score * p.pesoDig;
+          pesoDig += p.pesoDig;
+          somaProc += score * p.pesoProc;
+          pesoProc += p.pesoProc;
+
+          if (!porDimensao[p.dimensao]) porDimensao[p.dimensao] = { soma: 0, peso: 0 };
+          const pesoCombinado = p.pesoDig + p.pesoProc;
+          porDimensao[p.dimensao].soma += score * pesoCombinado;
+          porDimensao[p.dimensao].peso += pesoCombinado;
+        });
+
+        const maturidadeDigital = pesoDig ? somaDig / pesoDig : 0;
+        const controleProcessos = pesoProc ? somaProc / pesoProc : 0;
+        const indiceGeral = (maturidadeDigital + controleProcessos) / 2;
+
+        const dimensoesResultado = Object.keys(DIMENSOES).map((key) => {
+          const d = porDimensao[key];
+          const score = d.peso ? d.soma / d.peso : 0;
+          return { key, nome: DIMENSOES[key].nome, ofertas: DIMENSOES[key].ofertas, score, nivel: nivelDe(score), prioridade: prioridadeDe(score) };
+        });
+        dimensoesResultado.sort((a, b) => a.score - b.score);
+
+        resultadoCalculado = { maturidadeDigital, controleProcessos, indiceGeral, dimensoesResultado };
+
+        document.getElementById("score-geral").textContent = indiceGeral.toFixed(2);
+        document.getElementById("nivel-geral").textContent = nivelDe(indiceGeral);
+        document.getElementById("score-digital").textContent = maturidadeDigital.toFixed(2);
+        document.getElementById("nivel-digital").textContent = nivelDe(maturidadeDigital);
+        document.getElementById("score-processos").textContent = controleProcessos.toFixed(2);
+        document.getElementById("nivel-processos").textContent = nivelDe(controleProcessos);
+
+        const listEl = document.getElementById("dim-resultado-list");
+        listEl.innerHTML = "";
+        dimensoesResultado.forEach((d) => {
+          const row = document.createElement("div");
+          row.className = "dim-resultado-row";
+          row.innerHTML = `
+            <div class="dim-resultado-nome">${d.nome}</div>
+            <div class="dim-resultado-score">${d.score.toFixed(2)}</div>
+            <div class="dim-resultado-nivel">${d.nivel}</div>
+            <span class="dim-resultado-prioridade prioridade-${d.prioridade.toLowerCase()}">${d.prioridade}</span>
+          `;
+          listEl.appendChild(row);
+        });
+
+        const lacunas = dimensoesResultado.filter((d) => d.prioridade === "Alta").slice(0, 3);
+        const baseLacunas = lacunas.length ? lacunas : dimensoesResultado.slice(0, 2);
+        const ofertasSugeridas = new Set();
+        baseLacunas.forEach((d) => d.ofertas.forEach((o) => ofertasSugeridas.add(o)));
+
+        const nomesLacunas = baseLacunas.map((d) => d.nome).join(", ");
+        document.getElementById("recomendacao-texto").textContent = lacunas.length
+          ? `As maiores lacunas hoje estão em ${nomesLacunas}. É por aí que a gente começaria.`
+          : `Sua organização já está num bom patamar — ${nomesLacunas} são as frentes com mais espaço pra evoluir.`;
+
+        const chipsEl = document.getElementById("recomendacao-chips");
+        chipsEl.innerHTML = "";
+        ofertasSugeridas.forEach((nome) => {
+          const chip = document.createElement("span");
+          chip.className = "recomendacao-chip";
+          chip.textContent = nome;
+          chipsEl.appendChild(chip);
+        });
+      }
+
+      // Etapa 2 — captura de contato
+      const contatoForm = document.getElementById("diag-contato-form");
+      const contatoStatus = document.getElementById("diag-contato-status");
+      const contatoSubmit = document.getElementById("diag-contato-submit");
+
+      contatoForm.addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        const email = contatoForm.email.value.trim();
+        const whatsapp = contatoForm.whatsapp.value.trim();
+        if (!email && !whatsapp) {
+          contatoStatus.textContent = "Precisamos de pelo menos um e-mail ou WhatsApp pra poder te responder.";
+          contatoStatus.className = "form-note is-error";
+          return;
+        }
+
+        contatoSubmit.disabled = true;
+        contatoStatus.textContent = "Enviando...";
+        contatoStatus.className = "form-note";
+
+        const r = resultadoCalculado;
+        const lacunas = r.dimensoesResultado
+          .filter((d) => d.prioridade === "Alta")
+          .map((d) => `${d.nome} (${d.score.toFixed(2)})`)
+          .join("; ");
+
+        const formData = new FormData(contatoForm);
+        formData.set("interesse", state.interesse || "");
+        formData.set("indice_geral", r.indiceGeral.toFixed(2));
+        formData.set("maturidade_digital", r.maturidadeDigital.toFixed(2));
+        formData.set("controle_processos", r.controleProcessos.toFixed(2));
+        formData.set("nivel", nivelDe(r.indiceGeral));
+        formData.set("lacunas", lacunas);
+
+        try {
+          const resp = await fetch("/assessment/leads/diagnostico", { method: "POST", body: formData });
+          if (!resp.ok) throw new Error(`status ${resp.status}`);
+          contatoForm.reset();
+          contatoForm.hidden = true;
+          contatoStatus.textContent = "Recebemos seu diagnóstico — a gente entra em contato em breve. Obrigado!";
+          contatoStatus.className = "form-note is-ok";
+        } catch (err) {
+          contatoStatus.textContent = "Não foi possível enviar agora. Tente de novo em instantes.";
+          contatoStatus.className = "form-note is-error";
+        } finally {
+          contatoSubmit.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 2rem;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-wordmark { text-decoration: none; color: var(--ink); font-size: 1.15rem; }
+  .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
+  .navlinks a { text-decoration: none; color: var(--ink-soft); }
+  .navlinks a:hover { color: var(--ink); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 999px; padding: 0.85rem 1.7rem; font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; border: 1px solid transparent; cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink-soft); }
+
+  .hero { padding: 5.5rem 2rem 4rem; text-align: center; }
+  .hero-inner { max-width: 720px; margin: 0 auto; }
+  .badge {
+    display: inline-block; border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.5rem 1.2rem; font-family: var(--font-title); font-size: 0.85rem; font-weight: 700;
+    color: var(--ink-soft); margin-bottom: 1.6rem; background: var(--card);
+  }
+  h1 {
+    font-family: var(--font-title); font-size: clamp(2rem, 4.6vw, 3rem); font-weight: 700;
+    letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 1.1rem; text-wrap: balance; color: var(--ink);
+  }
+  h1 .accent { color: var(--accent); }
+  .hero-sub { font-family: var(--font-body); font-size: 1.05rem; color: var(--ink-soft); line-height: 1.6; }
+
+  .section { max-width: 760px; margin: 0 auto; padding: 1rem 2rem 6rem; }
+  .eyebrow {
+    font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600; color: var(--accent); margin: 0 0 0.9rem;
+  }
+  h2 {
+    font-family: var(--font-title); font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 700;
+    letter-spacing: -0.01em; margin: 0 0 1rem; text-wrap: balance;
+  }
+  .lede { font-family: var(--font-body); font-size: 1rem; color: var(--ink-soft); line-height: 1.6; margin: 0 0 1.4rem; }
+
+  .diag-step { padding: 2rem 0; }
+
+  /* Etapa 0 */
+  .interesse-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 700px) { .interesse-grid { grid-template-columns: 1fr; } }
+  .interesse-card {
+    text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.4rem 1.3rem; cursor: pointer; font-family: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .interesse-card:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(36,38,31,.12); border-color: var(--accent); }
+  .interesse-card.is-selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+  .interesse-tag { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+  .interesse-card h3 { font-family: var(--font-title); font-size: 1.1rem; margin: 0.5rem 0 0.4rem; font-weight: 600; color: var(--ink); }
+  .interesse-card p { font-family: var(--font-body); font-size: 0.85rem; margin: 0; color: var(--ink-soft); }
+
+  /* Etapa 1 */
+  .diag-progress { margin-bottom: 2rem; }
+  .diag-progress-bar { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; margin-bottom: 0.6rem; }
+  #diag-progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+  #diag-progress-label { font-family: var(--font-body); font-size: 0.78rem; color: var(--ink-soft); }
+  .diag-opcoes { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.5rem; }
+  .diag-opcao {
+    display: flex; align-items: center; gap: 0.8rem; text-align: left;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 0.9rem 1.1rem; cursor: pointer; font-family: var(--font-body); font-size: 0.92rem; color: var(--ink);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .diag-opcao:hover { border-color: var(--accent); }
+  .diag-opcao.is-selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--card)); }
+  .diag-opcao-n {
+    flex: none; width: 1.6rem; height: 1.6rem; border-radius: 999px; background: var(--bg-alt);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-title); font-weight: 700; font-size: 0.78rem; color: var(--ink-soft);
+  }
+  .diag-nav { margin-top: 1.5rem; }
+
+  /* Etapa 2 */
+  .resultado-eixos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 640px) { .resultado-eixos { grid-template-columns: 1fr; } }
+  .eixo-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; text-align: center;
+  }
+  .eixo-card.eixo-geral { background: var(--ink); border-color: var(--ink); }
+  .eixo-card.eixo-geral .eixo-label { color: color-mix(in srgb, var(--bg) 75%, transparent); }
+  .eixo-card.eixo-geral .eixo-score { color: var(--bg); }
+  .eixo-card.eixo-geral .eixo-nivel { color: var(--accent); }
+  .eixo-label { font-family: var(--font-body); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
+  .eixo-score { font-family: var(--font-title); font-size: 2.4rem; font-weight: 700; color: var(--ink); }
+  .eixo-nivel { font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; color: var(--accent); }
+
+  .dim-resultado-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.2rem; }
+  .dim-resultado-row {
+    display: grid; grid-template-columns: 1fr auto auto auto; gap: 1rem; align-items: center;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 0.8rem 1rem;
+    font-family: var(--font-body); font-size: 0.88rem;
+  }
+  @media (max-width: 560px) { .dim-resultado-row { grid-template-columns: 1fr; text-align: left; gap: 0.3rem; } }
+  .dim-resultado-nome { color: var(--ink); font-weight: 600; }
+  .dim-resultado-score { font-family: var(--font-title); font-weight: 700; color: var(--ink); }
+  .dim-resultado-nivel { color: var(--ink-soft); font-size: 0.82rem; }
+  .dim-resultado-prioridade { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 999px; justify-self: end; }
+  .prioridade-alta { background: color-mix(in srgb, var(--accent) 16%, var(--card)); color: var(--accent); }
+  .prioridade-média { background: var(--support-tint); color: var(--support); }
+  .prioridade-baixa { background: var(--bg-alt); color: var(--ink-soft); }
+
+  .recomendacao-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+  .recomendacao-chip {
+    font-family: var(--font-title); font-size: 0.82rem; font-weight: 600; color: var(--accent-ink);
+    background: var(--accent); border-radius: 999px; padding: 0.4rem 0.9rem;
+  }
+
+  .diag-contato {
+    margin-top: 3rem; background: var(--bg-alt); border-radius: 16px; padding: 1.8rem;
+  }
+  .diag-contato h3 { font-family: var(--font-title); font-size: 1.15rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--ink); }
+  .mock-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 1rem; }
+  .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  @media (max-width: 460px) { .f-row { grid-template-columns: 1fr; } }
+  .f-field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .f-field label { font-family: var(--font-title); font-size: 0.75rem; font-weight: 600; color: var(--ink-soft); }
+  .f-field input {
+    font-family: var(--font-body); font-size: 0.92rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 0.6rem 0.7rem;
+  }
+  .f-field input:focus { outline: none; border-color: var(--accent); }
+  .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .form-note { font-family: var(--font-body); font-size: 0.78rem; color: var(--ink-soft); margin: 0.7rem 0 0; min-height: 1.1em; }
+  .form-note.is-error { color: var(--accent); font-weight: 600; }
+  .form-note.is-ok { color: var(--support); font-weight: 600; }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 3rem 2rem; text-align: center;
+    color: var(--ink-soft); font-size: 0.85rem;
+  }
+  footer .wordmark { color: var(--ink); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; display: inline-flex; }
+  footer p { margin: 0; font-family: var(--font-body); }
+
+  .wordmark {
+    display: inline-flex; align-items: baseline; font-family: 'Montserrat', var(--font-title);
+    font-weight: 800; letter-spacing: -0.02em;
+  }
+  .wordmark .oo { letter-spacing: -0.12em; }
+  .wordmark .dot { color: var(--accent); margin: 0 0.02em; }
+  .wordmark .suffix { font-weight: 400; }
+</style>

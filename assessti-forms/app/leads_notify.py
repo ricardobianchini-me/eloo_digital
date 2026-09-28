@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 _CAMPOS_VISIVEIS = [
     "Nome", "Instituição", "Cargo", "E-mail", "WhatsApp",
     "Interesse", "Origem", "Urgência", "Mensagem",
+    "Índice Geral", "Maturidade Digital", "Controle de Processos", "Nível", "Lacunas Prioritárias",
 ]
 
 

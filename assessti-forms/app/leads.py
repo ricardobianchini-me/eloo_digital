@@ -28,11 +28,15 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Colunas preenchidas pelo visitante no formulário público, seguidas das
-# colunas de gestão interna (CRM), preenchidas só pela equipe.
+# Colunas preenchidas pelo visitante no formulário público (contato OU
+# diagnóstico — nem todo lead tem as duas origens, células ficam em branco
+# quando não se aplica), seguidas das 5 colunas de resultado do Diagnóstico
+# LUMEN (só preenchidas por quem veio de /diagnostico), e por fim as colunas
+# de gestão interna (CRM), editadas só pela equipe.
 COLUNAS = [
     "Data/Hora", "Nome", "Instituição", "Cargo", "E-mail", "WhatsApp",
     "Interesse", "Origem", "Urgência", "Mensagem",
+    "Índice Geral", "Maturidade Digital", "Controle de Processos", "Nível", "Lacunas Prioritárias",
     "Status", "Próximo Retorno", "Notas Internas",
 ]
 
@@ -82,10 +86,32 @@ def salvar_lead(
     linha = [
         agora, nome, instituicao, cargo, email, whatsapp,
         interesse, origem, urgencia, mensagem,
+        "", "", "", "", "",
         STATUS_PADRAO, "", "",
     ]
     ws.append_row(linha)
     logger.info(f"Novo lead salvo: {nome} ({instituicao})")
+    return dict(zip(COLUNAS, linha))
+
+
+def salvar_diagnostico(
+    nome: str, email: str, whatsapp: str, interesse: str,
+    indice_geral: str, maturidade_digital: str, controle_processos: str,
+    nivel: str, lacunas: str,
+) -> dict[str, str]:
+    """Lead vindo do Diagnóstico LUMEN (/diagnostico) — sem Instituição/Cargo/
+    Urgência/Mensagem (não perguntados nesse fluxo, pra manter fricção baixa),
+    com o resultado do diagnóstico já calculado no navegador."""
+    ws = _worksheet()
+    agora = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S")
+    linha = [
+        agora, nome, "", "", email, whatsapp,
+        interesse, "Diagnóstico Online", "", "",
+        indice_geral, maturidade_digital, controle_processos, nivel, lacunas,
+        STATUS_PADRAO, "", "",
+    ]
+    ws.append_row(linha)
+    logger.info(f"Novo diagnóstico salvo: {nome or email or whatsapp} — índice {indice_geral}")
     return dict(zip(COLUNAS, linha))
 
 

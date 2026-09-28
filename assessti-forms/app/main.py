@@ -391,6 +391,44 @@ async def enviar_lead(
     return templates.TemplateResponse("lead_obrigado.html", {"request": request})
 
 
+@app.post("/assessment/leads/diagnostico")
+async def enviar_diagnostico(
+    nome: str = Form(""),
+    email: str = Form(""),
+    whatsapp: str = Form(""),
+    interesse: str = Form(""),
+    indice_geral: str = Form(""),
+    maturidade_digital: str = Form(""),
+    controle_processos: str = Form(""),
+    nivel: str = Form(""),
+    lacunas: str = Form(""),
+    site: str = Form(""),  # honeypot
+):
+    """Lead do Diagnóstico LUMEN (/diagnostico) — o resultado já vem calculado
+    do navegador (motor de pontuação roda no cliente). Nada aqui é
+    obrigatório, exceto ter pelo menos um jeito de contato (e-mail ou
+    WhatsApp), senão o lead não serve pra nada comercialmente."""
+    if site.strip():
+        return JSONResponse({"ok": True})
+
+    if not email.strip() and not whatsapp.strip():
+        raise HTTPException(status_code=400, detail="Informe e-mail ou WhatsApp para contato")
+
+    try:
+        lead_salvo = leads.salvar_diagnostico(
+            nome.strip(), email.strip(), whatsapp.strip(), interesse.strip(),
+            indice_geral.strip(), maturidade_digital.strip(), controle_processos.strip(),
+            nivel.strip(), lacunas.strip(),
+        )
+    except Exception:
+        logger.exception("Falha ao salvar diagnóstico")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+
+    leads_notify.notificar_novo_lead(lead_salvo)
+
+    return JSONResponse({"ok": True})
+
+
 def _leads_crm_autenticado(request: Request) -> bool:
     return leads_crm_auth.cookie_valido(request.cookies.get(leads_crm_auth.COOKIE_NOME))
 
