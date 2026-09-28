@@ -527,7 +527,7 @@ const DIMENSOES = {
         elProgressLabel.textContent = `Pergunta ${state.indice + 1} de ${total}`;
         elDimensaoAtual.textContent = DIMENSOES[p.dimensao].nome;
         elPerguntaAtual.textContent = p.texto;
-        elVoltar.style.visibility = state.indice === 0 ? "hidden" : "visible";
+        elVoltar.textContent = state.indice === 0 ? "← Trocar o que estou buscando" : "← Voltar";
 
         elOpcoes.innerHTML = "";
         p.opcoes.forEach((texto, i) => {
@@ -561,7 +561,14 @@ const DIMENSOES = {
         if (state.indice > 0) {
           state.indice -= 1;
           renderPergunta();
+          return;
         }
+        // Na primeira pergunta, "Voltar" leva de volta pra escolha PACCE/
+        // Serviços/Ambos, caso a pessoa tenha clicado na caixinha errada.
+        stepPerguntas.hidden = true;
+        stepInteresse.hidden = false;
+        document.querySelectorAll(".interesse-card").forEach((c) => c.classList.remove("is-selected"));
+        stepInteresse.scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
       // Etapa 2 — cálculo e exibição
