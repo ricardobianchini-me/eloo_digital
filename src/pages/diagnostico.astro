@@ -7,13 +7,18 @@ import '@fontsource/work-sans/400.css';
 import '@fontsource/work-sans/500.css';
 import '@fontsource/work-sans/600.css';
 
-// Modelo LUMEN completo (2 eixos ponderados: Maturidade Digital + Controle de
-// Processos) — 19 perguntas em 6 dimensões, preparado por Alessandro a partir
-// da prática real de 7 anos de campo. A página pública continua vendendo
-// "rápido" (é clique único por pergunta); o motor por baixo é o rico.
+// Modelo LUMEN (2 eixos ponderados: Maturidade Digital + Controle de
+// Processos), preparado por Alessandro a partir da prática real de 7 anos de
+// campo. Cada pergunta tem uma "trilha" — PACCE (operação interna: cadastro,
+// atendimento, escalas, indicadores, prestação de contas) ou Serviços
+// (presença digital, marketing/captação, tecnologia/segurança, soluções sob
+// medida) — escolhida na etapa 0. As perguntas puramente operacionais do
+// modelo original cobriam bem a trilha PACCE; a trilha Serviços ganhou 5
+// perguntas novas (marcadas "// nova") porque o modelo original só tocava de
+// leve em marketing/captação (só site + redes sociais + canal de contato).
 const PERGUNTAS = [
   {
-    id: "Q01", dimensao: "atendimento-dados",
+    id: "Q01", dimensao: "atendimento-dados", trilha: "pacce",
     texto: "Como é realizado o cadastro de um assistido novo?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -25,7 +30,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q02", dimensao: "atendimento-dados",
+    id: "Q02", dimensao: "atendimento-dados", trilha: "pacce",
     texto: "Como é feita a atualização dos dados cadastrais dos assistidos?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -37,7 +42,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q03", dimensao: "atendimento-dados",
+    id: "Q03", dimensao: "atendimento-dados", trilha: "pacce",
     texto: "Como são registrados os atendimentos e a evolução de cada caso?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -49,7 +54,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q04", dimensao: "processos-rotinas",
+    id: "Q04", dimensao: "processos-rotinas", trilha: "pacce",
     texto: "Quanto os processos de atendimento estão padronizados e documentados?",
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
@@ -61,7 +66,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q05", dimensao: "indicadores-melhoria",
+    id: "Q05", dimensao: "indicadores-melhoria", trilha: "pacce",
     texto: "Com que facilidade a instituição acompanha indicadores de atendimento?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -73,7 +78,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q06", dimensao: "indicadores-melhoria",
+    id: "Q06", dimensao: "indicadores-melhoria", trilha: "pacce",
     texto: "Como a instituição identifica faltas, interrupções e possível abandono do acompanhamento?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -85,7 +90,10 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q07", dimensao: "comunicacao-relacionamento",
+    // Reclassificada do "Comunicação e Relacionamento" original: lembrete de
+    // retorno/sessão é automação de um processo de atendimento (encaixe
+    // natural com PACCE), não uma ação de marketing/captação.
+    id: "Q07", dimensao: "processos-rotinas", trilha: "pacce",
     texto: "Como são enviados lembretes de retorno, próxima sessão ou outros compromissos?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
@@ -97,7 +105,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q08", dimensao: "processos-rotinas",
+    id: "Q08", dimensao: "processos-rotinas", trilha: "pacce",
     texto: "Como as escalas de atendimento são montadas e acompanhadas?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -109,7 +117,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q09", dimensao: "processos-rotinas",
+    id: "Q09", dimensao: "processos-rotinas", trilha: "pacce",
     texto: "O que acontece quando um trabalhador escalado não pode comparecer?",
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
@@ -121,7 +129,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q10", dimensao: "tecnologia-seguranca",
+    id: "Q10", dimensao: "tecnologia-seguranca", trilha: "servicos",
     texto: "Como são armazenados e localizados documentos, formulários e registros administrativos?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -133,7 +141,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q11", dimensao: "tecnologia-seguranca",
+    id: "Q11", dimensao: "tecnologia-seguranca", trilha: "servicos",
     texto: "Como é controlado quem pode acessar os dados dos assistidos e os documentos internos?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -145,7 +153,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q12", dimensao: "tecnologia-seguranca",
+    id: "Q12", dimensao: "tecnologia-seguranca", trilha: "servicos",
     texto: "Se o sistema ou computador principal ficar indisponível amanhã, o que acontece com os dados?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -157,7 +165,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q13", dimensao: "tecnologia-seguranca",
+    id: "Q13", dimensao: "tecnologia-seguranca", trilha: "servicos",
     texto: "Como a instituição utiliza sistemas ou ferramentas digitais para a gestão?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -169,7 +177,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q14", dimensao: "tecnologia-seguranca",
+    id: "Q14", dimensao: "tecnologia-seguranca", trilha: "servicos",
     texto: "Como a instituição acompanha atualizações, mudanças e melhorias nas ferramentas digitais que utiliza?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
@@ -181,7 +189,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q15", dimensao: "gestao-prestacao-contas",
+    id: "Q15", dimensao: "gestao-prestacao-contas", trilha: "pacce",
     texto: "Como é feita a prestação de contas para a diretoria/assembleia?",
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
@@ -193,7 +201,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q16", dimensao: "comunicacao-relacionamento",
+    id: "Q16", dimensao: "comunicacao-relacionamento", trilha: "servicos",
     texto: "Qual é o nível de atualização e utilidade do site da instituição?",
     pesoDig: 1, pesoProc: 0,
     opcoes: [
@@ -205,7 +213,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q17", dimensao: "comunicacao-relacionamento",
+    id: "Q17", dimensao: "comunicacao-relacionamento", trilha: "servicos",
     texto: "Como as redes sociais são administradas?",
     pesoDig: 1, pesoProc: 0,
     opcoes: [
@@ -217,7 +225,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q18", dimensao: "comunicacao-relacionamento",
+    id: "Q18", dimensao: "comunicacao-relacionamento", trilha: "servicos",
     texto: "Como a instituição recebe dúvidas, solicitações e feedback dos assistidos?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
@@ -229,7 +237,7 @@ const PERGUNTAS = [
     ],
   },
   {
-    id: "Q19", dimensao: "indicadores-melhoria",
+    id: "Q19", dimensao: "indicadores-melhoria", trilha: "pacce",
     texto: "Com que frequência os dados e resultados são usados para decidir melhorias nos processos?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
@@ -238,6 +246,70 @@ const PERGUNTAS = [
       "Consultamos dados de forma ocasional",
       "Há reuniões/rotinas periódicas para analisar indicadores e definir ações",
       "Existe ciclo contínuo de medir, agir, revisar resultados e ajustar processos",
+    ],
+  },
+  // Perguntas novas — trilha Serviços. O modelo original de 19 perguntas
+  // avaliava sobretudo operação interna (o que virou a trilha PACCE); pra
+  // avaliar Serviços com o mesmo rigor, faltava cobrir captação, ROI de
+  // marketing, integração entre canais e maturidade pra soluções sob medida.
+  {
+    id: "NQ01", dimensao: "comunicacao-relacionamento", trilha: "servicos",
+    texto: "Como a instituição atrai novos contatos, doadores ou voluntários hoje?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não há nenhuma ação de captação — depende só de quem já conhece",
+      "Ações pontuais e isoladas, sem planejamento",
+      "Existe alguma campanha ocasional, mas sem funil definido",
+      "Há um funil de captação estruturado (conteúdo → contato → conversão)",
+      "Funil estruturado, automatizado e otimizado com base em dados de conversão",
+    ],
+  },
+  {
+    id: "NQ02", dimensao: "comunicacao-relacionamento", trilha: "servicos",
+    texto: "Como é medido o retorno das ações de comunicação e marketing?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Não medimos nada",
+      "Só olhamos curtidas/seguidores, sem ligar a resultado real",
+      "Acompanhamos alguns números manualmente, sem consolidar",
+      "Há indicadores definidos (alcance, conversão, custo por contato)",
+      "Painel de indicadores consolidado, revisado periodicamente e usado pra decisão",
+    ],
+  },
+  {
+    id: "NQ03", dimensao: "comunicacao-relacionamento", trilha: "servicos",
+    texto: "Como o conteúdo publicado é gerenciado entre site, redes sociais e outros canais?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Cada canal é atualizado de forma separada e sem padrão",
+      "Uma pessoa tenta manter tudo atualizado manualmente",
+      "Existe algum planejamento, mas a publicação ainda é manual em cada canal",
+      "Há um calendário único e publicação coordenada entre canais",
+      "Publicação integrada/automatizada a partir de um só lugar, com consistência de marca",
+    ],
+  },
+  {
+    id: "NQ04", dimensao: "solucoes-digitais", trilha: "servicos",
+    texto: "Existe alguma tarefa ou processo que hoje depende de planilha, papel ou retrabalho manual porque nenhuma ferramenta pronta resolve?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não sabemos identificar isso",
+      "Sim, várias, mas nunca avaliamos o impacto",
+      "Identificamos os principais gargalos, mas sem plano de solução",
+      "Já mapeamos e priorizamos o que precisaria de uma solução sob medida",
+      "Já temos (ou estamos implementando) uma solução sob medida pra esse gargalo",
+    ],
+  },
+  {
+    id: "NQ05", dimensao: "solucoes-digitais", trilha: "servicos",
+    texto: "Quando surge uma necessidade nova de sistema ou processo digital, como a instituição resolve isso hoje?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não resolve — convive com a limitação",
+      "Tenta um jeito manual ou paliativo",
+      "Pesquisa ferramentas prontas no mercado, sem avaliar se encaixam de verdade",
+      "Avalia entre ferramenta pronta e solução sob medida, conforme o caso",
+      "Tem um parceiro de tecnologia que avalia e constrói sob medida quando necessário",
     ],
   },
 ];
@@ -250,8 +322,9 @@ const DIMENSOES = {
     nome: "Comunicação e Relacionamento",
     ofertas: ["Sites Institucionais Inteligentes (com CMS)", "Marketing Digital e Captação Estratégica", "Sincronização de Canais Digitais"],
   },
-  "tecnologia-seguranca": { nome: "Tecnologia, Segurança e Continuidade", ofertas: ["Assessment de TI", "Soluções Digitais"] },
+  "tecnologia-seguranca": { nome: "Tecnologia, Segurança e Continuidade", ofertas: ["Assessment de TI"] },
   "gestao-prestacao-contas": { nome: "Gestão e Prestação de Contas", ofertas: ["PACCE"] },
+  "solucoes-digitais": { nome: "Soluções sob Medida", ofertas: ["Soluções Digitais"] },
 };
 
 ---
@@ -281,9 +354,9 @@ const DIMENSOES = {
         <span class="badge">Diagnóstico gratuito</span>
         <h1>Onde a sua organização está <span class="accent">hoje</span>?</h1>
         <p class="hero-sub">
-          19 perguntas rápidas, clique único cada uma, sobre 6 frentes da sua rotina — cadastro,
-          processos, indicadores, comunicação, tecnologia e prestação de contas. No fim, você vê o
-          resultado na hora, sem esperar e-mail nenhum.
+          Perguntas rápidas, clique único cada uma, ajustadas pro que você busca — gestão interna
+          (PACCE) ou presença digital e marketing (Serviços). No fim, você vê o resultado na hora,
+          sem esperar e-mail nenhum.
         </p>
       </div>
     </header>
@@ -405,9 +478,19 @@ const DIMENSOES = {
 
       const state = {
         interesse: null,
+        perguntasAtivas: [],
         indice: -1,
-        respostas: new Array(PERGUNTAS.length).fill(null),
+        respostas: [],
       };
+
+      // "PACCE" -> só perguntas da trilha pacce. "Serviços" -> só servicos.
+      // "PACCE + Serviços" -> as duas trilhas, sem repetir pergunta nenhuma
+      // (nenhuma pergunta pertence às duas trilhas ao mesmo tempo).
+      function perguntasDaTrilha(interesse) {
+        if (interesse === "PACCE") return PERGUNTAS.filter((p) => p.trilha === "pacce");
+        if (interesse === "Serviços") return PERGUNTAS.filter((p) => p.trilha === "servicos");
+        return PERGUNTAS;
+      }
 
       const stepInteresse = document.getElementById("step-interesse");
       const stepPerguntas = document.getElementById("step-perguntas");
@@ -417,6 +500,8 @@ const DIMENSOES = {
       document.querySelectorAll(".interesse-card").forEach((card) => {
         card.addEventListener("click", () => {
           state.interesse = card.dataset.interesse;
+          state.perguntasAtivas = perguntasDaTrilha(state.interesse);
+          state.respostas = new Array(state.perguntasAtivas.length).fill(null);
           document.querySelectorAll(".interesse-card").forEach((c) => c.classList.remove("is-selected"));
           card.classList.add("is-selected");
           stepInteresse.hidden = true;
@@ -436,8 +521,8 @@ const DIMENSOES = {
       const elVoltar = document.getElementById("diag-voltar");
 
       function renderPergunta() {
-        const p = PERGUNTAS[state.indice];
-        const total = PERGUNTAS.length;
+        const p = state.perguntasAtivas[state.indice];
+        const total = state.perguntasAtivas.length;
         elProgressFill.style.width = `${((state.indice) / total) * 100}%`;
         elProgressLabel.textContent = `Pergunta ${state.indice + 1} de ${total}`;
         elDimensaoAtual.textContent = DIMENSOES[p.dimensao].nome;
@@ -460,7 +545,7 @@ const DIMENSOES = {
       }
 
       function avancar() {
-        if (state.indice < PERGUNTAS.length - 1) {
+        if (state.indice < state.perguntasAtivas.length - 1) {
           state.indice += 1;
           renderPergunta();
         } else {
@@ -486,7 +571,7 @@ const DIMENSOES = {
         let somaDig = 0, pesoDig = 0, somaProc = 0, pesoProc = 0;
         const porDimensao = {};
 
-        PERGUNTAS.forEach((p, i) => {
+        state.perguntasAtivas.forEach((p, i) => {
           const score = state.respostas[i];
           somaDig += score * p.pesoDig;
           pesoDig += p.pesoDig;
@@ -503,7 +588,10 @@ const DIMENSOES = {
         const controleProcessos = pesoProc ? somaProc / pesoProc : 0;
         const indiceGeral = (maturidadeDigital + controleProcessos) / 2;
 
-        const dimensoesResultado = Object.keys(DIMENSOES).map((key) => {
+        // Só dimensões com pelo menos 1 pergunta respondida nesta trilha —
+        // sem isso, uma dimensão nunca perguntada apareceria com score 0
+        // (falsa prioridade "Alta").
+        const dimensoesResultado = Object.keys(porDimensao).map((key) => {
           const d = porDimensao[key];
           const score = d.peso ? d.soma / d.peso : 0;
           return { key, nome: DIMENSOES[key].nome, ofertas: DIMENSOES[key].ofertas, score, nivel: nivelDe(score), prioridade: prioridadeDe(score) };
