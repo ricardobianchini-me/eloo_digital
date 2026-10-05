@@ -1,52 +1,63 @@
 ---
-import '../styles/global.css';
-import '@fontsource/bricolage-grotesque/500.css';
-import '@fontsource/bricolage-grotesque/600.css';
-import '@fontsource/bricolage-grotesque/700.css';
-import '@fontsource/bricolage-grotesque/800.css';
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
+// Página do PACCE no padrão full-bleed editorial da v2 (index.astro):
+// mesmas fontes, tokens, topo e rodapé. Público: quem coordena
+// atendimento recorrente (acolhimento, organizações sociais, clínicas e
+// centros de cuidado). Ver PRODUCT.md e DESIGN.md na raiz.
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (nome: string) => `${B}/img/${nome}`;
 
-const DIAGNOSTICO_URL = "/diagnostico";
+const dores = [
+  "O histórico se perde na troca de turno.",
+  "A escala é montada no grupo de WhatsApp.",
+  "O relatório é feito na véspera da reunião.",
+];
 
-const pilares = [
+const modulos = [
+  "Cadastro de pessoas atendidas", "Atendimento por tipo", "Histórico", "Agenda",
+  "Turnos e escalas", "Equipes e funções", "Fluxo de etapas", "Perfis de acesso",
+  "Registro de atividades", "Indicadores",
+];
+
+const recursos = [
   {
-    nome: "Prontuário Social e Acolhimento",
-    desc: "Centralize o cadastro, pré-cadastro e todo o histórico de evolução das pessoas assistidas. Garanta a continuidade do atendimento, mesmo com a rotatividade de voluntários.",
-    icone: "prontuario",
+    id: "cadastro",
+    titulo: "Cadastro e histórico que acompanham a pessoa",
+    texto: "Quem chega é cadastrado uma vez. Cada atendimento, orientação e encaminhamento entra no histórico, e quem atende na próxima vez já sabe por onde começar.",
+    itens: ["Busca por nome, CPF ou e-mail", "Contatos de emergência", "Data de retorno", "Tipos de atendimento definidos por vocês"],
+    foto: "sobre-acolhimento.jpg",
+    alt: "Duas pessoas conversando de perto, em um atendimento de escuta",
   },
   {
-    nome: "Escalas de Trabalhadores Inteligentes",
-    desc: "Organize os turnos de funcionários, plantonistas e voluntários de forma simples. Monitore presenças e evite buracos na escala de atendimento.",
-    icone: "escala",
+    id: "escalas",
+    titulo: "Escalas da equipe sem buraco",
+    texto: "Turnos de funcionários, plantonistas e voluntários num quadro só. Dá para ver quem está escalado e onde falta gente antes de o dia começar.",
+    itens: ["Turnos e funções", "Equipes por departamento", "Agenda de atendimentos"],
+    foto: "pacce-escalas.jpg",
+    alt: "Agenda e quadro de turnos da equipe organizados sobre a mesa",
   },
   {
-    nome: "Transparência Pronta para Assembleias",
-    desc: "Dados financeiros e operacionais estruturados de ponta a ponta. Extraia relatórios claros e seguros para auditorias, editais e prestações de contas em assembleias formais.",
-    icone: "grafico",
+    id: "fluxo",
+    titulo: "O atendimento do jeito que vocês já trabalham",
+    texto: "Cada organização define as etapas do próprio atendimento: acolhimento, triagem, retorno, encaminhamento. O PACCE segue esse fluxo, em vez de obrigar a equipe a mudar a rotina para caber no sistema.",
+    itens: ["Construtor de etapas", "Departamentos e tipos configuráveis", "Avisos para a equipe"],
+    foto: "comp-tecnologia.jpg",
+    alt: "Duas pessoas trabalhando lado a lado em notebooks",
   },
   {
-    nome: "Segurança e Conformidade Rígida",
-    desc: "Proteja informações altamente sensíveis dos seus assistidos em conformidade com as exigências legais, eliminando o trânsito de dados vulneráveis.",
-    icone: "escudoLock",
+    id: "seguranca",
+    titulo: "Dados protegidos e contas claras",
+    texto: "Cada pessoa da equipe vê só o que o perfil dela permite, e o que é feito fica registrado. Na hora de prestar contas à diretoria, aos financiadores ou à assembleia, os números já estão lá.",
+    itens: ["Perfis de acesso por função", "Registro de atividades", "Consentimento do atendido registrado", "Indicadores e relatórios"],
+    foto: "pacce-seguranca.jpg",
+    alt: "Pessoa trabalhando com atenção em informações protegidas",
   },
 ];
 
-// Ícones de linha, autorais (mesmo padrão de index.astro) — 24x24, stroke
-// único, currentColor.
-const ICONES = {
-  prontuario: '<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="3" rx="1"/><path d="M12 17s-3-2-3-4a2 2 0 0 1 3-1.7A2 2 0 0 1 15 13c0 2-3 4-3 4z"/>',
-  escala: '<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><circle cx="8" cy="15" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="16" cy="15" r="1"/>',
-  grafico: '<line x1="4" y1="21" x2="20" y2="21"/><rect x="6" y="13" width="3" height="8"/><rect x="11" y="9" width="3" height="12"/><rect x="16" y="5" width="3" height="16"/>',
-  escudoLock: '<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><rect x="9.5" y="11" width="5" height="4" rx="1"/><path d="M10.5 11v-1.5a1.5 1.5 0 0 1 3 0V11"/>',
-};
-
 const maturidade = [
-  { n: "1", nome: "Manual", realidade: "Dependência de papel, memória ou conversas informais.", impacto: "Digitalização imediata e centralizada de dados." },
-  { n: "2", nome: "Parcial", realidade: "Planilhas isoladas que não garantem continuidade.", impacto: "Integração total entre setores e equipes." },
-  { n: "3", nome: "Frágil", realidade: "Sistemas antigos, obsoletos ou sem suporte técnico.", impacto: "Plataforma robusta, com IA aplicada e atualização contínua." },
-  { n: "4", nome: "Estruturado", realidade: "Processo seguro e resiliente a trocas na equipe.", impacto: "Onde o PACCE consolida sua instituição." },
+  { nome: "Manual", hoje: "Papel, memória e conversa informal.", com: "Cadastro e histórico digitalizados em um lugar só." },
+  { nome: "Parcial", hoje: "Planilhas soltas que dependem de quem fez.", com: "Setores e equipes trabalhando na mesma base." },
+  { nome: "Frágil", hoje: "Sistema antigo, sem suporte ou sem dono.", com: "Plataforma mantida, com evolução contínua." },
+  { nome: "Estruturado", hoje: "Processo que resiste à troca de equipe.", com: "Onde o PACCE consolida a operação." },
 ];
 ---
 
@@ -54,264 +65,399 @@ const maturidade = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PACCE — eloo.digital</title>
-    <meta
-      name="description"
-      content="A plataforma de gestão definitiva para quem lidera o acolhimento e a assistência social. Cadastro, atendimento, escalas e transparência num só lugar."
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
+    <title>PACCE — gestão de atendimento recorrente | eloo.digital</title>
+    <meta name="description" content="PACCE, da eloo.digital: cadastro, atendimento, histórico, agenda e escalas da equipe em uma só plataforma, para quem faz atendimento recorrente." />
+    <link rel="icon" type="image/svg+xml" href={`${B}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <nav>
-      <a href="/#topo" class="wordmark nav-wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
-      <div class="navlinks">
-        <a href="/">← eloo.digital</a>
-        <a href="/#capacidades">Serviços</a>
-        <a href="/#metodologia">Metodologia</a>
+    <nav class="topo" id="topo">
+      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span>.digital</span></a>
+      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="menu" id="menu">
+        <a href="/#capacidades">O que fazemos</a>
+        <a href="#por-dentro">O PACCE por dentro</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#producao">Em produção</a>
+        <a href="/diagnostico" class="menu-cta">Fazer o diagnóstico</a>
       </div>
-      <a class="btn btn-nav" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+      <a href="/diagnostico" class="cta-topo">Fazer o diagnóstico</a>
     </nav>
 
-    <!-- BLOCO 1 — Hero -->
-    <header class="hero reveal" id="topo">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Produto Central eloo.digital</p>
-          <h1>A plataforma de gestão definitiva para quem lidera o acolhimento e a assistência social.</h1>
-          <p class="hero-sub">
-            Esqueça as planilhas soltas, a perda de históricos e os furos nas escalas. O PACCE
-            (Plataforma Administrativa Central para Comunidades Espiritualistas) centraliza toda
-            a administração da sua instituição em um ambiente seguro, profissional e feito para durar.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+    <main>
+
+      <!-- HERO -->
+      <section class="hero" id="inicio">
+        <img class="hero-img" src={img("pacce-prontuario.jpg")} alt="Ficha de cadastro preenchida à mão, como ainda acontece em muitas organizações" />
+        <div class="scrim"></div>
+        <div class="hero-inner wrap">
+          <div class="selo"><b>p</b><span><strong>PACCE</strong><small>um produto eloo.digital</small></span></div>
+          <h1>Cada pessoa atendida tem uma história. <span class="destaque">O PACCE não deixa ela se perder.</span></h1>
+          <p class="lede claro">Cadastro, atendimento, histórico, agenda e escalas da equipe em uma plataforma só, para quem atende as mesmas pessoas semana após semana.</p>
+          <div class="acoes">
+            <a class="btn btn-primario" href="/diagnostico">Fazer o diagnóstico ↗</a>
+            <a class="btn btn-ghost" href="#por-dentro">Ver o PACCE por dentro ↓</a>
           </div>
+          <ul class="hero-fatos" aria-label="Fatos sobre o PACCE">
+            <li><b>Em produção</b> no ar em pacce.app</li>
+            <li><b>Várias organizações</b> na mesma plataforma, cada uma com seus dados</li>
+            <li><b>Acesso por perfil</b> e registro de tudo o que é feito</li>
+          </ul>
         </div>
-        <a href="https://pacce.app" target="_blank" rel="noopener" class="hero-shot">
-          <img src="/img/pacce-overview.png" alt="Painel Overview do PACCE, com atendimentos do dia e avanço por departamento" />
-        </a>
-      </div>
-    </header>
+      </section>
 
-    <!-- BLOCO 2 — A dor do setor vs. a realidade real -->
-    <section class="section">
-      <h2>Sua instituição lida com vidas. A gestão dela não pode depender de papéis ou mensagens de WhatsApp.</h2>
-      <p class="lede">
-        Fornecedores tradicionais tentam adaptar sistemas de empresas comerciais para a rotina do
-        Terceiro Setor. O resultado? Ferramentas rígidas que ninguém usa. O PACCE foi moldado por
-        mais de 25 anos de vivência em desenvolvimento de produtos digitais, suporte,
-        refatoramento de aplicações e integrações sistêmicas — 7 deles na linha de frente de
-        entidades assistenciais — a gente entende a sua cultura, a sua rotina e as suas exigências
-        de prestação de contas.
-      </p>
-    </section>
+      <!-- DECLARAÇÃO -->
+      <section class="declaracao vermelho">
+        <div class="wrap">
+          <h2>Quem atende gente todo dia não pode depender de papel, planilha e mensagem solta.</h2>
+          <ol class="dores">
+            {dores.map((d) => <li>{d}</li>)}
+          </ol>
+          <p class="declaracao-fecho">O PACCE foi desenhado por quem passou 7 anos na linha de frente de organizações de atendimento, dentro de 25 anos de tecnologia.</p>
+        </div>
+      </section>
 
-    <!-- BLOCO 3 — Pilares de funcionalidade -->
-    <section class="section band" id="pilares">
-      <h2>Tudo o que sua organização precisa em um único ecossistema.</h2>
-      <div class="pilares-grid">
-        {pilares.map((p) => (
-          <div class="pilar-card">
-            <span class="card-icon" set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${ICONES[p.icone] || ""}</svg>`} />
-            <h3>{p.nome}</h3>
-            <p>{p.desc}</p>
+      <!-- POR DENTRO -->
+      <section class="por-dentro escuro" id="por-dentro">
+        <div class="wrap por-dentro-grid">
+          <div class="por-dentro-texto">
+            <h2>Uma tela para o dia de atendimento, <span class="destaque">do primeiro contato ao retorno.</span></h2>
+            <p class="lede claro">A equipe abre o PACCE e vê quem está na fila, que tipo de atendimento cada pessoa precisa e quem está escalado. A coordenação vê o todo: volume do dia, retornos pendentes e onde a operação aperta.</p>
+            <ul class="modulos" aria-label="Módulos do PACCE">
+              {modulos.map((m) => <li>{m}</li>)}
+            </ul>
           </div>
+          <figure class="tela">
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app</span></div>
+            <img src={img("pacce-exemplo.svg")} alt="Tela de atendimentos do PACCE com dados de exemplo: tipos de atendimento do dia e fila de pessoas" loading="lazy" />
+            <figcaption>Tela com dados de exemplo.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- RECURSOS (faixas full-bleed alternadas) -->
+      <div id="recursos">
+        {recursos.map((r, i) => (
+          <section class={`bleed ${i % 2 ? "bleed-reverso" : ""} ${i === 3 ? "escuro" : ""}`} id={r.id}>
+            <img class="bleed-foto" src={img(r.foto)} alt={r.alt} loading="lazy" />
+            <div class="bleed-texto">
+              <h2>{r.titulo}</h2>
+              <p class={`lede ${i === 3 ? "claro" : ""}`}>{r.texto}</p>
+              <ul class="lista-recurso">
+                {r.itens.map((it) => <li>{it}</li>)}
+              </ul>
+            </div>
+          </section>
         ))}
       </div>
-    </section>
 
-    <!-- BLOCO 4 — Maturidade digital, conexão com LUMEN -->
-    <section class="section" id="maturidade">
-      <p class="eyebrow">Conexão com a Metodologia LUMEN</p>
-      <h2>Em qual nível de maturidade digital sua instituição está hoje?</h2>
-      <p class="lede">
-        Através da nossa <a href="/#metodologia">Metodologia LUMEN</a>, avaliamos seu cenário atual
-        e usamos o PACCE como o motor para transformar sua operação:
-      </p>
-
-      <div class="matriz-table" role="table" aria-label="Tabela de maturidade digital e o impacto do PACCE em cada estágio">
-        <div class="matriz-row matriz-head" role="row">
-          <span role="columnheader">Estágio atual</span>
-          <span role="columnheader">A realidade</span>
-          <span role="columnheader">O impacto do PACCE</span>
-        </div>
-        {maturidade.map((m) => (
-          <div class={`matriz-row matriz-${m.n}`} role="row">
-            <span class="matriz-estagio" role="cell"><b>{m.n}</b> {m.nome}</span>
-            <span role="cell">{m.realidade}</span>
-            <span role="cell" class="matriz-impacto">{m.impacto}</span>
+      <!-- EM PRODUÇÃO -->
+      <section class="producao" id="producao">
+        <div class="wrap producao-grid">
+          <figure class="tela tela-clara">
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app</span></div>
+            <img src={img("pacce-painel-real.png")} alt="Painel real do PACCE: atendimentos de hoje, em andamento, finalizados e gráfico de desempenho da semana" loading="lazy" />
+            <figcaption>Painel real, em produção.</figcaption>
+          </figure>
+          <div class="producao-texto">
+            <h2>Não é protótipo. <span class="destaque-ink">Já está no ar.</span></h2>
+            <p class="lede">A tela ao lado é o painel do PACCE em produção: atendimentos do dia, em andamento, finalizados e o desempenho da semana, por departamento.</p>
+            <dl class="fatos">
+              <div><dt>Entrada</dt><dd>Login com e-mail, Google ou Microsoft.</dd></div>
+              <div><dt>Organizações</dt><dd>Cada instituição com seus dados, usuários e configurações.</dd></div>
+              <div><dt>Próximos módulos</dt><dd>Campanhas nas redes sociais e financeiro com balancete mensal.</dd></div>
+            </dl>
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <!-- BLOCO 5 — Tecnologia validada -->
-    <section class="section band">
-      <div class="tech-grid">
+      <!-- MATURIDADE (LUMEN) -->
+      <section class="maturidade escuro" id="maturidade">
+        <div class="wrap">
+          <div class="maturidade-cabeca">
+            <h2>Em que ponto está a sua operação <span class="destaque">hoje?</span></h2>
+            <p class="lede claro">A metodologia LUMEN da eloo.digital mede a maturidade da operação em quatro níveis. O PACCE é o que leva cada nível ao seguinte.</p>
+          </div>
+          <ol class="regua">
+            {maturidade.map((m, i) => (
+              <li>
+                <span class="regua-nivel">Nível {i + 1}</span>
+                <h3>{m.nome}</h3>
+                <p class="regua-hoje">{m.hoje}</p>
+                <p class="regua-com"><b>Com o PACCE</b>{m.com}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- CTA FINAL -->
+      <section class="cta-foto" id="contato">
+        <img class="cta-img" src={img("reiki-acolhimento.jpg")} alt="Mãos em gesto de cuidado durante um atendimento" loading="lazy" />
+        <div class="scrim scrim-total"></div>
+        <div class="wrap cta-inner">
+          <p class="tempo">≈ 3 minutos</p>
+          <h2>Comece pelo diagnóstico. <span class="destaque">A plataforma vem depois.</span></h2>
+          <p class="lede claro">Responda como a sua operação funciona hoje. Mostramos onde o PACCE ajuda primeiro e, se quiser, a equipe da eloo.digital volta com a análise.</p>
+          <div class="acoes centro">
+            <a class="btn btn-primario" href="/diagnostico">Fazer o diagnóstico ↗</a>
+            <a class="btn btn-ghost" href="/">Conhecer a eloo.digital</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="rodape">
+      <div class="wrap rodape-grid">
         <div>
-          <h2>IA aplicada e produto de verdade. O PACCE já roda em produção.</h2>
-          <p class="lede">
-            Não vendemos ideias abstratas ou protótipos de prateleira. O PACCE é uma realidade
-            tecnológica validada, estável e em plena operação, desenhada para evoluir junto com
-            o tamanho e o impacto da sua causa.
-          </p>
+          <a href="/" class="marca">eloo<span>.digital</span></a>
+          <p>Tecnologia para transformar operações.</p>
         </div>
-        <a href="https://pacce.app" target="_blank" rel="noopener" class="hero-shot hero-shot-small">
-          <img src="/img/pacce-atendimento.png" alt="Tela de Gestão de Atendimentos do PACCE, com a seleção de tratamentos por departamento" />
-        </a>
+        <div>
+          <b>Empresa</b>
+          <a href="/#sobre">Sobre</a><a href="/#metodologia">Metodologia</a><a href="/diagnostico">Contato</a>
+        </div>
+        <div>
+          <b>O que fazemos</b>
+          <a href="/#automacao">Automação</a><a href="/#ia">Inteligência artificial</a><a href="/#capacidades">Desenvolvimento e integrações</a><a href="/#capacidades">Transformação digital</a><a href="/assessment">Assessment de TI</a>
+        </div>
+        <div>
+          <b>Produtos</b>
+          <a href="/pacce" aria-current="page">PACCE</a>
+        </div>
       </div>
-    </section>
-
-    <!-- BLOCO 6 — CTA final -->
-    <section class="cta-final">
-      <p class="cta-kicker">Comece pelo diagnóstico</p>
-      <h2 class="cta-big">Pronto para levar governança e segurança para a sua diretoria?</h2>
-      <p class="lede">
-        Não mude sua operação de uma vez. Comece pelo primeiro passo do nosso método: uma conversa
-        de 20 minutos que gera um relatório completo de diagnóstico em até 24 horas.
-      </p>
-      <div class="hero-actions" style="justify-content:center;">
-        <a class="btn btn-primary" href={DIAGNOSTICO_URL}>Faça o diagnóstico gratuito</a>
+      <div class="wrap rodape-base">
+        <span>© eloo.digital</span>
+        <span>PACCE é um produto da eloo.digital.</span>
+        <a href="#topo">Voltar ao topo ↑</a>
       </div>
-      <p class="cta-support">O mesmo time, o mesmo compromisso de longo prazo. Uma parceria feita para durar.</p>
-    </section>
-
-    <footer>
-      <a href="/#topo" class="wordmark" aria-label="eloo.digital, início">el<span class="oo">oo</span><span class="dot">.</span><span class="suffix">digital</span></a>
-      <p>eloo.digital · PACCE, feito pela eloo.digital</p>
     </footer>
+
+    <script is:inline>
+      const btn = document.getElementById("menu-btn");
+      const menu = document.getElementById("menu");
+      btn.addEventListener("click", () => {
+        const aberto = menu.classList.toggle("aberto");
+        btn.classList.toggle("aberto", aberto);
+        btn.setAttribute("aria-expanded", String(aberto));
+      });
+      menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
+        menu.classList.remove("aberto"); btn.classList.remove("aberto"); btn.setAttribute("aria-expanded", "false");
+      }));
+    </script>
   </body>
 </html>
 
 <style>
-  nav {
-    position: sticky; top: 0; z-index: 10;
-    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
-    padding: 1.1rem 2rem;
-    background: color-mix(in srgb, var(--card) 92%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
+  :root {
+    --bg: #f4f2ed;
+    --bg-alt: #e6e4dd;
+    --card: #fbfaf7;
+    --ink: #1f1f1d;
+    --ink-soft: #55554f;
+    --line: #d8d6ce;
+    --accent: #e0201a;
+    --accent-deep: #b8160f;
+    --accent-ink: #fff3f2;
+    --escuro: #1f1f1d;
+    --destaque-escuro: #ff8a84;
+    --font-title: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    --z-topo: 20;
   }
-  .nav-wordmark { text-decoration: none; color: var(--ink); font-size: 1.15rem; }
-  .navlinks { display: flex; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; }
-  .navlinks a {
-    text-decoration: none; color: var(--ink-soft); position: relative;
-    padding-bottom: 0.3rem; transition: color 0.2s ease;
-  }
-  .navlinks a::after {
-    content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px;
-    background: var(--accent); border-radius: 2px;
-    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .navlinks a:hover { color: var(--accent); }
-  .navlinks a:hover::after { width: 100%; }
-  @media (max-width: 780px) { .navlinks { display: none; } }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: var(--font-title); letter-spacing: -0.015em; text-wrap: balance; margin: 0; }
+  p { margin: 0 0 1rem; text-wrap: pretty; }
+  ul, ol { margin: 0; }
 
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    border-radius: 999px; padding: 0.85rem 1.7rem; font-weight: 700; font-size: 0.95rem;
-    text-decoration: none; border: 1px solid transparent; cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
-  }
-  .btn:hover { transform: translateY(-1px); }
-  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .btn-nav { padding: 0.55rem 1.2rem; font-size: 0.85rem; background: var(--accent); color: var(--accent-ink); }
-  .btn-nav:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
-  .btn-primary { background: var(--accent); color: var(--accent-ink); }
-  .btn-primary:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
-  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-  .btn-ghost:hover { border-color: var(--ink-soft); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.4rem; }
+  .destaque { color: var(--destaque-escuro); }
+  .destaque-ink { color: var(--accent); }
+  .lede { font-size: 1.08rem; color: var(--ink-soft); max-width: 60ch; }
+  .lede.claro, .claro { color: rgba(255, 255, 255, .86); }
+  .escuro { background: var(--escuro); color: #fff; }
+  .escuro h2, .escuro h3 { color: #fff; }
+  .vermelho { background: var(--accent); color: var(--accent-ink); }
 
-  .hero { padding: 5.5rem 2rem; }
-  .hero-grid {
-    max-width: 1120px; margin: 0 auto;
-    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; align-items: center;
-  }
-  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
-  .eyebrow {
-    font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
-    font-weight: 600; color: var(--accent); margin: 0 0 0.9rem;
-  }
-  h1 {
-    font-family: var(--font-title); font-size: clamp(2rem, 4.2vw, 2.9rem); font-weight: 700;
-    letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 1.2rem; text-wrap: balance; color: var(--ink);
-  }
-  .hero-sub {
-    font-family: var(--font-body); font-size: 1.05rem;
-    color: var(--ink-soft);
-    max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;
-  }
-  .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
-  .hero-shot {
-    display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line);
-    box-shadow: 0 36px 60px -18px rgba(36,38,31,.4), 0 20px 46px -20px color-mix(in srgb, var(--accent) 35%, transparent);
-    transform: perspective(1400px) rotateY(-4deg) rotateX(1.5deg);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .hero-shot:hover { transform: perspective(1400px) rotateY(0deg) rotateX(0deg); }
-  .hero-shot img { width: 100%; height: auto; }
-  .hero-shot-small { max-width: 480px; margin: 0 auto; }
+  /* Botões */
+  .btn { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .9rem 1.55rem; font-family: var(--font-title); font-weight: 700; font-size: .96rem; text-decoration: none; border: 1px solid transparent; transition: background .2s ease, transform .3s var(--ease); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:focus-visible, .menu a:focus-visible, .cta-topo:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-primario { background: var(--accent); color: var(--accent-ink); }
+  .btn-primario:hover { background: var(--accent-deep); }
+  .btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .6); }
+  .btn-ghost:hover { border-color: #fff; }
+  .acoes { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.8rem; }
+  .acoes.centro { justify-content: center; }
 
-  .section { max-width: 1120px; margin: 0 auto; padding: 5.5rem 2rem; }
-  .band { max-width: none; background: var(--bg-alt); }
-  .band > * { max-width: 1120px; margin-left: auto; margin-right: auto; }
-  .band .tech-grid { max-width: 1120px; margin: 0 auto; }
-  h2 {
-    font-family: var(--font-title); font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700;
-    letter-spacing: -0.01em; margin: 0 0 1.1rem; text-wrap: balance; max-width: 34ch;
+  /* Topo (igual à home) */
+  .topo { position: sticky; top: 0; z-index: var(--z-topo); display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.4rem; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .marca { font-family: var(--font-title); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
+  .marca span { font-weight: 500; color: var(--ink-soft); }
+  .menu { display: flex; gap: 1.5rem; font-size: .9rem; font-weight: 600; }
+  .menu a { text-decoration: none; color: var(--ink-soft); }
+  .menu a:hover { color: var(--accent); }
+  .cta-topo { background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: .55rem 1.1rem; font-size: .85rem; font-weight: 700; text-decoration: none; }
+  section[id], #recursos { scroll-margin-top: 4.5rem; }
+  .menu-cta { display: none; }
+  .menu-btn { display: none; background: none; border: none; width: 2.2rem; height: 2.2rem; flex-direction: column; justify-content: center; align-items: flex-end; gap: 5px; padding: 0; cursor: pointer; }
+  .menu-btn span { display: block; width: 100%; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .25s ease, opacity .25s ease; }
+  .menu-btn.aberto span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-btn.aberto span:nth-child(2) { opacity: 0; }
+  .menu-btn.aberto span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 900px) {
+    .menu-btn { display: flex; }
+    .cta-topo { display: none; }
+    .menu { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 1.1rem; background: var(--card); border-bottom: 1px solid var(--line); padding: 1.5rem 1.4rem 2rem; box-shadow: 0 16px 32px rgba(0, 0, 0, .12); }
+    .menu.aberto { display: flex; }
+    .menu-cta { display: block; color: var(--accent); }
   }
-  .lede {
-    font-family: var(--font-body); font-size: 1.02rem; color: var(--ink-soft);
-    line-height: 1.65; max-width: 66ch; margin: 0 0 1.2rem;
-  }
-  .lede a { color: var(--accent); font-weight: 600; }
 
-  .pilares-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem; }
-  @media (max-width: 700px) { .pilares-grid { grid-template-columns: 1fr; } }
-  .pilar-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px; padding: 1.5rem 1.5rem;
+  /* Hero full-bleed */
+  .hero { position: relative; min-height: min(92vh, 800px); color: #fff; overflow: hidden; display: flex; }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20, 20, 18, .94) 0%, rgba(20, 20, 18, .72) 42%, rgba(20, 20, 18, .3) 75%, rgba(20, 20, 18, .12) 100%); }
+  .hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 7rem; padding-bottom: 3.5rem; width: 100%; }
+  .selo { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.6rem; }
+  .selo b { width: 2.6rem; height: 2.6rem; border-radius: 11px; background: var(--accent); color: #fff; display: grid; place-items: center; font-family: var(--font-title); font-size: 1.2rem; }
+  .selo strong { display: block; font-family: var(--font-title); font-size: 1.15rem; letter-spacing: .02em; line-height: 1.2; }
+  .selo small { display: block; font-size: .8rem; color: rgba(255, 255, 255, .75); }
+  .hero h1 { font-size: clamp(2.3rem, 5.6vw, 4.4rem); line-height: 1.04; max-width: 17ch; color: #fff; margin-bottom: 1.3rem; }
+  .hero .lede { font-size: 1.15rem; max-width: 52ch; }
+  .hero-fatos { list-style: none; padding: 1.4rem 0 0; margin: 2.6rem 0 0; border-top: 1px solid rgba(255, 255, 255, .22); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; font-size: .92rem; color: rgba(255, 255, 255, .8); max-width: 900px; }
+  .hero-fatos b { display: block; font-family: var(--font-title); font-size: 1.05rem; color: #fff; }
+  @media (max-width: 720px) {
+    .hero-fatos { grid-template-columns: 1fr; gap: .9rem; }
+    .hero .scrim { background: linear-gradient(0deg, rgba(20, 20, 18, .95) 0%, rgba(20, 20, 18, .8) 60%, rgba(20, 20, 18, .45) 100%); }
   }
-  .pilar-card h3 { font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--ink); }
-  .pilar-card p { font-family: var(--font-body); font-size: 0.9rem; margin: 0; color: var(--ink-soft); }
-  .card-icon {
-    display: flex; align-items: center; justify-content: center; flex: none;
-    width: 2.75rem; height: 2.75rem; border-radius: 9px; margin-bottom: 0.9rem;
-    background: linear-gradient(145deg, var(--accent), var(--accent-deep));
-    color: var(--accent-ink);
-    box-shadow: 0 8px 16px -6px color-mix(in srgb, var(--accent) 55%, transparent);
+
+  /* Declaração em vermelho */
+  .declaracao { padding: clamp(4.5rem, 9vw, 7.5rem) 0; }
+  .declaracao h2 { font-size: clamp(2rem, 4.6vw, 3.5rem); line-height: 1.08; max-width: 20ch; color: var(--accent-ink); }
+  .dores { list-style: none; padding: 0; margin: 3rem 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgba(255, 243, 242, .35); }
+  .dores li { font-family: var(--font-title); font-size: clamp(1.15rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.25; padding: 1.4rem 1.6rem 0 0; }
+  .dores li + li { padding-left: 1.6rem; border-left: 1px solid rgba(255, 243, 242, .35); }
+  .declaracao-fecho { margin: 3rem 0 0; font-size: 1.02rem; max-width: 56ch; color: color-mix(in srgb, var(--accent-ink) 92%, transparent); }
+  @media (max-width: 760px) {
+    .dores { grid-template-columns: 1fr; }
+    .dores li, .dores li + li { padding: 1.1rem 0; border-left: none; border-bottom: 1px solid rgba(255, 243, 242, .35); }
   }
-  .card-icon svg { width: 1.4rem; height: 1.4rem; }
 
-  .matriz-table { margin-top: 2rem; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-  .matriz-row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.4fr; gap: 1.2rem; padding: 1rem 1.3rem; }
-  @media (max-width: 780px) { .matriz-row { grid-template-columns: 1fr; gap: 0.3rem; } }
-  .matriz-head { background: var(--ink); color: var(--bg); font-family: var(--font-title); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
-  .matriz-row:not(.matriz-head) { border-top: 1px solid var(--line); font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-soft); }
-  .matriz-row:not(.matriz-head):nth-child(odd) { background: var(--card); }
-  .matriz-estagio { font-family: var(--font-title); font-weight: 600; color: var(--ink); }
-  .matriz-estagio b { color: var(--accent); margin-right: 0.3rem; }
-  .matriz-impacto { color: var(--support); font-weight: 500; }
-  .matriz-4 { background: color-mix(in srgb, var(--accent) 12%, transparent) !important; }
+  /* Por dentro */
+  .por-dentro { padding: clamp(4.5rem, 8vw, 7rem) 0; overflow: hidden; }
+  .por-dentro-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .por-dentro h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.1; margin-bottom: 1.2rem; }
+  .modulos { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .modulos li { border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; padding: .35rem .9rem; font-size: .86rem; color: #fff; }
+  .tela { margin: 0; background: #151514; border-radius: 18px; padding: .7rem .7rem 0; box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .7); transform: rotate(-1deg); }
+  .tela-barra { display: flex; align-items: center; gap: .4rem; padding: .2rem .4rem .7rem; }
+  .tela-barra i { width: .62rem; height: .62rem; border-radius: 50%; background: #3a3a36; }
+  .tela-barra span { margin-left: .6rem; font-size: .75rem; color: rgba(255, 255, 255, .6); }
+  .tela img { border-radius: 10px 10px 0 0; width: 100%; }
+  .tela figcaption { font-size: .78rem; color: rgba(255, 255, 255, .6); padding: .7rem .4rem .8rem; }
+  @media (max-width: 900px) { .por-dentro-grid { grid-template-columns: 1fr; } .tela { transform: none; } }
 
-  .tech-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; }
-  @media (max-width: 880px) { .tech-grid { grid-template-columns: 1fr; } }
-
-  .cta-final { text-align: center; padding: 6rem 2rem; background: var(--bg-alt); }
-  .cta-kicker { font-family: var(--font-title); font-weight: 700; color: var(--accent); margin: 0 0 0.6rem; font-size: 0.95rem; }
-  .cta-big {
-    font-family: var(--font-title); font-size: clamp(1.8rem, 4.2vw, 2.5rem); font-weight: 700;
-    letter-spacing: -0.01em; margin: 0 auto 0.8rem; max-width: 30ch; text-wrap: balance; color: var(--ink);
+  /* Faixas full-bleed de recursos */
+  .bleed { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: min(78vh, 640px); background: var(--bg); }
+  .bleed.escuro { background: var(--escuro); }
+  .bleed + .bleed:not(.escuro) { border-top: 1px solid var(--line); }
+  .bleed-foto { width: 100%; height: 100%; min-height: 380px; object-fit: cover; }
+  .bleed-texto { padding: clamp(3rem, 7vw, 5.5rem) max(1.4rem, calc(50vw - 540px)) clamp(3rem, 7vw, 5.5rem) clamp(2rem, 5vw, 4rem); display: flex; flex-direction: column; justify-content: center; }
+  .bleed-reverso .bleed-foto { order: 2; }
+  .bleed-reverso .bleed-texto { order: 1; padding-left: max(1.4rem, calc(50vw - 540px)); padding-right: clamp(2rem, 5vw, 4rem); }
+  .bleed h2 { font-size: clamp(1.75rem, 3.3vw, 2.6rem); line-height: 1.1; max-width: 18ch; margin-bottom: 1.1rem; }
+  .lista-recurso { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; max-width: 46ch; }
+  .lista-recurso li { padding: .7rem 0; border-top: 1px solid var(--line); font-weight: 500; display: flex; gap: .7rem; align-items: baseline; }
+  .lista-recurso li::before { content: "↗"; color: var(--accent); font-weight: 700; }
+  .escuro .lista-recurso li { border-top-color: rgba(255, 255, 255, .18); }
+  .escuro .lista-recurso li::before { color: var(--destaque-escuro); }
+  @media (max-width: 860px) {
+    .bleed { grid-template-columns: 1fr; min-height: 0; }
+    .bleed-foto { min-height: 0; aspect-ratio: 4 / 3; height: auto; }
+    .bleed-reverso .bleed-foto { order: 0; }
+    .bleed-texto, .bleed-reverso .bleed-texto { padding: 2.6rem 1.4rem 3.2rem; }
   }
-  .cta-final .lede { margin-left: auto; margin-right: auto; text-align: center; }
-  .cta-support { font-family: var(--font-body); font-size: 0.85rem; color: var(--ink-soft); margin-top: 1.6rem; }
 
-  footer {
-    border-top: 1px solid var(--line); padding: 3rem 2rem; text-align: center;
-    color: var(--ink-soft); font-size: 0.85rem;
+  /* Em produção */
+  .producao { padding: clamp(4.5rem, 8vw, 7rem) 0; background: var(--bg-alt); }
+  .producao-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .producao h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.08; margin-bottom: 1.1rem; }
+  .tela-clara { transform: rotate(1deg); }
+  .fatos { margin: 1.6rem 0 0; display: grid; }
+  .fatos div { padding: .9rem 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; }
+  .fatos dt { font-family: var(--font-title); font-weight: 700; }
+  .fatos dd { margin: 0; color: var(--ink-soft); }
+  @media (max-width: 900px) { .producao-grid { grid-template-columns: 1fr; } .tela-clara { transform: none; } }
+  @media (max-width: 520px) { .fatos div { grid-template-columns: 1fr; gap: .2rem; } }
+
+  /* Régua de maturidade */
+  .maturidade { padding: clamp(4.5rem, 8vw, 7rem) 0; }
+  .maturidade-cabeca { max-width: 760px; margin-bottom: 3rem; }
+  .maturidade h2 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.1; margin-bottom: 1rem; }
+  .regua { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
+  .regua::before { content: ""; position: absolute; top: .45rem; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, rgba(255, 255, 255, .25), var(--accent)); }
+  .regua li { position: relative; padding: 2rem 1.4rem 0 0; }
+  .regua li::before { content: ""; position: absolute; top: 0; left: 0; width: 1rem; height: 1rem; border-radius: 50%; background: var(--escuro); border: 2px solid rgba(255, 255, 255, .5); }
+  .regua li:last-child::before { background: var(--accent); border-color: var(--accent); }
+  .regua-nivel { font-size: .82rem; color: rgba(255, 255, 255, .66); }
+  .regua h3 { font-size: 1.35rem; margin: .2rem 0 .7rem; }
+  .regua-hoje { color: rgba(255, 255, 255, .8); font-size: .95rem; }
+  .regua-com { font-size: .95rem; color: #fff; margin: 0; }
+  .regua-com b { display: block; color: var(--destaque-escuro); font-size: .82rem; font-weight: 600; margin-bottom: .15rem; }
+  @media (max-width: 860px) {
+    .regua { grid-template-columns: 1fr; gap: 1.6rem; padding-left: 1.6rem; }
+    .regua::before { top: 0; bottom: 0; left: .45rem; right: auto; width: 2px; height: auto; background: linear-gradient(180deg, rgba(255, 255, 255, .25), var(--accent)); }
+    .regua li { padding: 0 0 0 .8rem; }
+    .regua li::before { left: -1.6rem; top: .3rem; }
   }
-  footer .wordmark { color: var(--ink); font-size: 1.1rem; text-decoration: none; margin-bottom: 0.7rem; justify-content: center; }
-  footer p { margin: 0; font-family: var(--font-body); }
+
+  /* CTA final full-bleed */
+  .cta-foto { position: relative; color: #fff; overflow: hidden; text-align: center; }
+  .cta-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+  .scrim-total { background: rgba(20, 20, 18, .74); }
+  .cta-inner { position: relative; z-index: 1; padding-top: clamp(5rem, 11vw, 8.5rem); padding-bottom: clamp(5rem, 11vw, 8.5rem); display: flex; flex-direction: column; align-items: center; }
+  .cta-foto h2 { font-size: clamp(2rem, 4.4vw, 3.3rem); line-height: 1.08; max-width: 18ch; margin-bottom: 1.1rem; color: #fff; }
+  .cta-foto .lede { margin: 0 auto; }
+  .tempo { font-family: var(--font-title); color: var(--destaque-escuro); font-weight: 700; margin: 0 0 .6rem; }
+
+  /* Rodapé (igual à home) */
+  .rodape { background: var(--escuro); color: rgba(255, 255, 255, .78); padding: 3.5rem 0 1.6rem; font-size: .9rem; }
+  .rodape-grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 2rem; }
+  .rodape-grid > div { display: flex; flex-direction: column; gap: .45rem; }
+  .rodape-grid b { color: #fff; font-family: var(--font-title); margin-bottom: .3rem; }
+  .rodape-grid a { text-decoration: none; }
+  .rodape-grid a:hover { color: #fff; }
+  .rodape .marca { color: #fff; }
+  .rodape .marca span { color: rgba(255, 255, 255, .6); }
+  .rodape-base { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid rgba(255, 255, 255, .15); font-size: .82rem; }
+  .rodape-base a { text-decoration: none; }
+  @media (max-width: 760px) { .rodape-grid { grid-template-columns: 1fr 1fr; } }
+
+  /* Movimento: entrada do hero e revelação das fotos (o conteúdo já nasce visível) */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-img { animation: aproxima 1.8s var(--ease) both; }
+    .hero-inner > * { animation: sobe .9s var(--ease) both; }
+    .hero-inner > :nth-child(2) { animation-delay: .08s; }
+    .hero-inner > :nth-child(3) { animation-delay: .16s; }
+    .hero-inner > :nth-child(4) { animation-delay: .24s; }
+    .hero-inner > :nth-child(5) { animation-delay: .32s; }
+    @supports (animation-timeline: view()) {
+      .bleed-foto { animation: revela linear both; animation-timeline: view(); animation-range: entry 0% cover 35%; }
+      .tela { animation: assenta linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; }
+    }
+  }
+  @keyframes aproxima { from { transform: scale(1.07); } to { transform: scale(1); } }
+  @keyframes sobe { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes revela { from { clip-path: inset(0 0 18% 0); filter: saturate(.6); } to { clip-path: inset(0); filter: none; } }
+  @keyframes assenta { from { translate: 0 40px; } to { translate: 0 0; } }
 </style>
