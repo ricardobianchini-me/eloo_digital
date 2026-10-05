@@ -8,7 +8,7 @@ mesmas métricas por fórmula, e quem preferir pode editar direto por lá. Esta
 página só oferece uma visão de gestão mais rápida e edição sem abrir o Sheets.
 
 Abas usadas (cabeçalho na linha 1):
-- "Roadmap Q4": ID | Área | Item | Dono | Mês | Prazo | Status | Nota | Atualizado em | Atualizado por
+- "Roadmap Q4": ID | Área | Item | Dono | Mês | Prazo | Status | Nota | Atualizado em | Atualizado por | Prioridade
 - "Metas Q4":   Objetivo | Resultado-chave | Meta | Atual | Dono | Prazo
 - "Visão":      Bloco | Conteúdo | Detalhe
 - "Nichos":     Nicho | Exemplos | Dor principal | Entrada | Oferta núcleo | Canal | Status
@@ -45,7 +45,7 @@ ABA_DECISOES = "Decisões"
 ABA_LEADS = "Leads"
 ABA_PROSPECCAO = "Prospecção Clínicas Holísticas"
 
-COLUNAS_ROADMAP = ["ID", "Área", "Item", "Dono", "Mês", "Prazo", "Status", "Nota", "Atualizado em", "Atualizado por"]
+COLUNAS_ROADMAP = ["ID", "Área", "Item", "Dono", "Mês", "Prazo", "Status", "Nota", "Atualizado em", "Atualizado por", "Prioridade"]
 COLUNAS_METAS = ["Objetivo", "Resultado-chave", "Meta", "Atual", "Dono", "Prazo"]
 COLUNAS_DECISOES = ["Data", "Decisão", "Quem decidiu", "Impacto"]
 
@@ -57,10 +57,11 @@ AREAS = [
 DONOS = ["Ricardo", "Alessandro", "Rafael", "Todos"]
 MESES = ["Out", "Nov", "Dez"]
 STATUS = ["A fazer", "Em andamento", "Bloqueado", "Feito"]
+PRIORIDADES = ["Alta", "Média", "Baixa"]
 
 # Campos do roadmap que a página pode alterar, com a regra de cada um.
-CAMPOS_ROADMAP_EDITAVEIS = {"Item", "Dono", "Mês", "Prazo", "Status", "Nota", "Área"}
-_LISTAS = {"Dono": DONOS, "Mês": MESES, "Status": STATUS, "Área": AREAS}
+CAMPOS_ROADMAP_EDITAVEIS = {"Item", "Dono", "Mês", "Prazo", "Status", "Nota", "Área", "Prioridade"}
+_LISTAS = {"Dono": DONOS, "Mês": MESES, "Status": STATUS, "Área": AREAS, "Prioridade": PRIORIDADES}
 _MAX_TEXTO = 2000
 
 _COL_ROADMAP = {nome: i + 1 for i, nome in enumerate(COLUNAS_ROADMAP)}  # 1-based
@@ -130,6 +131,7 @@ def carregar() -> dict:
     roadmap = _como_linhas(brutos[ABA_ROADMAP], COLUNAS_ROADMAP)
     hoje = datetime.now(timezone.utc).astimezone().date()
     for item in roadmap:
+        item["Prioridade"] = item["Prioridade"] if item["Prioridade"] in PRIORIDADES else "Média"
         prazo = _parse_data(item["Prazo"])
         item["_prazo_iso"] = prazo.isoformat() if prazo else ""
         item["_prazo_curto"] = prazo.strftime("%d/%m") if prazo else item["Prazo"]
@@ -158,7 +160,7 @@ def carregar() -> dict:
 
     return {
         "roadmap": roadmap,
-        "frentes": _frentes(roadmap, hoje),
+        "itens_json": [_item_json(i) for i in roadmap],
         "linha_do_tempo": _linha_do_tempo(roadmap, hoje),
         "metas": metas,
         "visao": valores_visao,
@@ -167,7 +169,7 @@ def carregar() -> dict:
         "metricas": _metricas(roadmap),
         "funil": _funil(brutos[ABA_LEADS], brutos[ABA_PROSPECCAO], hoje),
         "hoje": hoje.strftime("%d/%m/%Y"),
-        "areas": AREAS, "donos": DONOS, "meses": MESES, "status": STATUS,
+        "areas": AREAS, "donos": DONOS, "meses": MESES, "status": STATUS, "prioridades": PRIORIDADES,
     }
 
 
@@ -197,35 +199,14 @@ def _metricas(roadmap: list[dict]) -> dict:
     }
 
 
-def _frentes(roadmap: list[dict], hoje: date) -> list[dict]:
-    """Uma frente por área: progresso, saúde e próxima entrega.
-
-    Saúde: "critica" se há item atrasado ou bloqueado; "atencao" se há item
-    vencendo em 7 dias que ainda nem começou; "ok" no resto."""
-    frentes = []
-    for area in AREAS:
-        itens = [i for i in roadmap if i["Área"] == area]
-        if not itens:
-            continue
-        abertos = [i for i in itens if i["Status"] != "Feito"]
-        futuros = sorted((i for i in abertos if i["_prazo_iso"] and not i["_atrasado"]), key=lambda i: i["_prazo_iso"])
-        contagem = _contagem(itens)
-        if contagem["atrasados"] or contagem["bloqueado"]:
-            saude = "critica"
-        elif any(i["_vence_7d"] and i["Status"] == "A fazer" for i in itens):
-            saude = "atencao"
-        else:
-            saude = "ok"
-        donos = [d for d in DONOS if any(i["Dono"] == d for i in itens)]
-        frentes.append({
-            "nome": area,
-            **contagem,
-            "saude": saude,
-            "donos": donos,
-            "proximo": futuros[0] if futuros else None,
-            "em_andamento": [i for i in itens if i["Status"] == "Em andamento"],
-        })
-    return frentes
+def _item_json(i: dict) -> dict:
+    """Dados mínimos de cada item para o navegador montar os cards das
+    frentes com filtro por sócio, prioridade e situação."""
+    return {
+        "id": i["ID"], "area": i["Área"], "item": i["Item"], "dono": i["Dono"],
+        "status": i["Status"], "prioridade": i["Prioridade"], "prazo": i["_prazo_iso"],
+        "prazo_curto": i["_prazo_curto"], "atrasado": i["_atrasado"], "vence_7d": i["_vence_7d"],
+    }
 
 
 # Janela da linha do tempo: o trimestre do plano.
@@ -346,14 +327,15 @@ def atualizar_item(item_id: str, campo: str, valor: str, quem: str) -> None:
     logger.info(f"Roadmap {item_id}: {campo} = {valor!r} ({quem})")
 
 
-def novo_item(area: str, item: str, dono: str, mes: str, prazo: str, quem: str) -> str:
+def novo_item(area: str, item: str, dono: str, mes: str, prazo: str, quem: str, prioridade: str = "Média") -> str:
     area, dono, mes = _validar("Área", area), _validar("Dono", dono), _validar("Mês", mes)
+    prioridade = _validar("Prioridade", prioridade)
     item, prazo = _validar("Item", item), _validar("Prazo", prazo)
     item_id = "nv-" + secrets.token_hex(3)
     sh = _planilha()
     ws = sh.worksheet(ABA_ROADMAP)
     ws.append_row(
-        [item_id, area, item, dono, mes, prazo, "A fazer", "", _hoje(), _quem(quem)],
+        [item_id, area, item, dono, mes, prazo, "A fazer", "", _hoje(), _quem(quem), prioridade],
         value_input_option="USER_ENTERED",
         table_range="A1",
     )

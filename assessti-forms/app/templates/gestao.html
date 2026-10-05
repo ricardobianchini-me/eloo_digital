@@ -75,7 +75,7 @@
   .selo{font-size:11px; font-weight:600; padding:1px 8px; border-radius:999px;}
   .selo.atrasado{background:var(--red-soft); color:var(--red);}
   .selo.vence{background:var(--amber-soft); color:var(--amber);}
-  form.novo{display:grid; grid-template-columns:2fr repeat(4,minmax(110px,1fr)) auto; gap:8px; align-items:end; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px;}
+  form.novo{display:grid; grid-template-columns:2fr repeat(5,minmax(100px,1fr)) auto; gap:8px; align-items:end; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px;}
   form.novo label{display:grid; gap:3px; font-size:11px; color:var(--ink-muted); min-width:0;}
   .decisao{display:grid; grid-template-columns:96px 1fr; gap:12px; padding:10px 0; border-top:1px solid var(--border); font-size:13.5px;}
   .decisao small{display:block; color:var(--ink-faint); margin-top:2px;}
@@ -111,10 +111,10 @@
   .tl-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface);}
   .tl{min-width:860px; padding-bottom:8px;}
   .tl-cab, .tl-linha{display:grid; grid-template-columns:260px 1fr; align-items:center;}
-  .tl-cab{background:var(--surface-2); border-bottom:1px solid var(--border); height:52px;}
-  .tl-escala{height:52px;}
-  .tl-mes{position:absolute; top:6px; line-height:1; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); padding-left:6px; border-left:1px solid var(--border-strong);}
-  .tl-sem{position:absolute; bottom:6px; line-height:1; font-size:10px; color:var(--ink-faint); transform:translateX(-50%);}
+  .tl-cab{background:var(--surface-2); border-bottom:1px solid var(--border); height:64px;}
+  .tl-escala{height:64px;}
+  .tl-mes{position:absolute; top:10px; line-height:1; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); padding-left:6px; border-left:1px solid var(--border-strong);}
+  .tl-sem{position:absolute; bottom:8px; line-height:1; font-size:10px; color:var(--ink-faint); transform:translateX(-50%);}
   .tl-grupo-nome{font-size:12px; font-weight:700; padding:10px 12px 4px; color:var(--ink);}
   .tl-rot{font-size:12px; padding:4px 12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
   .tl-rot small{display:block; font-size:10.5px; color:var(--ink-faint);}
@@ -132,6 +132,11 @@
   .tl-linha:hover{background:var(--surface-2);}
   @media (max-width:760px){ .tl-cab, .tl-linha{grid-template-columns:170px 1fr;} .frente dl{grid-template-columns:repeat(2,1fr);} }
 
+  .item .controles select[data-campo="Prioridade"]{width:84px;}
+  .prio-alta{color:var(--red); font-weight:600;}
+  .frente .prio-tags{display:flex; gap:4px; flex-wrap:wrap; font-size:11px;}
+  .frente .prio-tags span{padding:1px 7px; border-radius:999px; background:var(--surface-2); color:var(--ink-muted);}
+  .frente .prio-tags span.alta{background:var(--red-soft); color:var(--red); font-weight:600;}
   #aviso{position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none;}
   #aviso.on{opacity:1;}
   #aviso.erro{background:var(--red);}
@@ -217,35 +222,16 @@
 
   <section id="frentes">
     <h2>Frentes</h2>
-    <p class="vazio" style="margin:0;">Vermelho: tem item atrasado ou bloqueado. Amarelo: tem item vencendo em 7 dias que ainda não começou. Verde: no ritmo.</p>
-    <div class="frentes">
-      {% for f in frentes %}
-      <article class="frente saude-{{ f.saude }}">
-        <header>
-          <h3>{{ f.nome }}</h3>
-          <span class="saude">{{ {"critica": "Atenção já", "atencao": "Atenção", "ok": "No ritmo"}[f.saude] }}</span>
-        </header>
-        <div class="frente-pct"><b>{{ f.pct }}%</b><span>{{ f.feito }} de {{ f.total }} feitos</span></div>
-        <div class="barra">{% if f.total %}<i class="c-feito" style="width:{{ 100*f.feito/f.total }}%"></i><i class="c-andamento" style="width:{{ 100*f.andamento/f.total }}%"></i><i class="c-bloqueado" style="width:{{ 100*f.bloqueado/f.total }}%"></i>{% endif %}</div>
-        <dl>
-          <div><dt>Andamento</dt><dd>{{ f.andamento }}</dd></div>
-          <div><dt>A fazer</dt><dd>{{ f.afazer }}</dd></div>
-          <div><dt>Atrasados</dt><dd {% if f.atrasados %}class="ruim"{% endif %}>{{ f.atrasados }}</dd></div>
-          <div><dt>Bloqueados</dt><dd {% if f.bloqueado %}class="ruim"{% endif %}>{{ f.bloqueado }}</dd></div>
-        </dl>
-        <p class="frente-prox"><span class="eyebrow">Próxima entrega</span>
-          {% if f.proximo %}{{ f.proximo['Item'] }} <small>{{ f.proximo['Dono'] }} · {{ f.proximo._prazo_curto }}</small>{% else %}<small>sem prazo definido</small>{% endif %}
-        </p>
-        {% if f.em_andamento %}
-        <ul class="frente-and">{% for i in f.em_andamento[:3] %}<li>{{ i['Item'] }}</li>{% endfor %}</ul>
-        {% endif %}
-        <footer>
-          <span>{% for d in f.donos %}<span class="chip">{{ d }}</span>{% endfor %}</span>
-          <a href="#roadmap" data-filtro-area="{{ f.nome }}">Ver itens</a>
-        </footer>
-      </article>
-      {% endfor %}
+    <div class="filtros">
+      <label for="fr-dono">Sócio<select id="fr-dono"><option value="">Todos os sócios</option>{% for d in donos if d != "Todos" %}<option>{{ d }}</option>{% endfor %}<option value="Todos">Coletivo (Todos)</option></select></label>
+      <label for="fr-prio">Prioridade<select id="fr-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
+      <label for="fr-saude">Situação<select id="fr-saude"><option value="">Todas</option><option value="critica">Atenção já</option><option value="atencao">Atenção</option><option value="ok">No ritmo</option></select></label>
+      <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="fr-abertos"> Só itens não feitos</label>
+      <span class="vazio" id="fr-contagem"></span>
     </div>
+    <p class="vazio" style="margin:0;">Vermelho: tem item atrasado ou bloqueado. Amarelo: tem item vencendo em 7 dias que ainda não começou. Verde: no ritmo. Os números de cada card consideram só os itens dos filtros escolhidos.</p>
+    <div class="frentes" id="frentes-cards"></div>
+    <p class="vazio" id="frentes-vazio" hidden>Nenhuma frente com esses filtros.</p>
   </section>
 
   {% set tl = linha_do_tempo %}
@@ -253,6 +239,7 @@
     <h2>Linha do tempo</h2>
     <div class="filtros">
       <label for="tl-dono">Dono<select id="tl-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
+      <label for="tl-prio">Prioridade<select id="tl-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
       <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="tl-feitos"> Esconder feitos</label>
       <span class="tl-legenda"><i class="c-feito"></i>Feito <i class="c-andamento"></i>Em andamento <i class="c-bloqueado"></i>Bloqueado <i class="c-afazer"></i>A fazer <i class="c-semprazo"></i>Sem prazo (mês previsto) <b>◆</b> prazo</span>
     </div>
@@ -270,7 +257,7 @@
           <div class="tl-grupo-nome">{{ g.area }}</div>
           {% for l in g.linhas %}
           {% set i = l.item %}
-          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-status="{{ i['Status'] }}">
+          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-prioridade="{{ i['Prioridade'] }}" data-status="{{ i['Status'] }}">
             <div class="tl-rot" title="{{ i['Item'] }}">{{ i['Item'] }}<small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></div>
             <div class="tl-trilho">
               {% for s in tl.semanas %}<i class="tl-grade" style="left:{{ s.pct }}%"></i>{% endfor %}
@@ -293,6 +280,7 @@
       <label for="f-area">Área<select id="f-area"><option value="">Todas</option>{% for a in areas %}<option>{{ a }}</option>{% endfor %}</select></label>
       <label for="f-dono">Dono<select id="f-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
       <label for="f-mes">Mês<select id="f-mes"><option value="">Todos</option>{% for m in meses %}<option>{{ m }}</option>{% endfor %}</select></label>
+      <label for="f-prio">Prioridade<select id="f-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
       <label for="f-status">Status<select id="f-status"><option value="">Todos</option><option value="abertos">Não feitos</option>{% for s in status %}<option>{{ s }}</option>{% endfor %}</select></label>
       <label for="f-busca">Buscar<input type="text" id="f-busca" placeholder="palavra do item ou nota"></label>
       <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="f-atraso"> Só atrasados</label>
@@ -305,7 +293,7 @@
     <div class="area" data-area="{{ area }}">
       <div class="area-head"><h3>{{ area }}</h3><small>{{ lista|selectattr("Status","equalto","Feito")|list|length }} de {{ lista|length }} feitos</small></div>
       {% for i in lista|sort(attribute="_ordem") %}
-      <div class="item" data-id="{{ i['ID'] }}" data-status="{{ i['Status'] }}" data-dono="{{ i['Dono'] }}" data-mes="{{ i['Mês'] }}" data-atrasado="{{ 1 if i._atrasado else 0 }}" data-texto="{{ (i['Item'] ~ ' ' ~ i['Nota'])|lower }}">
+      <div class="item" data-id="{{ i['ID'] }}" data-status="{{ i['Status'] }}" data-dono="{{ i['Dono'] }}" data-mes="{{ i['Mês'] }}" data-prioridade="{{ i['Prioridade'] }}" data-atrasado="{{ 1 if i._atrasado else 0 }}" data-texto="{{ (i['Item'] ~ ' ' ~ i['Nota'])|lower }}">
         <span class="stripe"></span>
         <div class="corpo">
           <input class="titulo" type="text" value="{{ i['Item'] }}" data-campo="Item" aria-label="Título do item">
@@ -316,6 +304,7 @@
           <textarea data-campo="Nota" rows="1" placeholder="Nota" aria-label="Nota">{{ i['Nota'] }}</textarea>
         </div>
         <div class="controles">
+          <select data-campo="Prioridade" aria-label="Prioridade" class="prio prio-{{ i['Prioridade']|lower }}">{% for p in prioridades %}<option {{ 'selected' if p == i['Prioridade'] }}>{{ p }}</option>{% endfor %}</select>
           <select data-campo="Status" aria-label="Status">{% for s in status %}<option {{ 'selected' if s == i['Status'] }}>{{ s }}</option>{% endfor %}</select>
           <select data-campo="Dono" aria-label="Dono">{% for d in donos %}<option {{ 'selected' if d == i['Dono'] }}>{{ d }}</option>{% endfor %}</select>
           <select data-campo="Mês" aria-label="Mês">{% for m in meses %}<option {{ 'selected' if m == i['Mês'] }}>{{ m }}</option>{% endfor %}</select>
@@ -332,6 +321,7 @@
       <label for="n-area">Área<select id="n-area" name="area">{% for a in areas %}<option>{{ a }}</option>{% endfor %}</select></label>
       <label for="n-dono">Dono<select id="n-dono" name="dono">{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
       <label for="n-mes">Mês<select id="n-mes" name="mes">{% for m in meses %}<option>{{ m }}</option>{% endfor %}</select></label>
+      <label for="n-prio">Prioridade<select id="n-prio" name="prioridade">{% for p in prioridades %}<option {{ 'selected' if p == 'Média' }}>{{ p }}</option>{% endfor %}</select></label>
       <label for="n-prazo">Prazo<input type="date" id="n-prazo" name="prazo"></label>
       <button class="btn primario" type="submit">Adicionar</button>
     </form>
@@ -410,6 +400,8 @@
 </div>
 
 <div id="aviso" role="status" aria-live="polite"></div>
+<script type="application/json" id="dados-itens">{{ itens_json|tojson }}</script>
+<script type="application/json" id="dados-areas">{{ areas|tojson }}</script>
 
 <script>
 (() => {
@@ -422,6 +414,68 @@
     clearTimeout(timer);
     timer = setTimeout(() => { aviso.className = ""; }, erro ? 5000 : 1600);
   }
+
+  const ITENS = JSON.parse(document.getElementById("dados-itens").textContent);
+  const AREAS = JSON.parse(document.getElementById("dados-areas").textContent);
+  const SAUDE = { critica: "Atenção já", atencao: "Atenção", ok: "No ritmo" };
+  const frDono = document.getElementById("fr-dono"), frPrio = document.getElementById("fr-prio"),
+        frSaude = document.getElementById("fr-saude"), frAbertos = document.getElementById("fr-abertos");
+  const novo = (tag, cls, texto) => { const e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; };
+
+  // Cards das frentes, recalculados no navegador a cada filtro.
+  function desenharFrentes() {
+    const caixa = document.getElementById("frentes-cards");
+    caixa.textContent = "";
+    let nFrentes = 0, nItens = 0;
+    AREAS.forEach((area) => {
+      const itens = ITENS.filter((i) => i.area === area
+        && (!frDono.value || i.dono === frDono.value)
+        && (!frPrio.value || i.prioridade === frPrio.value)
+        && (!frAbertos.checked || i.status !== "Feito"));
+      if (!itens.length) return;
+      const conta = (st) => itens.filter((i) => i.status === st).length;
+      const feito = conta("Feito"), andamento = conta("Em andamento"), bloqueado = conta("Bloqueado"), afazer = conta("A fazer");
+      const atrasados = itens.filter((i) => i.atrasado).length;
+      const saude = (atrasados || bloqueado) ? "critica" : (itens.some((i) => i.vence_7d && i.status === "A fazer") ? "atencao" : "ok");
+      if (frSaude.value && frSaude.value !== saude) return;
+      nFrentes++; nItens += itens.length;
+      const total = itens.length, pct = Math.round(100 * feito / total);
+      const card = novo("article", "frente saude-" + saude);
+      const cab = novo("header"); cab.append(novo("h3", "", area), novo("span", "saude", SAUDE[saude])); card.append(cab);
+      const p = novo("div", "frente-pct"); p.append(novo("b", "", pct + "%"), novo("span", "", feito + " de " + total + " feitos")); card.append(p);
+      const barra = novo("div", "barra");
+      [["c-feito", feito], ["c-andamento", andamento], ["c-bloqueado", bloqueado]].forEach(([k, n]) => { const i = novo("i", k); i.style.width = (100 * n / total) + "%"; barra.append(i); });
+      card.append(barra);
+      const dl = novo("dl");
+      [["Andamento", andamento, false], ["A fazer", afazer, false], ["Atrasados", atrasados, atrasados > 0], ["Bloqueados", bloqueado, bloqueado > 0]].forEach(([t, n, ruim]) => {
+        const d = novo("div"); d.append(novo("dt", "", t), novo("dd", ruim ? "ruim" : "", String(n))); dl.append(d);
+      });
+      card.append(dl);
+      const prios = novo("div", "prio-tags");
+      ["Alta", "Média", "Baixa"].forEach((pr) => {
+        const n = itens.filter((i) => i.prioridade === pr && i.status !== "Feito").length;
+        if (n) prios.append(novo("span", pr === "Alta" ? "alta" : "", n + " " + pr.toLowerCase() + " em aberto"));
+      });
+      if (prios.childNodes.length) card.append(prios);
+      const prox = itens.filter((i) => i.status !== "Feito" && i.prazo && !i.atrasado)
+        .sort((a, b) => a.prazo.localeCompare(b.prazo) || (a.prioridade === "Alta" ? 0 : 1) - (b.prioridade === "Alta" ? 0 : 1))[0];
+      const pp = novo("p", "frente-prox"); pp.append(novo("span", "eyebrow", "Próxima entrega"));
+      if (prox) { pp.append(document.createTextNode(prox.item + " ")); pp.append(novo("small", "", prox.dono + " · " + prox.prazo_curto)); }
+      else pp.append(novo("small", "", "sem prazo definido"));
+      card.append(pp);
+      const and = itens.filter((i) => i.status === "Em andamento").slice(0, 3);
+      if (and.length) { const ul = novo("ul", "frente-and"); and.forEach((i) => ul.append(novo("li", "", i.item))); card.append(ul); }
+      const rod = novo("footer"); const chips = novo("span");
+      ["Ricardo", "Alessandro", "Rafael", "Todos"].filter((d) => itens.some((i) => i.dono === d)).forEach((d) => chips.append(novo("span", "chip", d)));
+      const ver = novo("a", "", "Ver itens"); ver.href = "#roadmap"; ver.dataset.filtroArea = area;
+      rod.append(chips, ver); card.append(rod);
+      caixa.append(card);
+    });
+    document.getElementById("frentes-vazio").hidden = nFrentes > 0;
+    document.getElementById("fr-contagem").textContent = nFrentes + " frente(s) · " + nItens + " item(ns)";
+  }
+  [frDono, frPrio, frSaude, frAbertos].forEach((e) => e.addEventListener("change", desenharFrentes));
+  desenharFrentes();
 
   const quemSel = document.getElementById("quem");
   try { quemSel.value = localStorage.getItem("eloo_gestao_quem") || ""; } catch (e) {}
@@ -448,6 +502,14 @@
         if (campo === "Status") item.dataset.status = el.value;
         if (campo === "Dono") item.dataset.dono = el.value;
         if (campo === "Mês") item.dataset.mes = el.value;
+        if (campo === "Prioridade") { item.dataset.prioridade = el.value; el.className = "prio prio-" + el.value.toLowerCase(); }
+        const dado = ITENS.find((x) => x.id === item.dataset.id);
+        if (dado) {
+          if (campo === "Status") dado.status = el.value;
+          if (campo === "Dono") dado.dono = el.value;
+          if (campo === "Prioridade") dado.prioridade = el.value;
+          desenharFrentes();
+        }
         avisar("Salvo na planilha");
       } catch (e) { avisar(e.message, true); }
     });
@@ -464,7 +526,7 @@
     ev.preventDefault();
     const f = ev.target;
     try {
-      await enviar("/item/novo", { item: f.item.value, area: f.area.value, dono: f.dono.value, mes: f.mes.value, prazo: f.prazo.value, quem: quemSel.value });
+      await enviar("/item/novo", { item: f.item.value, area: f.area.value, dono: f.dono.value, mes: f.mes.value, prazo: f.prazo.value, prioridade: f.prioridade.value, quem: quemSel.value });
       avisar("Item adicionado");
       setTimeout(() => location.reload(), 600);
     } catch (e) { avisar(e.message, true); }
@@ -481,6 +543,7 @@
   });
 
   // Filtros do roadmap (só na tela, nada é salvo).
+  const fPrio = document.getElementById("f-prio");
   const fArea = document.getElementById("f-area"), fDono = document.getElementById("f-dono"),
         fMes = document.getElementById("f-mes"), fStatus = document.getElementById("f-status"),
         fBusca = document.getElementById("f-busca"), fAtraso = document.getElementById("f-atraso"),
@@ -495,6 +558,7 @@
         const ok = (!fArea.value || area.dataset.area === fArea.value)
           && (!fDono.value || it.dataset.dono === fDono.value)
           && (!fMes.value || it.dataset.mes === fMes.value)
+          && (!fPrio.value || it.dataset.prioridade === fPrio.value)
           && (!fStatus.value || (fStatus.value === "abertos" ? st !== "Feito" : st === fStatus.value))
           && (!fAtraso.checked || it.dataset.atrasado === "1")
           && (!busca || it.dataset.texto.includes(busca));
@@ -506,26 +570,35 @@
     });
     fCont.textContent = visiveis + " item(ns)";
   }
-  [fArea, fDono, fMes, fStatus, fAtraso].forEach((el) => el.addEventListener("change", filtrar));
+  [fArea, fDono, fMes, fStatus, fAtraso, fPrio].forEach((el) => el.addEventListener("change", filtrar));
   fBusca.addEventListener("input", filtrar);
   document.querySelectorAll("[data-filtro-dono]").forEach((a) => a.addEventListener("click", () => { fDono.value = a.dataset.filtroDono; fArea.value = ""; filtrar(); }));
-  document.querySelectorAll("[data-filtro-area]").forEach((a) => a.addEventListener("click", () => { fArea.value = a.dataset.filtroArea; fDono.value = ""; filtrar(); }));
+  document.addEventListener("click", (ev) => {
+    const a = ev.target.closest("[data-filtro-area]");
+    if (!a) return;
+    fArea.value = a.dataset.filtroArea;
+    fDono.value = a.closest("#frentes") ? document.getElementById("fr-dono").value : "";
+    fPrio.value = a.closest("#frentes") ? document.getElementById("fr-prio").value : "";
+    fStatus.value = a.closest("#frentes") && document.getElementById("fr-abertos").checked ? "abertos" : "";
+    filtrar();
+  });
   filtrar();
 
   // Linha do tempo: filtro por dono e esconder feitos.
   const tlDono = document.getElementById("tl-dono"), tlFeitos = document.getElementById("tl-feitos");
+  const tlPrio = document.getElementById("tl-prio");
   function filtrarLinha() {
     document.querySelectorAll(".tl-grupo").forEach((g) => {
       let n = 0;
       g.querySelectorAll(".tl-linha").forEach((l) => {
-        const ok = (!tlDono.value || l.dataset.dono === tlDono.value) && !(tlFeitos.checked && l.dataset.status === "Feito");
+        const ok = (!tlDono.value || l.dataset.dono === tlDono.value) && (!tlPrio.value || l.dataset.prioridade === tlPrio.value) && !(tlFeitos.checked && l.dataset.status === "Feito");
         l.hidden = !ok;
         if (ok) n++;
       });
       g.hidden = n === 0;
     });
   }
-  [tlDono, tlFeitos].forEach((el) => el.addEventListener("change", filtrarLinha));
+  [tlDono, tlFeitos, tlPrio].forEach((el) => el.addEventListener("change", filtrarLinha));
 })();
 </script>
 {% endblock %}

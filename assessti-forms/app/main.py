@@ -575,10 +575,10 @@ async def gestao_salvar_item(
 async def gestao_novo_item(
     request: Request,
     area: str = Form(...), item: str = Form(...), dono: str = Form(...),
-    mes: str = Form(...), prazo: str = Form(""), quem: str = Form(""),
+    mes: str = Form(...), prazo: str = Form(""), quem: str = Form(""), prioridade: str = Form("Média"),
 ):
     _exigir_gestao(request)
-    return _salvar_gestao(lambda: gestao.novo_item(area, item, dono, mes, prazo, quem))
+    return _salvar_gestao(lambda: gestao.novo_item(area, item, dono, mes, prazo, quem, prioridade))
 
 
 @app.post(f"{GESTAO_PATH}/meta")
