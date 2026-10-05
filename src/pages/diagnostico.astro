@@ -20,7 +20,7 @@ import '@fontsource/ibm-plex-sans/600.css';
 const PERGUNTAS = [
   {
     id: "Q01", dimensao: "atendimento-dados", trilha: "pacce",
-    texto: "Como é realizado o cadastro de um assistido novo?",
+    texto: "Como é feito o cadastro de um cliente ou pessoa atendida nova?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Somente presencial e em papel",
@@ -32,11 +32,11 @@ const PERGUNTAS = [
   },
   {
     id: "Q02", dimensao: "atendimento-dados", trilha: "pacce",
-    texto: "Como é feita a atualização dos dados cadastrais dos assistidos?",
+    texto: "Como é feita a atualização dos dados cadastrais de clientes ou pessoas atendidas?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Não existe rotina definida",
-      "Cada trabalhador atualiza de um jeito",
+      "Cada pessoa da equipe atualiza de um jeito",
       "Atualizamos em planilha ou registros separados",
       "Há responsável e periodicidade definidos no sistema",
       "O cadastro tem histórico, validações e revisão periódica controlada",
@@ -48,10 +48,10 @@ const PERGUNTAS = [
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Em papel, caderneta ou ficha física",
-      "Cada trabalhador registra de maneira própria",
+      "Cada pessoa da equipe registra de maneira própria",
       "Em planilha compartilhada ou arquivos separados",
       "No mesmo sistema do cadastro, com padrão de registro",
-      "Registro estruturado, histórico por assistido, permissões e rastreabilidade",
+      "Registro estruturado, histórico por pessoa, permissões e rastreabilidade",
     ],
   },
   {
@@ -60,7 +60,7 @@ const PERGUNTAS = [
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
       "Não há processo definido",
-      "O processo é conhecido informalmente pelos trabalhadores",
+      "O processo é conhecido informalmente pela equipe",
       "Existem algumas orientações, mas variam entre equipes",
       "Processo documentado, com responsáveis e treinamento",
       "Processo documentado, medido e revisado periodicamente",
@@ -68,7 +68,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q05", dimensao: "indicadores-melhoria", trilha: "pacce",
-    texto: "Com que facilidade a instituição acompanha indicadores de atendimento?",
+    texto: "Com que facilidade a organização acompanha indicadores de atendimento?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Não temos os números",
@@ -80,7 +80,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q06", dimensao: "indicadores-melhoria", trilha: "pacce",
-    texto: "Como a instituição identifica faltas, interrupções e possível abandono do acompanhamento?",
+    texto: "Como a organização identifica faltas, interrupções e possível abandono do acompanhamento?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Não acompanhamos",
@@ -107,7 +107,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q08", dimensao: "processos-rotinas", trilha: "pacce",
-    texto: "Como as escalas de atendimento são montadas e acompanhadas?",
+    texto: "Como as escalas e turnos da equipe são montados e acompanhados?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Principalmente por mensagens, sem controle estruturado",
@@ -119,7 +119,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q09", dimensao: "processos-rotinas", trilha: "pacce",
-    texto: "O que acontece quando um trabalhador escalado não pode comparecer?",
+    texto: "O que acontece quando alguém escalado da equipe não pode comparecer?",
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
       "Não existe plano de substituição",
@@ -143,7 +143,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q11", dimensao: "tecnologia-seguranca", trilha: "servicos",
-    texto: "Como é controlado quem pode acessar os dados dos assistidos e os documentos internos?",
+    texto: "Como é controlado quem pode acessar os dados de clientes e os documentos internos?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Praticamente qualquer pessoa autorizada a usar o dispositivo consegue acessar",
@@ -167,7 +167,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q13", dimensao: "tecnologia-seguranca", trilha: "servicos",
-    texto: "Como a instituição utiliza sistemas ou ferramentas digitais para a gestão?",
+    texto: "Como a organização utiliza sistemas ou ferramentas digitais para a gestão?",
     pesoDig: 1, pesoProc: 1,
     opcoes: [
       "Não utiliza ferramenta de gestão",
@@ -179,7 +179,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q14", dimensao: "tecnologia-seguranca", trilha: "servicos",
-    texto: "Como a instituição acompanha atualizações, mudanças e melhorias nas ferramentas digitais que utiliza?",
+    texto: "Como a organização acompanha atualizações, mudanças e melhorias nas ferramentas digitais que utiliza?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
       "Não sabemos se as ferramentas estão atualizadas",
@@ -191,7 +191,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q15", dimensao: "gestao-prestacao-contas", trilha: "pacce",
-    texto: "Como é feita a prestação de contas para a diretoria/assembleia?",
+    texto: "Como é feita a prestação de contas para diretoria, sócios ou conselho?",
     pesoDig: 0.5, pesoProc: 1,
     opcoes: [
       "Não há processo definido",
@@ -203,7 +203,7 @@ const PERGUNTAS = [
   },
   {
     id: "Q16", dimensao: "comunicacao-relacionamento", trilha: "servicos",
-    texto: "Qual é o nível de atualização e utilidade do site da instituição?",
+    texto: "Qual é o nível de atualização e utilidade do site da organização?",
     pesoDig: 1, pesoProc: 0,
     opcoes: [
       "Não temos site",
@@ -222,12 +222,12 @@ const PERGUNTAS = [
       "Publicamos esporadicamente, sem rotina",
       "Há alguém responsável, mas sem calendário consistente",
       "Existe calendário editorial e acompanhamento básico de métricas",
-      "Há planejamento, métricas e integração com os objetivos de comunicação da casa",
+      "Há planejamento, métricas e integração com os objetivos de comunicação da organização",
     ],
   },
   {
     id: "Q18", dimensao: "comunicacao-relacionamento", trilha: "servicos",
-    texto: "Como a instituição recebe dúvidas, solicitações e feedback dos assistidos?",
+    texto: "Como a organização recebe dúvidas, solicitações e feedback de clientes ou pessoas atendidas?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
       "Somente presencialmente, sem registro estruturado",
@@ -255,7 +255,7 @@ const PERGUNTAS = [
   // marketing, integração entre canais e maturidade pra soluções sob medida.
   {
     id: "NQ01", dimensao: "comunicacao-relacionamento", trilha: "servicos",
-    texto: "Como a instituição atrai novos contatos, doadores ou voluntários hoje?",
+    texto: "Como a organização atrai novos clientes, contatos ou apoiadores hoje?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
       "Não há nenhuma ação de captação — depende só de quem já conhece",
@@ -303,7 +303,7 @@ const PERGUNTAS = [
   },
   {
     id: "NQ05", dimensao: "solucoes-digitais", trilha: "servicos",
-    texto: "Quando surge uma necessidade nova de sistema ou processo digital, como a instituição resolve isso hoje?",
+    texto: "Quando surge uma necessidade nova de sistema ou processo digital, como a organização resolve isso hoje?",
     pesoDig: 1, pesoProc: 0.5,
     opcoes: [
       "Não resolve — convive com a limitação",
@@ -313,19 +313,57 @@ const PERGUNTAS = [
       "Tem um parceiro de tecnologia que avalia e constrói sob medida quando necessário",
     ],
   },
+  // Perguntas novas (2026-10-05) — automação, integração e IA, o centro do
+  // discurso da v2 do site, que o modelo não media. A VALIDAR COM O
+  // ALESSANDRO (pesos e redação): entram na trilha Serviços e numa dimensão
+  // própria, sem mudar o cálculo das demais.
+  {
+    id: "NQ06", dimensao: "automacao-integracao", trilha: "servicos",
+    texto: "Quanto da rotina da equipe é tarefa repetitiva feita à mão (copiar dados, preencher planilha, mandar a mesma mensagem)?",
+    pesoDig: 1, pesoProc: 1,
+    opcoes: [
+      "Quase tudo é feito à mão",
+      "Muita coisa, e nunca medimos quanto tempo isso consome",
+      "Sabemos quais tarefas se repetem, mas elas continuam manuais",
+      "Algumas tarefas já são automáticas (avisos, formulários, integrações simples)",
+      "As principais tarefas repetitivas são automatizadas e acompanhadas",
+    ],
+  },
+  {
+    id: "NQ07", dimensao: "automacao-integracao", trilha: "servicos",
+    texto: "Quando uma informação entra em um sistema, ela chega aos outros sozinha?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não — digitamos a mesma informação em vários lugares",
+      "Exportamos e importamos planilhas de tempos em tempos",
+      "Alguns sistemas conversam, outros não",
+      "Os sistemas principais são integrados",
+      "Tudo integrado, com uma fonte única de dados e painéis atualizados",
+    ],
+  },
+  {
+    id: "NQ08", dimensao: "automacao-integracao", trilha: "servicos",
+    texto: "Como a organização usa inteligência artificial hoje?",
+    pesoDig: 1, pesoProc: 0.5,
+    opcoes: [
+      "Não usa",
+      "Algumas pessoas usam por conta própria, sem regra combinada",
+      "Usamos em tarefas pontuais, como escrever textos e resumir documentos",
+      "Há uso definido dentro de processos (triagem, leitura de documentos, atendimento)",
+      "IA integrada aos processos, com dados da organização, regras de uso e resultado medido",
+    ],
+  },
 ];
 
 const DIMENSOES = {
   "atendimento-dados": { nome: "Atendimento e Dados", ofertas: ["PACCE"] },
   "processos-rotinas": { nome: "Processos e Rotinas", ofertas: ["PACCE"] },
   "indicadores-melhoria": { nome: "Indicadores e Melhoria", ofertas: ["PACCE"] },
-  "comunicacao-relacionamento": {
-    nome: "Comunicação e Relacionamento",
-    ofertas: ["Sites Institucionais Inteligentes (com CMS)", "Marketing Digital e Captação Estratégica", "Sincronização de Canais Digitais"],
-  },
-  "tecnologia-seguranca": { nome: "Tecnologia, Segurança e Continuidade", ofertas: ["Assessment de TI"] },
+  "comunicacao-relacionamento": { nome: "Comunicação e Relacionamento", ofertas: ["Experiência e presença digital"] },
+  "tecnologia-seguranca": { nome: "Tecnologia, Segurança e Continuidade", ofertas: ["Transformação e assessment (Assessment de TI)"] },
+  "automacao-integracao": { nome: "Automação, Integração e IA", ofertas: ["Automação de processos", "Integração e dados", "Inteligência artificial aplicada"] },
   "gestao-prestacao-contas": { nome: "Gestão e Prestação de Contas", ofertas: ["PACCE"] },
-  "solucoes-digitais": { nome: "Soluções sob Medida", ofertas: ["Soluções Digitais"] },
+  "solucoes-digitais": { nome: "Soluções sob Medida", ofertas: ["Desenvolvimento de software"] },
 };
 
 ---
@@ -337,7 +375,7 @@ const DIMENSOES = {
     <title>Diagnóstico LUMEN — eloo.digital</title>
     <meta
       name="description"
-      content="Descubra em poucos minutos o nível de maturidade digital da sua instituição — cadastro, processos, indicadores, comunicação, tecnologia e prestação de contas — e receba um retrato imediato, na tela, com os próximos passos recomendados."
+      content="Descubra em poucos minutos onde a tecnologia pode gerar mais impacto na sua operação — processos, automação, integração, dados, segurança e atendimento — e receba o retrato na hora, com os próximos passos recomendados."
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
@@ -354,11 +392,11 @@ const DIMENSOES = {
       <div class="hero-inner">
         <div class="hero-copy">
           <span class="badge">Diagnóstico gratuito</span>
-          <h1>Onde a sua organização está <span class="accent">hoje</span>?</h1>
+          <h1>Onde a tecnologia pode gerar mais impacto na sua <span class="accent">operação</span>?</h1>
           <p class="hero-sub">
-            Perguntas rápidas, clique único cada uma, ajustadas pro que você busca — gestão interna
-            (PACCE) ou presença digital e marketing (Serviços). No fim, você vê o resultado na hora,
-            sem esperar e-mail nenhum.
+            Perguntas rápidas, um clique em cada. Você escolhe o foco: o PACCE, para quem faz
+            atendimento recorrente, ou a transformação da operação com automação, IA, integração,
+            software sob medida e assessment. O resultado aparece na tela, na hora.
           </p>
         </div>
         <div class="hero-visual">
@@ -372,22 +410,22 @@ const DIMENSOES = {
       <section id="step-interesse" class="diag-step">
         <p class="eyebrow">Antes de começar</p>
         <h2>O que você está buscando?</h2>
-        <p class="lede">Isso não muda as perguntas — só ajuda a gente a te dar uma recomendação mais certeira no final.</p>
+        <p class="lede">A escolha define quais perguntas aparecem. Se ainda não souber, fique com o retrato completo.</p>
         <div class="interesse-grid">
           <button type="button" class="interesse-card" data-interesse="PACCE">
             <span class="interesse-tag">Produto</span>
             <h3>PACCE</h3>
-            <p>Gestão de cadastro, atendimento, escalas e histórico.</p>
+            <p>Cadastro, atendimento, histórico, agenda e escalas da equipe, para quem atende as mesmas pessoas com frequência.</p>
           </button>
           <button type="button" class="interesse-card" data-interesse="Serviços">
             <span class="interesse-tag">Serviços</span>
-            <h3>Serviços</h3>
-            <p>Site, marketing digital, canais, assessment de TI, soluções sob medida.</p>
+            <h3>Transformar a operação</h3>
+            <p>Automação de processos, IA aplicada, integração de sistemas, software sob medida, assessment de TI e presença digital.</p>
           </button>
           <button type="button" class="interesse-card" data-interesse="PACCE + Serviços">
-            <span class="interesse-tag">Ambos</span>
-            <h3>PACCE + Serviços</h3>
-            <p>Ainda não sei — quero um retrato completo antes de decidir.</p>
+            <span class="interesse-tag">Retrato completo</span>
+            <h3>Ainda não sei</h3>
+            <p>Quero ver a operação inteira antes de decidir por onde começar.</p>
           </button>
         </div>
       </section>
@@ -448,7 +486,7 @@ const DIMENSOES = {
               </div>
               <div class="f-field">
                 <label for="d-email">E-mail</label>
-                <input id="d-email" name="email" type="email" placeholder="voce@instituicao.org" />
+                <input id="d-email" name="email" type="email" placeholder="voce@empresa.com.br" />
               </div>
             </div>
             <div class="f-field">
