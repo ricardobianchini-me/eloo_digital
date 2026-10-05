@@ -7,7 +7,7 @@ const capacidades = [
   { n: "02", icone: "✳", nome: "Inteligência artificial aplicada", desc: "Usamos IA onde ela produz resultado concreto e se encaixa no trabalho real.", itens: ["Agentes e copilotos", "Leitura inteligente de documentos", "Busca e classificação contextual"], foto: "comp-tecnologia.jpg", alt: "Duas pessoas trabalhando lado a lado em notebooks" },
   { n: "03", icone: "⌘", nome: "Desenvolvimento de software", desc: "Quando a solução pronta não atende, construímos software alinhado ao processo.", itens: ["Aplicações e portais", "Sistemas internos e produtos", "Modernização de aplicações"], foto: "servico-sites.jpg", alt: "Trabalho de desenvolvimento e construção de software" },
   { n: "04", icone: "⌁", nome: "Integração e dados", desc: "Conectamos sistemas e informações para reduzir retrabalho e apoiar decisões.", itens: ["APIs e sincronização", "Dados e dashboards", "Governança da informação"], foto: "pacce-escalas.jpg", alt: "Organização de informações e agenda da equipe" },
-  { n: "05", icone: "◉", nome: "Transformação e assessment", desc: "Entendemos processos, sistemas, riscos e maturidade para definir onde investir.", itens: ["Diagnóstico e arquitetura", "Roadmap e governança", "Segurança e modernização"], foto: "comp-consultoria.jpg", alt: "Reunião de análise entre duas pessoas com documentos" },
+  { n: "05", icone: "◉", nome: "Transformação e assessment", desc: "Entendemos processos, sistemas, riscos e maturidade para definir onde investir.", itens: ["Diagnóstico e arquitetura", "Roadmap e governança", "Segurança e modernização"], link: "/assessment", linkTexto: "Ver o Assessment →", foto: "comp-consultoria.jpg", alt: "Reunião de análise entre duas pessoas com documentos" },
   { n: "06", icone: "↗", nome: "Experiência e presença digital", desc: "Criamos experiências que aproximam organizações, clientes, equipes e parceiros.", itens: ["Sites e portais", "Jornadas digitais", "Presença institucional"], foto: "servico-marketing.jpg", alt: "Planejamento de presença digital e comunicação" },
 ];
 
@@ -181,6 +181,7 @@ const valores = [
                   <h3><span class="icone">{c.icone}</span> {c.nome}</h3>
                   <p>{c.desc}</p>
                   <ul>{c.itens.map((i) => <li>{i}</li>)}</ul>
+                  {c.link && <a href={c.link}>{c.linkTexto}</a>}
                 </div>
               </article>
             ))}
@@ -395,7 +396,7 @@ const valores = [
         </div>
         <div>
           <b>O que fazemos</b>
-          <a href="#automacao">Automação</a><a href="#ia">Inteligência artificial</a><a href="#capacidades">Desenvolvimento e integrações</a><a href="#capacidades">Transformação digital</a>
+          <a href="#automacao">Automação</a><a href="#ia">Inteligência artificial</a><a href="#capacidades">Desenvolvimento e integrações</a><a href="#capacidades">Transformação digital</a><a href="/assessment">Assessment de TI</a>
         </div>
         <div>
           <b>Produtos</b>
