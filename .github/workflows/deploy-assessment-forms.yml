@@ -61,6 +61,7 @@ jobs:
           SECRET_KEY=${{ secrets.ASSESSMENT_SECRET_KEY }}
           INTERNAL_PIN=${{ secrets.ASSESSMENT_INTERNAL_PIN }}
           LEADS_CRM_PIN=${{ secrets.ASSESSMENT_LEADS_CRM_PIN || '2424' }}
+          GESTAO_PIN=${{ secrets.ELOO_GESTAO_PIN }}
           GMAIL_USER=${{ secrets.ASSESSMENT_GMAIL_USER }}
           GMAIL_APP_PASSWORD=${{ secrets.ASSESSMENT_GMAIL_APP_PASSWORD }}
           LEADS_NOTIFY_EMAIL=${{ secrets.ASSESSMENT_LEADS_NOTIFY_EMAIL }}

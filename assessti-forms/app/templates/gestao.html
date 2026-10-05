@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% block title %}Gestão — eloo.digital{% endblock %}
+{% block head_extra %}
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>{% include "leads_crm_tema.css" %}</style>
+<style>
+  [hidden]{display:none !important;}
+  .g-wrap{max-width:1180px; margin:0 auto; padding:0 clamp(14px,3vw,28px) 64px; display:grid; gap:40px;}
+  .g-head{display:flex; flex-wrap:wrap; gap:16px; align-items:end; justify-content:space-between; padding-top:24px;}
+  .g-head h1{font-size:clamp(26px,4vw,36px); margin:4px 0 0;}
+  .g-head .sub{color:var(--ink-muted); font-size:13px;}
+  .g-head .acoes{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .g-head label{font-size:12px; color:var(--ink-muted); display:flex; gap:6px; align-items:center;}
+  .btn{font:inherit; font-size:13px; padding:7px 12px; border-radius:999px; border:1px solid var(--border-strong); background:var(--surface); color:var(--ink); cursor:pointer; text-decoration:none;}
+  .btn.primario{background:var(--accent-fill); border-color:var(--accent-fill); color:var(--accent-ink); font-weight:600;}
+  nav.g-nav{position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--border); display:flex; gap:6px; flex-wrap:wrap; padding:10px 0;}
+  nav.g-nav a{font-size:13px; text-decoration:none; color:var(--ink); padding:5px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface);}
+  nav.g-nav a:hover{border-color:var(--accent); color:var(--accent);}
+  section{display:grid; gap:16px; scroll-margin-top:60px;}
+  section > h2{font-size:22px; margin:0;}
+  .eyebrow{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint);}
+  .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .kpi{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; display:grid; gap:2px;}
+  .kpi b{font-family:'Bricolage Grotesque',sans-serif; font-size:30px; line-height:1; font-variant-numeric:tabular-nums;}
+  .kpi span{font-size:12px; color:var(--ink-muted);}
+  .kpi.alerta b{color:var(--red);}
+  .barra{display:flex; height:10px; border-radius:999px; overflow:hidden; background:var(--surface-2); min-width:80px;}
+  .barra i{display:block; height:100%;}
+  .c-feito{background:var(--good);} .c-andamento{background:var(--amber);} .c-bloqueado{background:var(--red);}
+  .grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px;}
+  .painel{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; display:grid; gap:8px; align-content:start; min-width:0;}
+  .painel h3{margin:0; font-size:15px;}
+  .painel ul{margin:0; padding-left:0; list-style:none; display:grid; gap:6px;}
+  .painel li{font-size:13px; display:flex; justify-content:space-between; gap:10px;}
+  .painel li small{color:var(--ink-faint); white-space:nowrap;}
+  .vazio{font-size:13px; color:var(--ink-faint);}
+  .tabela-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface);}
+  table.t{width:100%; border-collapse:collapse; font-size:13px; min-width:640px;}
+  table.t th, table.t td{padding:9px 12px; border-bottom:1px solid var(--border); text-align:left; vertical-align:middle;}
+  table.t th{font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); background:var(--surface-2); font-weight:600;}
+  table.t tr:last-child td{border-bottom:0;}
+  .num{font-variant-numeric:tabular-nums; text-align:right;}
+  .filtros{display:flex; flex-wrap:wrap; gap:10px; align-items:end;}
+  .filtros label{display:grid; gap:3px; font-size:11px; color:var(--ink-muted);}
+  select, input[type=text], input[type=date], textarea{font:inherit; font-size:13px; color:var(--ink); background:var(--surface); border:1px solid var(--border-strong); border-radius:6px; padding:5px 7px;}
+  .area{border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:hidden;}
+  .area-head{display:flex; justify-content:space-between; gap:10px; padding:10px 14px; background:var(--surface-2); flex-wrap:wrap;}
+  .area-head h3{margin:0; font-size:15px;}
+  .area-head small{color:var(--ink-muted);}
+  .item{display:grid; grid-template-columns:5px minmax(0,1fr) auto; gap:12px; padding:10px 14px 10px 0; border-top:1px solid var(--border);}
+  .stripe{border-radius:0 3px 3px 0; background:var(--ink-faint);}
+  .item[data-status="Feito"] .stripe{background:var(--good);}
+  .item[data-status="Em andamento"] .stripe{background:var(--amber);}
+  .item[data-status="Bloqueado"] .stripe{background:var(--red);}
+  .item .corpo{display:grid; gap:6px; min-width:0;}
+  .item .titulo{font-weight:600; border:1px solid transparent; background:transparent; padding:2px 4px; width:100%;}
+  .item .titulo:hover, .item .titulo:focus{border-color:var(--border-strong); background:var(--surface);}
+  .item[data-status="Feito"] .titulo{color:var(--ink-muted); text-decoration:line-through;}
+  .item textarea{width:100%; min-height:30px; resize:vertical; color:var(--ink-muted);}
+  .item .controles{display:flex; gap:6px; flex-wrap:wrap; justify-content:end; align-items:start; max-width:330px;}
+  .item .controles > select, .item .controles > input{width:auto; margin:0; display:inline-block;}
+  .item .controles select[data-campo="Status"]{width:132px;}
+  .item .controles select[data-campo="Dono"]{width:112px;}
+  .item .controles select[data-campo="Mês"]{width:68px;}
+  .item .controles input[type=date]{width:140px;}
+  .item textarea{margin:0;}
+  .g-head label{white-space:nowrap; text-transform:none; letter-spacing:0;}
+  .g-head select{width:auto; margin:0;}
+  .filtros select, .filtros input[type=text]{width:auto; margin:0;}
+  .selo{display:inline-block; line-height:1.6;}
+  .item .meta-linha{display:flex; gap:8px; flex-wrap:wrap; font-size:11.5px; color:var(--ink-faint);}
+  .selo{font-size:11px; font-weight:600; padding:1px 8px; border-radius:999px;}
+  .selo.atrasado{background:var(--red-soft); color:var(--red);}
+  .selo.vence{background:var(--amber-soft); color:var(--amber);}
+  form.novo{display:grid; grid-template-columns:2fr repeat(4,minmax(110px,1fr)) auto; gap:8px; align-items:end; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px;}
+  form.novo label{display:grid; gap:3px; font-size:11px; color:var(--ink-muted); min-width:0;}
+  .decisao{display:grid; grid-template-columns:96px 1fr; gap:12px; padding:10px 0; border-top:1px solid var(--border); font-size:13.5px;}
+  .decisao small{display:block; color:var(--ink-faint); margin-top:2px;}
+  #aviso{position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none;}
+  #aviso.on{opacity:1;}
+  #aviso.erro{background:var(--red);}
+  @media (max-width:760px){
+    .item{grid-template-columns:5px minmax(0,1fr);}
+    .item .controles{grid-column:2; justify-content:start;}
+    form.novo{grid-template-columns:1fr 1fr;}
+    form.novo label:first-child{grid-column:1/-1;}
+    .decisao{grid-template-columns:1fr; gap:2px;}
+  }
+</style>
+{% endblock %}
+{% block body %}
+{% set g = metricas.geral %}
+<div class="g-wrap">
+
+  <header class="g-head">
+    <div>
+      <div class="eyebrow"><span class="brandmark" style="color:var(--accent-fill); font-family:'Bricolage Grotesque',sans-serif; font-weight:800;">eloo</span> · gestão da empresa</div>
+      <h1>Plano Q4 2026</h1>
+      <div class="sub">Dados da planilha "eloo.digital — CRM e Plano" · {{ g.total }} itens · hoje {{ hoje }}</div>
+    </div>
+    <div class="acoes">
+      <label for="quem">Você é
+        <select id="quem">
+          <option value="">escolha</option>
+          {% for d in donos if d != "Todos" %}<option value="{{ d }}">{{ d }}</option>{% endfor %}
+        </select>
+      </label>
+      <button class="btn" type="button" onclick="location.reload()">Atualizar números</button>
+      <a class="btn" href="https://docs.google.com/spreadsheets/d/1GYZIKoAxpveCCWUv2QnyGBMdSUqvRtTLjzPKXIC5VTk/edit" target="_blank" rel="noopener">Abrir planilha</a>
+    </div>
+  </header>
+
+  <nav class="g-nav" aria-label="Seções">
+    <a href="#resumo">Resumo</a><a href="#roadmap">Roadmap</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
+  </nav>
+
+  <section id="resumo">
+    <h2>Resumo</h2>
+    <div class="kpis">
+      <div class="kpi"><b>{{ g.pct }}%</b><span>concluído</span></div>
+      <div class="kpi"><b>{{ g.feito }}</b><span>feitos</span></div>
+      <div class="kpi"><b>{{ g.andamento }}</b><span>em andamento</span></div>
+      <div class="kpi {{ 'alerta' if g.bloqueado }}"><b>{{ g.bloqueado }}</b><span>bloqueados</span></div>
+      <div class="kpi"><b>{{ g.afazer }}</b><span>a fazer</span></div>
+      <div class="kpi {{ 'alerta' if g.atrasados }}"><b>{{ g.atrasados }}</b><span>atrasados</span></div>
+      <div class="kpi"><b>{{ g.vence_7d }}</b><span>vencem em 7 dias</span></div>
+    </div>
+    <div class="barra" role="img" aria-label="{{ g.feito }} feitos, {{ g.andamento }} em andamento, {{ g.bloqueado }} bloqueados de {{ g.total }}">
+      {% if g.total %}<i class="c-feito" style="width:{{ 100*g.feito/g.total }}%"></i><i class="c-andamento" style="width:{{ 100*g.andamento/g.total }}%"></i><i class="c-bloqueado" style="width:{{ 100*g.bloqueado/g.total }}%"></i>{% endif %}
+    </div>
+
+    <div class="grid3">
+      {% for titulo, lista, vazio in [("Atrasados", metricas.atrasados, "Nada atrasado."), ("Vencem nos próximos 7 dias", metricas.vence_7d, "Nada vencendo."), ("Bloqueados", metricas.bloqueados, "Nada bloqueado.")] %}
+      <div class="painel">
+        <h3>{{ titulo }} ({{ lista|length }})</h3>
+        {% if lista %}
+        <ul>{% for i in lista %}<li><span>{{ i['Item'] }}</span><small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></li>{% endfor %}</ul>
+        {% else %}<p class="vazio">{{ vazio }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    {% for titulo, linhas in [("Por sócio", metricas.por_dono), ("Por área", metricas.por_area), ("Por mês", metricas.por_mes)] %}
+    <div class="tabela-wrap">
+      <table class="t">
+        <thead><tr><th>{{ titulo }}</th><th style="width:30%">Progresso</th><th class="num">Feito</th><th class="num">Andamento</th><th class="num">Bloqueado</th><th class="num">A fazer</th><th class="num">Total</th><th class="num">%</th><th class="num">Atrasados</th></tr></thead>
+        <tbody>
+          {% for l in linhas %}
+          <tr>
+            <td>{% if titulo == "Por sócio" %}<a href="#roadmap" data-filtro-dono="{{ l.nome }}">{{ l.nome }}</a>{% elif titulo == "Por área" %}<a href="#roadmap" data-filtro-area="{{ l.nome }}">{{ l.nome }}</a>{% else %}{{ l.nome }}{% endif %}</td>
+            <td><div class="barra">{% if l.total %}<i class="c-feito" style="width:{{ 100*l.feito/l.total }}%"></i><i class="c-andamento" style="width:{{ 100*l.andamento/l.total }}%"></i><i class="c-bloqueado" style="width:{{ 100*l.bloqueado/l.total }}%"></i>{% endif %}</div></td>
+            <td class="num">{{ l.feito }}</td><td class="num">{{ l.andamento }}</td><td class="num">{{ l.bloqueado }}</td><td class="num">{{ l.afazer }}</td><td class="num">{{ l.total }}</td><td class="num">{{ l.pct }}%</td>
+            <td class="num" {% if l.atrasados %}style="color:var(--red); font-weight:600;"{% endif %}>{{ l.atrasados }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section id="roadmap">
+    <h2>Roadmap</h2>
+    <div class="filtros">
+      <label for="f-area">Área<select id="f-area"><option value="">Todas</option>{% for a in areas %}<option>{{ a }}</option>{% endfor %}</select></label>
+      <label for="f-dono">Dono<select id="f-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
+      <label for="f-mes">Mês<select id="f-mes"><option value="">Todos</option>{% for m in meses %}<option>{{ m }}</option>{% endfor %}</select></label>
+      <label for="f-status">Status<select id="f-status"><option value="">Todos</option><option value="abertos">Não feitos</option>{% for s in status %}<option>{{ s }}</option>{% endfor %}</select></label>
+      <label for="f-busca">Buscar<input type="text" id="f-busca" placeholder="palavra do item ou nota"></label>
+      <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="f-atraso"> Só atrasados</label>
+      <span class="vazio" id="f-contagem"></span>
+    </div>
+
+    {% for area in areas %}
+    {% set lista = roadmap|selectattr("Área", "equalto", area)|list %}
+    {% if lista %}
+    <div class="area" data-area="{{ area }}">
+      <div class="area-head"><h3>{{ area }}</h3><small>{{ lista|selectattr("Status","equalto","Feito")|list|length }} de {{ lista|length }} feitos</small></div>
+      {% for i in lista|sort(attribute="_ordem") %}
+      <div class="item" data-id="{{ i['ID'] }}" data-status="{{ i['Status'] }}" data-dono="{{ i['Dono'] }}" data-mes="{{ i['Mês'] }}" data-atrasado="{{ 1 if i._atrasado else 0 }}" data-texto="{{ (i['Item'] ~ ' ' ~ i['Nota'])|lower }}">
+        <span class="stripe"></span>
+        <div class="corpo">
+          <input class="titulo" type="text" value="{{ i['Item'] }}" data-campo="Item" aria-label="Título do item">
+          <div class="meta-linha">
+            {% if i._atrasado %}<span class="selo atrasado">atrasado</span>{% elif i._vence_7d %}<span class="selo vence">vence em breve</span>{% endif %}
+            {% if i['Atualizado em'] %}<span>atualizado {{ i['Atualizado em'] }}{% if i['Atualizado por'] %} por {{ i['Atualizado por'] }}{% endif %}</span>{% endif %}
+          </div>
+          <textarea data-campo="Nota" rows="1" placeholder="Nota" aria-label="Nota">{{ i['Nota'] }}</textarea>
+        </div>
+        <div class="controles">
+          <select data-campo="Status" aria-label="Status">{% for s in status %}<option {{ 'selected' if s == i['Status'] }}>{{ s }}</option>{% endfor %}</select>
+          <select data-campo="Dono" aria-label="Dono">{% for d in donos %}<option {{ 'selected' if d == i['Dono'] }}>{{ d }}</option>{% endfor %}</select>
+          <select data-campo="Mês" aria-label="Mês">{% for m in meses %}<option {{ 'selected' if m == i['Mês'] }}>{{ m }}</option>{% endfor %}</select>
+          <input type="date" data-campo="Prazo" value="{{ i._prazo_iso }}" aria-label="Prazo">
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <form class="novo" id="form-novo">
+      <label for="n-item">Novo item<input type="text" id="n-item" name="item" required placeholder="O que precisa ser feito"></label>
+      <label for="n-area">Área<select id="n-area" name="area">{% for a in areas %}<option>{{ a }}</option>{% endfor %}</select></label>
+      <label for="n-dono">Dono<select id="n-dono" name="dono">{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
+      <label for="n-mes">Mês<select id="n-mes" name="mes">{% for m in meses %}<option>{{ m }}</option>{% endfor %}</select></label>
+      <label for="n-prazo">Prazo<input type="date" id="n-prazo" name="prazo"></label>
+      <button class="btn primario" type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <section id="metas">
+    <h2>Metas Q4</h2>
+    <div class="tabela-wrap">
+      <table class="t">
+        <thead><tr><th>Objetivo</th><th>Resultado-chave</th><th>Meta</th><th>Atual</th><th>Dono</th><th>Prazo</th></tr></thead>
+        <tbody>
+          {% for m in metas %}
+          <tr>
+            <td>{{ m['Objetivo'] }}</td><td>{{ m['Resultado-chave'] }}</td><td>{{ m['Meta'] }}</td>
+            <td><input type="text" data-meta-linha="{{ m._row }}" value="{{ m['Atual'] }}" aria-label="Valor atual de {{ m['Resultado-chave'] }}" style="width:150px;"></td>
+            <td>{{ m['Dono'] }}</td><td>{{ m['Prazo'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="funil">
+    <h2>Funil comercial</h2>
+    <div class="kpis">
+      <div class="kpi"><b>{{ funil.prospects }}</b><span>prospects na base</span></div>
+      <div class="kpi {{ 'alerta' if not funil.validados }}"><b>{{ funil.validados }}</b><span>validados (meta 40/semana)</span></div>
+      <div class="kpi {{ 'alerta' if not funil.contatados }}"><b>{{ funil.contatados }}</b><span>contatados (meta 60/semana)</span></div>
+      <div class="kpi {{ 'alerta' if funil.proximo_vencido }}"><b>{{ funil.proximo_vencido }}</b><span>próximo contato vencido</span></div>
+      <div class="kpi"><b>{{ funil.optout }}</b><span>opt-out</span></div>
+      <div class="kpi"><b>{{ funil.leads_site }}</b><span>leads do site</span></div>
+      <div class="kpi"><b>{{ funil.diagnosticos }}</b><span>diagnósticos completos</span></div>
+    </div>
+    <div class="painel">
+      <h3>Prospecção por etapa</h3>
+      <ul>{% for etapa, qtd in funil.etapas %}<li><span>{{ etapa }}</span><small>{{ qtd }}</small></li>{% else %}<li class="vazio">Sem prospects.</li>{% endfor %}</ul>
+      <p class="vazio">Leads e prospects são editados no <a href="/assessment/leads/crm">CRM de leads</a> ou na planilha.</p>
+    </div>
+  </section>
+
+  <section id="visao">
+    <h2>Visão e nichos</h2>
+    <div class="grid3">
+      {% for v in visao %}
+      <div class="painel"><span class="eyebrow">{{ v['Bloco'] }}</span><h3>{{ v['Conteúdo'] }}</h3><p style="margin:0; font-size:13px; color:var(--ink-muted);">{{ v['Detalhe'] }}</p></div>
+      {% endfor %}
+    </div>
+    <div class="tabela-wrap">
+      <table class="t">
+        <thead><tr><th>Nicho</th><th>Dor principal</th><th>Entrada</th><th>Oferta núcleo</th><th>Canal</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for n in nichos %}
+          <tr><td><b>{{ n['Nicho'] }}</b><br><small style="color:var(--ink-faint)">{{ n['Exemplos'] }}</small></td><td>{{ n['Dor principal'] }}</td><td>{{ n['Entrada'] }}</td><td>{{ n['Oferta núcleo'] }}</td><td>{{ n['Canal'] }}</td><td>{{ n['Status'] }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="vazio">Visão e nichos são editados nas abas "Visão" e "Nichos" da planilha.</p>
+  </section>
+
+  <section id="decisoes">
+    <h2>Decisões</h2>
+    <form class="novo" id="form-decisao" style="grid-template-columns:3fr 1fr 2fr auto;">
+      <label for="d-texto">Nova decisão<input type="text" id="d-texto" name="decisao" required placeholder="O que foi decidido"></label>
+      <label for="d-quem">Quem decidiu<select id="d-quem" name="quem">{% for d in donos %}<option>{{ d }}</option>{% endfor %}<option>Sócios</option></select></label>
+      <label for="d-impacto">Impacto<input type="text" id="d-impacto" name="impacto" placeholder="onde muda algo"></label>
+      <button class="btn primario" type="submit">Registrar</button>
+    </form>
+    <div>
+      {% for d in decisoes %}
+      <div class="decisao"><span class="eyebrow">{{ d['Data'] }}</span><div>{{ d['Decisão'] }}<small>{{ d['Quem decidiu'] }}{% if d['Impacto'] %} · {{ d['Impacto'] }}{% endif %}</small></div></div>
+      {% else %}<p class="vazio">Nenhuma decisão registrada.</p>{% endfor %}
+    </div>
+  </section>
+</div>
+
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const BASE = "/assessment/leads/gestao";
+  const aviso = document.getElementById("aviso");
+  let timer;
+  function avisar(texto, erro) {
+    aviso.textContent = texto;
+    aviso.className = "on" + (erro ? " erro" : "");
+    clearTimeout(timer);
+    timer = setTimeout(() => { aviso.className = ""; }, erro ? 5000 : 1600);
+  }
+
+  const quemSel = document.getElementById("quem");
+  try { quemSel.value = localStorage.getItem("eloo_gestao_quem") || ""; } catch (e) {}
+  quemSel.addEventListener("change", () => { try { localStorage.setItem("eloo_gestao_quem", quemSel.value); } catch (e) {} });
+
+  async function enviar(caminho, dados) {
+    const corpo = new FormData();
+    Object.entries(dados).forEach(([k, v]) => corpo.append(k, v));
+    const resp = await fetch(BASE + caminho, { method: "POST", body: corpo, credentials: "same-origin" });
+    if (!resp.ok) {
+      let msg = "Não foi possível salvar.";
+      try { msg = (await resp.json()).detail || msg; } catch (e) {}
+      throw new Error(msg);
+    }
+  }
+
+  // Roadmap: cada campo salva sozinho ao mudar.
+  document.querySelectorAll(".item [data-campo]").forEach((el) => {
+    el.addEventListener("change", async () => {
+      const item = el.closest(".item");
+      const campo = el.dataset.campo;
+      try {
+        await enviar("/item", { id: item.dataset.id, campo, valor: el.value, quem: quemSel.value });
+        if (campo === "Status") item.dataset.status = el.value;
+        if (campo === "Dono") item.dataset.dono = el.value;
+        if (campo === "Mês") item.dataset.mes = el.value;
+        avisar("Salvo na planilha");
+      } catch (e) { avisar(e.message, true); }
+    });
+  });
+
+  document.querySelectorAll("[data-meta-linha]").forEach((el) => {
+    el.addEventListener("change", async () => {
+      try { await enviar("/meta", { linha: el.dataset.metaLinha, valor: el.value }); avisar("Meta atualizada"); }
+      catch (e) { avisar(e.message, true); }
+    });
+  });
+
+  document.getElementById("form-novo").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const f = ev.target;
+    try {
+      await enviar("/item/novo", { item: f.item.value, area: f.area.value, dono: f.dono.value, mes: f.mes.value, prazo: f.prazo.value, quem: quemSel.value });
+      avisar("Item adicionado");
+      setTimeout(() => location.reload(), 600);
+    } catch (e) { avisar(e.message, true); }
+  });
+
+  document.getElementById("form-decisao").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const f = ev.target;
+    try {
+      await enviar("/decisao", { decisao: f.decisao.value, quem: f.quem.value, impacto: f.impacto.value });
+      avisar("Decisão registrada");
+      setTimeout(() => location.reload(), 600);
+    } catch (e) { avisar(e.message, true); }
+  });
+
+  // Filtros do roadmap (só na tela, nada é salvo).
+  const fArea = document.getElementById("f-area"), fDono = document.getElementById("f-dono"),
+        fMes = document.getElementById("f-mes"), fStatus = document.getElementById("f-status"),
+        fBusca = document.getElementById("f-busca"), fAtraso = document.getElementById("f-atraso"),
+        fCont = document.getElementById("f-contagem");
+  function filtrar() {
+    const busca = fBusca.value.trim().toLowerCase();
+    let visiveis = 0;
+    document.querySelectorAll(".area").forEach((area) => {
+      let naArea = 0;
+      area.querySelectorAll(".item").forEach((it) => {
+        const st = it.dataset.status;
+        const ok = (!fArea.value || area.dataset.area === fArea.value)
+          && (!fDono.value || it.dataset.dono === fDono.value)
+          && (!fMes.value || it.dataset.mes === fMes.value)
+          && (!fStatus.value || (fStatus.value === "abertos" ? st !== "Feito" : st === fStatus.value))
+          && (!fAtraso.checked || it.dataset.atrasado === "1")
+          && (!busca || it.dataset.texto.includes(busca));
+        it.hidden = !ok;
+        if (ok) naArea++;
+      });
+      area.hidden = naArea === 0;
+      visiveis += naArea;
+    });
+    fCont.textContent = visiveis + " item(ns)";
+  }
+  [fArea, fDono, fMes, fStatus, fAtraso].forEach((el) => el.addEventListener("change", filtrar));
+  fBusca.addEventListener("input", filtrar);
+  document.querySelectorAll("[data-filtro-dono]").forEach((a) => a.addEventListener("click", () => { fDono.value = a.dataset.filtroDono; fArea.value = ""; filtrar(); }));
+  document.querySelectorAll("[data-filtro-area]").forEach((a) => a.addEventListener("click", () => { fArea.value = a.dataset.filtroArea; fDono.value = ""; filtrar(); }));
+  filtrar();
+})();
+</script>
+{% endblock %}

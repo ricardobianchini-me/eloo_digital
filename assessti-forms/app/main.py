@@ -9,6 +9,8 @@ from fastapi.templating import Jinja2Templates
 
 from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
+import gestao
+import gestao_auth
 import leads
 import leads_crm_auth
 import leads_notify
@@ -29,6 +31,10 @@ BASE_DIR = Path(__file__).parent
 STATIC_PATH = "/assessment/_shared/responder/static"
 LOGIN_PATH = "/assessment/_shared/responder/entrar"
 LEADS_CRM_LOGIN_PATH = "/assessment/leads/crm/entrar"
+# Gestão da empresa fica sob /assessment/leads/ pra reaproveitar o
+# `location /assessment/leads/` que o nginx do host já encaminha pra cá.
+GESTAO_PATH = "/assessment/leads/gestao"
+GESTAO_LOGIN_PATH = "/assessment/leads/gestao/entrar"
 
 app = FastAPI(title="eloo Assessment")
 app.mount(STATIC_PATH, StaticFiles(directory=BASE_DIR / "static"), name="static")
@@ -490,6 +496,103 @@ async def leads_crm_salvar(
         raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
 
     return JSONResponse({"ok": True})
+
+
+# ---------------------------------------------------------------- gestão da empresa
+
+def _gestao_autenticado(request: Request) -> bool:
+    return gestao_auth.cookie_valido(request.cookies.get(gestao_auth.COOKIE_NOME))
+
+
+def _exigir_gestao(request: Request) -> None:
+    if not _gestao_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+
+
+@app.get(GESTAO_LOGIN_PATH, response_class=HTMLResponse)
+def gestao_tela_login(request: Request, erro: bool = False):
+    return templates.TemplateResponse("gestao_entrar.html", {"request": request, "erro": erro})
+
+
+@app.post(GESTAO_LOGIN_PATH)
+def gestao_processar_login(pin: str = Form(...)):
+    if not gestao_auth.pin_correto(pin):
+        return RedirectResponse(url=f"{GESTAO_LOGIN_PATH}?erro=1", status_code=303)
+    resposta = RedirectResponse(url=GESTAO_PATH, status_code=303)
+    resposta.set_cookie(
+        gestao_auth.COOKIE_NOME,
+        gestao_auth.valor_cookie(),
+        httponly=True,
+        samesite="strict",
+        secure=True,
+        path=GESTAO_PATH,
+        max_age=60 * 60 * 24 * 7,
+    )
+    return resposta
+
+
+@app.get(GESTAO_PATH, response_class=HTMLResponse)
+def gestao_painel(request: Request):
+    if not _gestao_autenticado(request):
+        return RedirectResponse(url=GESTAO_LOGIN_PATH)
+    try:
+        dados = gestao.carregar()
+    except Exception:
+        logger.exception("Falha ao ler a planilha de gestão")
+        return templates.TemplateResponse(
+            "erro.html",
+            {"request": request, "mensagem": "Não foi possível carregar o painel agora. Tente novamente em instantes."},
+            status_code=502,
+        )
+    resposta = templates.TemplateResponse("gestao.html", {"request": request, **dados})
+    resposta.headers["Cache-Control"] = "no-store"
+    resposta.headers["X-Robots-Tag"] = "noindex, nofollow"
+    return resposta
+
+
+def _salvar_gestao(acao) -> JSONResponse:
+    try:
+        acao()
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Item não encontrado na planilha — atualize a página")
+    except ValueError as erro:
+        raise HTTPException(status_code=400, detail=str(erro) or "Dado inválido")
+    except Exception:
+        logger.exception("Falha ao salvar na planilha de gestão")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+    return JSONResponse({"ok": True})
+
+
+@app.post(f"{GESTAO_PATH}/item")
+async def gestao_salvar_item(
+    request: Request, id: str = Form(...), campo: str = Form(...), valor: str = Form(""), quem: str = Form("")
+):
+    _exigir_gestao(request)
+    return _salvar_gestao(lambda: gestao.atualizar_item(id, campo, valor, quem))
+
+
+@app.post(f"{GESTAO_PATH}/item/novo")
+async def gestao_novo_item(
+    request: Request,
+    area: str = Form(...), item: str = Form(...), dono: str = Form(...),
+    mes: str = Form(...), prazo: str = Form(""), quem: str = Form(""),
+):
+    _exigir_gestao(request)
+    return _salvar_gestao(lambda: gestao.novo_item(area, item, dono, mes, prazo, quem))
+
+
+@app.post(f"{GESTAO_PATH}/meta")
+async def gestao_salvar_meta(request: Request, linha: int = Form(...), valor: str = Form("")):
+    _exigir_gestao(request)
+    return _salvar_gestao(lambda: gestao.atualizar_meta_atual(linha, valor))
+
+
+@app.post(f"{GESTAO_PATH}/decisao")
+async def gestao_nova_decisao(
+    request: Request, decisao: str = Form(...), quem: str = Form(""), impacto: str = Form("")
+):
+    _exigir_gestao(request)
+    return _salvar_gestao(lambda: gestao.nova_decisao(decisao, quem, impacto))
 
 
 app.include_router(router)

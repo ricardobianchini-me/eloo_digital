@@ -19,6 +19,11 @@ class Settings(BaseSettings):
     # comercial vs. quem preenche assessments). Ver leads_crm_auth.py.
     leads_crm_pin: str = "2424"
 
+    # PIN da página de gestão da empresa (/assessment/leads/gestao) — visão
+    # administrativa dos sócios. Sem padrão de propósito: vazio = página
+    # fechada. Ver gestao_auth.py.
+    gestao_pin: str = ""
+
     # Notificação por e-mail a cada novo lead — Gmail SMTP com senha de app
     # (myaccount.google.com/apppasswords, exige verificação em 2 etapas).
     # Se GMAIL_USER/GMAIL_APP_PASSWORD não estiverem setados, a notificação
