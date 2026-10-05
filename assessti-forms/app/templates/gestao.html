@@ -79,6 +79,59 @@
   form.novo label{display:grid; gap:3px; font-size:11px; color:var(--ink-muted); min-width:0;}
   .decisao{display:grid; grid-template-columns:96px 1fr; gap:12px; padding:10px 0; border-top:1px solid var(--border); font-size:13.5px;}
   .decisao small{display:block; color:var(--ink-faint); margin-top:2px;}
+  .frentes{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:12px;}
+  .frente{background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--good); border-radius:10px; padding:14px 16px; display:grid; gap:10px; align-content:start; min-width:0;}
+  .frente.saude-atencao{border-top-color:var(--amber);}
+  .frente.saude-critica{border-top-color:var(--red);}
+  .frente header{display:flex; justify-content:space-between; gap:8px; align-items:start;}
+  .frente h3{margin:0; font-size:15px;}
+  .frente .saude{font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; white-space:nowrap; background:var(--good-soft); color:var(--good);}
+  .frente.saude-atencao .saude{background:var(--amber-soft); color:var(--amber);}
+  .frente.saude-critica .saude{background:var(--red-soft); color:var(--red);}
+  .frente-pct{display:flex; align-items:baseline; gap:8px;}
+  .frente-pct b{font-family:'Bricolage Grotesque',sans-serif; font-size:28px; line-height:1;}
+  .frente-pct span{font-size:12px; color:var(--ink-muted);}
+  .frente dl{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin:0;}
+  .frente dl div{display:grid; gap:1px;}
+  .frente dt{font-size:10.5px; color:var(--ink-faint);}
+  .frente dd{margin:0; font-weight:600; font-variant-numeric:tabular-nums;}
+  .frente dd.ruim{color:var(--red);}
+  .frente-prox{margin:0; font-size:13px; display:grid; gap:2px;}
+  .frente-prox small, .frente footer{font-size:11.5px; color:var(--ink-faint);}
+  .frente-and{margin:0; padding-left:16px; font-size:12.5px; color:var(--ink-muted); display:grid; gap:2px;}
+  .frente footer{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;}
+  .frente footer a{color:var(--accent); font-weight:600; text-decoration:none;}
+  .chip{display:inline-block; font-size:11px; padding:1px 7px; border-radius:999px; background:var(--surface-2); color:var(--ink-muted); margin-right:4px;}
+
+  .tl-legenda{display:flex; flex-wrap:wrap; gap:4px 12px; align-items:center; font-size:11.5px; color:var(--ink-muted);}
+  .tl-legenda i{display:inline-block; width:14px; height:8px; border-radius:3px; margin-right:-6px;}
+  .tl-legenda b{color:var(--ink); font-size:11px;}
+  .c-afazer{background:var(--ink-faint);}
+  .c-semprazo{background:repeating-linear-gradient(45deg, var(--border-strong) 0 3px, transparent 3px 6px); border:1px solid var(--border-strong);}
+  .tl-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px; background:var(--surface);}
+  .tl{min-width:860px; padding-bottom:8px;}
+  .tl-cab, .tl-linha{display:grid; grid-template-columns:260px 1fr; align-items:center;}
+  .tl-cab{background:var(--surface-2); border-bottom:1px solid var(--border); height:52px;}
+  .tl-escala{height:52px;}
+  .tl-mes{position:absolute; top:6px; line-height:1; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); padding-left:6px; border-left:1px solid var(--border-strong);}
+  .tl-sem{position:absolute; bottom:6px; line-height:1; font-size:10px; color:var(--ink-faint); transform:translateX(-50%);}
+  .tl-grupo-nome{font-size:12px; font-weight:700; padding:10px 12px 4px; color:var(--ink);}
+  .tl-rot{font-size:12px; padding:4px 12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
+  .tl-rot small{display:block; font-size:10.5px; color:var(--ink-faint);}
+  .tl-trilho{position:relative; height:30px; margin-right:16px;}
+  .tl-grade{position:absolute; top:0; bottom:0; width:1px; background:var(--border);}
+  .tl-hoje{position:absolute; top:0; bottom:0; width:2px; background:var(--accent); opacity:.7; z-index:2;}
+  .tl-barra{position:absolute; top:10px; height:10px; border-radius:5px; background:var(--ink-faint); z-index:1;}
+  .tl-barra.st-feito{background:var(--good);}
+  .tl-barra.st-em-andamento{background:var(--amber);}
+  .tl-barra.st-bloqueado{background:var(--red);}
+  .tl-barra.semprazo{background:repeating-linear-gradient(45deg, var(--border-strong) 0 3px, transparent 3px 6px); border:1px solid var(--border-strong); top:9px;}
+  .tl-barra.atrasado{outline:2px solid var(--red); outline-offset:1px;}
+  .tl-marco{position:absolute; top:5px; font-size:14px; line-height:1; transform:translateX(-50%); color:var(--ink); z-index:3;}
+  .tl-marco.atrasado{color:var(--red);}
+  .tl-linha:hover{background:var(--surface-2);}
+  @media (max-width:760px){ .tl-cab, .tl-linha{grid-template-columns:170px 1fr;} .frente dl{grid-template-columns:repeat(2,1fr);} }
+
   #aviso{position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none;}
   #aviso.on{opacity:1;}
   #aviso.erro{background:var(--red);}
@@ -114,7 +167,7 @@
   </header>
 
   <nav class="g-nav" aria-label="Seções">
-    <a href="#resumo">Resumo</a><a href="#roadmap">Roadmap</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
+    <a href="#resumo">Resumo</a><a href="#frentes">Frentes</a><a href="#linha">Linha do tempo</a><a href="#roadmap">Roadmap</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
   </nav>
 
   <section id="resumo">
@@ -160,6 +213,78 @@
       </table>
     </div>
     {% endfor %}
+  </section>
+
+  <section id="frentes">
+    <h2>Frentes</h2>
+    <p class="vazio" style="margin:0;">Vermelho: tem item atrasado ou bloqueado. Amarelo: tem item vencendo em 7 dias que ainda não começou. Verde: no ritmo.</p>
+    <div class="frentes">
+      {% for f in frentes %}
+      <article class="frente saude-{{ f.saude }}">
+        <header>
+          <h3>{{ f.nome }}</h3>
+          <span class="saude">{{ {"critica": "Atenção já", "atencao": "Atenção", "ok": "No ritmo"}[f.saude] }}</span>
+        </header>
+        <div class="frente-pct"><b>{{ f.pct }}%</b><span>{{ f.feito }} de {{ f.total }} feitos</span></div>
+        <div class="barra">{% if f.total %}<i class="c-feito" style="width:{{ 100*f.feito/f.total }}%"></i><i class="c-andamento" style="width:{{ 100*f.andamento/f.total }}%"></i><i class="c-bloqueado" style="width:{{ 100*f.bloqueado/f.total }}%"></i>{% endif %}</div>
+        <dl>
+          <div><dt>Andamento</dt><dd>{{ f.andamento }}</dd></div>
+          <div><dt>A fazer</dt><dd>{{ f.afazer }}</dd></div>
+          <div><dt>Atrasados</dt><dd {% if f.atrasados %}class="ruim"{% endif %}>{{ f.atrasados }}</dd></div>
+          <div><dt>Bloqueados</dt><dd {% if f.bloqueado %}class="ruim"{% endif %}>{{ f.bloqueado }}</dd></div>
+        </dl>
+        <p class="frente-prox"><span class="eyebrow">Próxima entrega</span>
+          {% if f.proximo %}{{ f.proximo['Item'] }} <small>{{ f.proximo['Dono'] }} · {{ f.proximo._prazo_curto }}</small>{% else %}<small>sem prazo definido</small>{% endif %}
+        </p>
+        {% if f.em_andamento %}
+        <ul class="frente-and">{% for i in f.em_andamento[:3] %}<li>{{ i['Item'] }}</li>{% endfor %}</ul>
+        {% endif %}
+        <footer>
+          <span>{% for d in f.donos %}<span class="chip">{{ d }}</span>{% endfor %}</span>
+          <a href="#roadmap" data-filtro-area="{{ f.nome }}">Ver itens</a>
+        </footer>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% set tl = linha_do_tempo %}
+  <section id="linha">
+    <h2>Linha do tempo</h2>
+    <div class="filtros">
+      <label for="tl-dono">Dono<select id="tl-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
+      <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="tl-feitos"> Esconder feitos</label>
+      <span class="tl-legenda"><i class="c-feito"></i>Feito <i class="c-andamento"></i>Em andamento <i class="c-bloqueado"></i>Bloqueado <i class="c-afazer"></i>A fazer <i class="c-semprazo"></i>Sem prazo (mês previsto) <b>◆</b> prazo</span>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl">
+        <div class="tl-cab">
+          <div class="tl-rot"></div>
+          <div class="tl-trilho tl-escala">
+            {% for m in tl.meses %}<span class="tl-mes" style="left:{{ m.de }}%; width:{{ m.ate - m.de }}%">{{ {"Out": "Outubro", "Nov": "Novembro", "Dez": "Dezembro"}[m.nome] }}</span>{% endfor %}
+            {% for s in tl.semanas %}<span class="tl-sem" style="left:{{ s.pct }}%">{{ s.rotulo }}</span>{% endfor %}
+          </div>
+        </div>
+        {% for g in tl.grupos %}
+        <div class="tl-grupo" data-area="{{ g.area }}">
+          <div class="tl-grupo-nome">{{ g.area }}</div>
+          {% for l in g.linhas %}
+          {% set i = l.item %}
+          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-status="{{ i['Status'] }}">
+            <div class="tl-rot" title="{{ i['Item'] }}">{{ i['Item'] }}<small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></div>
+            <div class="tl-trilho">
+              {% for s in tl.semanas %}<i class="tl-grade" style="left:{{ s.pct }}%"></i>{% endfor %}
+              {% if tl.hoje is not none %}<i class="tl-hoje" style="left:{{ tl.hoje }}%"></i>{% endif %}
+              <span class="tl-barra {{ 'semprazo' if not l.com_prazo }} st-{{ i['Status']|lower|replace(' ', '-') }} {{ 'atrasado' if i._atrasado }}" style="left:{{ l.de }}%; width:{{ [l.ate - l.de, 0.8]|max }}%"></span>
+              {% if l.marco is not none %}<span class="tl-marco {{ 'atrasado' if i._atrasado }}" style="left:{{ l.marco }}%" title="Prazo {{ i._prazo_curto }}">◆</span>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if tl.hoje is not none %}<p class="vazio" style="margin:0;">A linha vermelha vertical marca hoje ({{ hoje }}). Barras vão do início do mês previsto até o prazo.</p>{% endif %}
   </section>
 
   <section id="roadmap">
@@ -386,6 +511,21 @@
   document.querySelectorAll("[data-filtro-dono]").forEach((a) => a.addEventListener("click", () => { fDono.value = a.dataset.filtroDono; fArea.value = ""; filtrar(); }));
   document.querySelectorAll("[data-filtro-area]").forEach((a) => a.addEventListener("click", () => { fArea.value = a.dataset.filtroArea; fDono.value = ""; filtrar(); }));
   filtrar();
+
+  // Linha do tempo: filtro por dono e esconder feitos.
+  const tlDono = document.getElementById("tl-dono"), tlFeitos = document.getElementById("tl-feitos");
+  function filtrarLinha() {
+    document.querySelectorAll(".tl-grupo").forEach((g) => {
+      let n = 0;
+      g.querySelectorAll(".tl-linha").forEach((l) => {
+        const ok = (!tlDono.value || l.dataset.dono === tlDono.value) && !(tlFeitos.checked && l.dataset.status === "Feito");
+        l.hidden = !ok;
+        if (ok) n++;
+      });
+      g.hidden = n === 0;
+    });
+  }
+  [tlDono, tlFeitos].forEach((el) => el.addEventListener("change", filtrarLinha));
 })();
 </script>
 {% endblock %}

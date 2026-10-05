@@ -158,6 +158,8 @@ def carregar() -> dict:
 
     return {
         "roadmap": roadmap,
+        "frentes": _frentes(roadmap, hoje),
+        "linha_do_tempo": _linha_do_tempo(roadmap, hoje),
         "metas": metas,
         "visao": valores_visao,
         "nichos": nichos,
@@ -193,6 +195,78 @@ def _metricas(roadmap: list[dict]) -> dict:
         "vence_7d": sorted([i for i in roadmap if i["_vence_7d"]], key=lambda i: i["_prazo_iso"]),
         "bloqueados": [i for i in roadmap if i["Status"] == "Bloqueado"],
     }
+
+
+def _frentes(roadmap: list[dict], hoje: date) -> list[dict]:
+    """Uma frente por área: progresso, saúde e próxima entrega.
+
+    Saúde: "critica" se há item atrasado ou bloqueado; "atencao" se há item
+    vencendo em 7 dias que ainda nem começou; "ok" no resto."""
+    frentes = []
+    for area in AREAS:
+        itens = [i for i in roadmap if i["Área"] == area]
+        if not itens:
+            continue
+        abertos = [i for i in itens if i["Status"] != "Feito"]
+        futuros = sorted((i for i in abertos if i["_prazo_iso"] and not i["_atrasado"]), key=lambda i: i["_prazo_iso"])
+        contagem = _contagem(itens)
+        if contagem["atrasados"] or contagem["bloqueado"]:
+            saude = "critica"
+        elif any(i["_vence_7d"] and i["Status"] == "A fazer" for i in itens):
+            saude = "atencao"
+        else:
+            saude = "ok"
+        donos = [d for d in DONOS if any(i["Dono"] == d for i in itens)]
+        frentes.append({
+            "nome": area,
+            **contagem,
+            "saude": saude,
+            "donos": donos,
+            "proximo": futuros[0] if futuros else None,
+            "em_andamento": [i for i in itens if i["Status"] == "Em andamento"],
+        })
+    return frentes
+
+
+# Janela da linha do tempo: o trimestre do plano.
+_TL_INICIO = date(2026, 10, 1)
+_TL_FIM = date(2026, 12, 31)
+_MES_INICIO = {"Out": date(2026, 10, 1), "Nov": date(2026, 11, 1), "Dez": date(2026, 12, 1)}
+_MES_FIM = {"Out": date(2026, 10, 31), "Nov": date(2026, 11, 30), "Dez": date(2026, 12, 31)}
+
+
+def _pct(d: date) -> float:
+    d = min(max(d, _TL_INICIO), _TL_FIM)
+    return round(100 * (d - _TL_INICIO).days / (_TL_FIM - _TL_INICIO).days, 2)
+
+
+def _linha_do_tempo(roadmap: list[dict], hoje: date) -> dict:
+    """Posições (em % da largura do trimestre) para desenhar cada item.
+
+    Com prazo: barra do início do mês do item até o prazo, com marco no
+    prazo. Sem prazo: barra clara cobrindo o mês inteiro (só a intenção)."""
+    grupos = []
+    for area in AREAS:
+        linhas = []
+        for i in sorted((i for i in roadmap if i["Área"] == area), key=lambda i: i["_ordem"][1:]):
+            prazo = _parse_data(i["Prazo"])
+            ini_mes = _MES_INICIO.get(i["Mês"], _TL_INICIO)
+            if prazo:
+                inicio = min(ini_mes, prazo)
+                linhas.append({"item": i, "de": _pct(inicio), "ate": _pct(prazo), "marco": _pct(prazo), "com_prazo": True})
+            else:
+                linhas.append({"item": i, "de": _pct(ini_mes), "ate": _pct(_MES_FIM.get(i["Mês"], _TL_FIM)), "marco": None, "com_prazo": False})
+        if linhas:
+            grupos.append({"area": area, "linhas": linhas})
+
+    semanas = []
+    d = _TL_INICIO + timedelta(days=(7 - _TL_INICIO.weekday()) % 7)  # primeira segunda-feira
+    while d <= _TL_FIM:
+        semanas.append({"pct": _pct(d), "rotulo": d.strftime("%d/%m")})
+        d += timedelta(days=7)
+    meses = [{"nome": m, "de": _pct(_MES_INICIO[m]), "ate": _pct(_MES_FIM[m])} for m in MESES]
+    hoje_pct = _pct(hoje) if _TL_INICIO <= hoje <= _TL_FIM else None
+    return {"grupos": grupos, "semanas": semanas, "meses": meses, "hoje": hoje_pct}
 
 
 def _funil(leads: list[list[str]], prospeccao: list[list[str]], hoje: date) -> dict:
