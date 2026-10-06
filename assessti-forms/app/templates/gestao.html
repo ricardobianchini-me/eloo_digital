@@ -172,7 +172,7 @@
   </header>
 
   <nav class="g-nav" aria-label="Seções">
-    <a href="#resumo">Resumo</a><a href="#frentes">Frentes</a><a href="#linha">Linha do tempo</a><a href="#roadmap">Roadmap</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
+    <a href="#resumo">Resumo</a><a href="#frentes">Frentes</a><a href="#roadmap">Roadmap</a><a href="#linha">Linha do tempo</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
   </nav>
 
   <section id="resumo">
@@ -234,46 +234,6 @@
     <p class="vazio" id="frentes-vazio" hidden>Nenhuma frente com esses filtros.</p>
   </section>
 
-  {% set tl = linha_do_tempo %}
-  <section id="linha">
-    <h2>Linha do tempo</h2>
-    <div class="filtros">
-      <label for="tl-dono">Dono<select id="tl-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
-      <label for="tl-prio">Prioridade<select id="tl-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
-      <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="tl-feitos"> Esconder feitos</label>
-      <span class="tl-legenda"><i class="c-feito"></i>Feito <i class="c-andamento"></i>Em andamento <i class="c-bloqueado"></i>Bloqueado <i class="c-afazer"></i>A fazer <i class="c-semprazo"></i>Sem prazo (mês previsto) <b>◆</b> prazo</span>
-    </div>
-    <div class="tl-wrap">
-      <div class="tl">
-        <div class="tl-cab">
-          <div class="tl-rot"></div>
-          <div class="tl-trilho tl-escala">
-            {% for m in tl.meses %}<span class="tl-mes" style="left:{{ m.de }}%; width:{{ m.ate - m.de }}%">{{ {"Out": "Outubro", "Nov": "Novembro", "Dez": "Dezembro"}[m.nome] }}</span>{% endfor %}
-            {% for s in tl.semanas %}<span class="tl-sem" style="left:{{ s.pct }}%">{{ s.rotulo }}</span>{% endfor %}
-          </div>
-        </div>
-        {% for g in tl.grupos %}
-        <div class="tl-grupo" data-area="{{ g.area }}">
-          <div class="tl-grupo-nome">{{ g.area }}</div>
-          {% for l in g.linhas %}
-          {% set i = l.item %}
-          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-prioridade="{{ i['Prioridade'] }}" data-status="{{ i['Status'] }}">
-            <div class="tl-rot" title="{{ i['Item'] }}">{{ i['Item'] }}<small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></div>
-            <div class="tl-trilho">
-              {% for s in tl.semanas %}<i class="tl-grade" style="left:{{ s.pct }}%"></i>{% endfor %}
-              {% if tl.hoje is not none %}<i class="tl-hoje" style="left:{{ tl.hoje }}%"></i>{% endif %}
-              <span class="tl-barra {{ 'semprazo' if not l.com_prazo }} st-{{ i['Status']|lower|replace(' ', '-') }} {{ 'atrasado' if i._atrasado }}" style="left:{{ l.de }}%; width:{{ [l.ate - l.de, 0.8]|max }}%"></span>
-              {% if l.marco is not none %}<span class="tl-marco {{ 'atrasado' if i._atrasado }}" style="left:{{ l.marco }}%" title="Prazo {{ i._prazo_curto }}">◆</span>{% endif %}
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% if tl.hoje is not none %}<p class="vazio" style="margin:0;">A linha vermelha vertical marca hoje ({{ hoje }}). Barras vão do início do mês previsto até o prazo.</p>{% endif %}
-  </section>
-
   <section id="roadmap">
     <h2>Roadmap</h2>
     <div class="filtros">
@@ -325,6 +285,46 @@
       <label for="n-prazo">Prazo<input type="date" id="n-prazo" name="prazo"></label>
       <button class="btn primario" type="submit">Adicionar</button>
     </form>
+  </section>
+
+  {% set tl = linha_do_tempo %}
+  <section id="linha">
+    <h2>Linha do tempo</h2>
+    <div class="filtros">
+      <label for="tl-dono">Dono<select id="tl-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
+      <label for="tl-prio">Prioridade<select id="tl-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
+      <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="tl-feitos"> Esconder feitos</label>
+      <span class="tl-legenda"><i class="c-feito"></i>Feito <i class="c-andamento"></i>Em andamento <i class="c-bloqueado"></i>Bloqueado <i class="c-afazer"></i>A fazer <i class="c-semprazo"></i>Sem prazo (mês previsto) <b>◆</b> prazo</span>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl">
+        <div class="tl-cab">
+          <div class="tl-rot"></div>
+          <div class="tl-trilho tl-escala">
+            {% for m in tl.meses %}<span class="tl-mes" style="left:{{ m.de }}%; width:{{ m.ate - m.de }}%">{{ {"Out": "Outubro", "Nov": "Novembro", "Dez": "Dezembro"}[m.nome] }}</span>{% endfor %}
+            {% for s in tl.semanas %}<span class="tl-sem" style="left:{{ s.pct }}%">{{ s.rotulo }}</span>{% endfor %}
+          </div>
+        </div>
+        {% for g in tl.grupos %}
+        <div class="tl-grupo" data-area="{{ g.area }}">
+          <div class="tl-grupo-nome">{{ g.area }}</div>
+          {% for l in g.linhas %}
+          {% set i = l.item %}
+          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-prioridade="{{ i['Prioridade'] }}" data-status="{{ i['Status'] }}">
+            <div class="tl-rot" title="{{ i['Item'] }}">{{ i['Item'] }}<small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></div>
+            <div class="tl-trilho">
+              {% for s in tl.semanas %}<i class="tl-grade" style="left:{{ s.pct }}%"></i>{% endfor %}
+              {% if tl.hoje is not none %}<i class="tl-hoje" style="left:{{ tl.hoje }}%"></i>{% endif %}
+              <span class="tl-barra {{ 'semprazo' if not l.com_prazo }} st-{{ i['Status']|lower|replace(' ', '-') }} {{ 'atrasado' if i._atrasado }}" style="left:{{ l.de }}%; width:{{ [l.ate - l.de, 0.8]|max }}%"></span>
+              {% if l.marco is not none %}<span class="tl-marco {{ 'atrasado' if i._atrasado }}" style="left:{{ l.marco }}%" title="Prazo {{ i._prazo_curto }}">◆</span>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if tl.hoje is not none %}<p class="vazio" style="margin:0;">A linha vermelha vertical marca hoje ({{ hoje }}). Barras vão do início do mês previsto até o prazo.</p>{% endif %}
   </section>
 
   <section id="metas">
