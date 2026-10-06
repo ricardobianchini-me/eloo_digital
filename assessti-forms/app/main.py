@@ -2,8 +2,8 @@ import logging
 from pathlib import Path
 from urllib.parse import quote
 
-from fastapi import APIRouter, FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi import APIRouter, FastAPI, Form, HTTPException, Request, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -11,6 +11,10 @@ from auth import PAPEL_REVISOR, gerar_token, validar_token
 from clientes import get_cliente
 import gestao
 import gestao_auth
+import csv
+import dashboard
+import historico
+import io
 import leads
 import leads_crm_auth
 import leads_notify
@@ -467,10 +471,17 @@ def leads_crm_processar_login(pin: str = Form(...), next: str = Form("/assessmen
 
 @app.get("/assessment/leads/crm", response_class=HTMLResponse)
 def leads_crm_painel(request: Request):
+    """Painel único com abas (Leads do site / Prospecção / Dashboard),
+    trocadas no cliente sem reload — ver leads_crm.html. As duas antigas
+    rotas separadas (/prospeccao, /dashboard) viraram redirects abaixo,
+    pra não quebrar link salvo."""
     if not _leads_crm_autenticado(request):
         return RedirectResponse(url=f"{LEADS_CRM_LOGIN_PATH}?next=/assessment/leads/crm")
     try:
-        registros = leads.listar_leads()
+        leads_site = leads.listar_leads()
+        leads_prospeccao = prospeccao.listar_leads()
+        dados_dashboard = dashboard.construir_dashboard(leads_site, leads_prospeccao)
+        eventos_historico = historico.listar_recentes()
     except Exception:
         logger.exception("Falha ao ler leads")
         return templates.TemplateResponse(
@@ -478,40 +489,31 @@ def leads_crm_painel(request: Request):
             {"request": request, "mensagem": "Não foi possível carregar os leads agora. Tente novamente em instantes."},
             status_code=502,
         )
-    # Prospecção é a segunda aba da página; se a leitura dela falhar, os leads
-    # do site continuam aparecendo (só a aba de prospecção mostra o aviso).
-    try:
-        dados_prospeccao = prospeccao.listar()
-        erro_prospeccao = False
-    except Exception:
-        logger.exception("Falha ao ler prospecção")
-        dados_prospeccao, erro_prospeccao = {"prospects": []}, True
-    return templates.TemplateResponse("leads_crm.html", {
-        "request": request,
-        "leads": registros,
-        "prospects": dados_prospeccao["prospects"],
-        "erro_prospeccao": erro_prospeccao,
-        "opcoes_validacao": prospeccao.OPCOES_VALIDACAO,
-        "opcoes_etapa": prospeccao.OPCOES_ETAPA,
-    })
+    return templates.TemplateResponse(
+        "leads_crm.html",
+        {
+            "request": request,
+            "leads_site": leads_site,
+            "leads_prospeccao": leads_prospeccao,
+            "etapas": prospeccao.ETAPAS,
+            "etapa_slug": prospeccao.ETAPA_SLUG,
+            "campos_criacao_prospeccao": prospeccao.CAMPOS_CRIACAO,
+            "etapa_descricoes": prospeccao.ETAPA_DESCRICOES,
+            "canais_origem": prospeccao.CANAIS_ORIGEM,
+            "eventos_historico": eventos_historico,
+            **dados_dashboard,
+        },
+    )
 
 
-@app.post("/assessment/leads/crm/prospect/salvar")
-async def leads_crm_prospect_salvar(
-    request: Request, linha: int = Form(...), empresa: str = Form(...), campo: str = Form(...), valor: str = Form("")
-):
-    if not _leads_crm_autenticado(request):
-        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
-    try:
-        prospeccao.atualizar(linha, empresa, campo, valor)
-    except KeyError as erro:
-        raise HTTPException(status_code=409, detail=str(erro.args[0]) if erro.args else "Atualize a página")
-    except ValueError as erro:
-        raise HTTPException(status_code=400, detail=str(erro))
-    except Exception:
-        logger.exception("Falha ao salvar campo do prospect")
-        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
-    return JSONResponse({"ok": True})
+@app.get("/assessment/leads/crm/prospeccao", response_class=HTMLResponse)
+def leads_crm_prospeccao_redirect():
+    return RedirectResponse(url="/assessment/leads/crm#prospeccao")
+
+
+@app.get("/assessment/leads/crm/dashboard", response_class=HTMLResponse)
+def leads_crm_dashboard_redirect():
+    return RedirectResponse(url="/assessment/leads/crm#dashboard")
 
 
 @app.post("/assessment/leads/crm/salvar")
@@ -634,6 +636,130 @@ async def gestao_nova_decisao(
 ):
     _exigir_gestao(request)
     return _salvar_gestao(lambda: gestao.nova_decisao(decisao, quem, impacto))
+
+
+@app.post("/assessment/leads/crm/prospeccao/salvar")
+async def leads_crm_prospeccao_salvar(
+    request: Request, linha: int = Form(...), campo: str = Form(...), valor: str = Form("")
+):
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+
+    if campo not in prospeccao.CAMPOS_CRM_EDITAVEIS:
+        raise HTTPException(status_code=403, detail="Campo não editável por aqui")
+
+    try:
+        prospeccao.atualizar_campo_lead(linha, campo, valor)
+    except Exception:
+        logger.exception("Falha ao salvar campo do lead de prospecção")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+
+    return JSONResponse({"ok": True})
+
+
+@app.post("/assessment/leads/crm/novo")
+async def leads_crm_novo(
+    request: Request,
+    nome: str = Form(...), instituicao: str = Form(""), cargo: str = Form(""),
+    email: str = Form(""), whatsapp: str = Form(""), interesse: str = Form(""),
+    urgencia: str = Form(""), mensagem: str = Form(""),
+):
+    """Adição manual de lead do site — pra quem chegou por telefone,
+    indicação etc., não pelo formulário público."""
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+    if not nome.strip():
+        raise HTTPException(status_code=422, detail="Nome é obrigatório")
+    try:
+        lead_salvo = leads.criar_lead_manual(
+            nome=nome.strip(), instituicao=instituicao.strip(), cargo=cargo.strip(),
+            email=email.strip(), whatsapp=whatsapp.strip(), interesse=interesse.strip(),
+            urgencia=urgencia.strip(), mensagem=mensagem.strip(),
+        )
+    except Exception:
+        logger.exception("Falha ao criar lead manual")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+    return JSONResponse({"ok": True, "lead": lead_salvo})
+
+
+@app.post("/assessment/leads/crm/prospeccao/novo")
+async def leads_crm_prospeccao_novo(request: Request):
+    """Adição manual de lead de prospecção. Form livre (não usa parâmetros
+    fixos do FastAPI) pra aceitar só os campos de `prospeccao.CAMPOS_CRIACAO`
+    sem precisar listar cada um na assinatura da rota."""
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+    form = await request.form()
+    dados = {campo: (form.get(campo) or "").strip() for campo in prospeccao.CAMPOS_CRIACAO}
+    if not dados.get("Empresa / Clínica"):
+        raise HTTPException(status_code=422, detail="Empresa / Clínica é obrigatório")
+    try:
+        lead_salvo = prospeccao.criar_lead_manual(dados)
+    except Exception:
+        logger.exception("Falha ao criar lead de prospecção manual")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+    return JSONResponse({"ok": True, "lead": lead_salvo})
+
+
+@app.get("/assessment/leads/crm/prospeccao/modelo.csv")
+def leads_crm_prospeccao_modelo(request: Request):
+    if not _leads_crm_autenticado(request):
+        return RedirectResponse(url=f"{LEADS_CRM_LOGIN_PATH}?next=/assessment/leads/crm/prospeccao/modelo.csv")
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(prospeccao.CAMPOS_CRIACAO)
+    writer.writerow([
+        "Exemplo Clínica Holística", "Centro holístico", "São Paulo", "Capital",
+        "(11) 90000-0000", "contato@exemplo.com", "https://exemplo.com", "@exemploclinica",
+        "Média", "Prospecção manual", "Clínica / espaço / instituto", "Nome do responsável",
+        "Novo", "2026-11-10", "Apresentar o PACCE como solução de agenda, cadastro e financeiro.",
+        "Primeiro contato ainda não realizado.",
+    ])
+    return PlainTextResponse(
+        buf.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=modelo-leads-prospeccao.csv"},
+    )
+
+
+@app.post("/assessment/leads/crm/prospeccao/importar")
+async def leads_crm_prospeccao_importar(request: Request, arquivo: UploadFile):
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+    conteudo = await arquivo.read()
+    try:
+        texto = conteudo.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        try:
+            texto = conteudo.decode("latin-1")
+        except Exception:
+            raise HTTPException(status_code=422, detail="Não foi possível ler o arquivo — confira se é um .csv válido")
+
+    leitor = csv.DictReader(io.StringIO(texto))
+    cabecalho = leitor.fieldnames or []
+    colunas_validas = set(prospeccao.COLUNAS)
+    linhas = []
+    ignoradas = 0
+    for row in leitor:
+        dados = {k: v for k, v in row.items() if k in colunas_validas and v}
+        if not (dados.get("Empresa / Clínica") or "").strip():
+            ignoradas += 1
+            continue
+        linhas.append(dados)
+
+    if not any(h in colunas_validas for h in cabecalho):
+        raise HTTPException(
+            status_code=422,
+            detail="Nenhuma coluna reconhecida no CSV — baixe o modelo e confira os cabeçalhos.",
+        )
+
+    try:
+        gravadas = prospeccao.importar_csv(linhas)
+    except Exception:
+        logger.exception("Falha ao importar CSV de prospecção")
+        raise HTTPException(status_code=502, detail="Não foi possível importar agora — tente novamente")
+
+    return JSONResponse({"ok": True, "gravadas": gravadas, "ignoradas": ignoradas})
 
 
 app.include_router(router)

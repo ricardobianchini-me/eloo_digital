@@ -17,6 +17,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 from config import settings
+import historico
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +93,7 @@ def salvar_lead(
     ]
     ws.append_row(linha)
     logger.info(f"Novo lead salvo: {nome} ({instituicao})")
+    historico.registrar("Leads do site", nome or instituicao or email or whatsapp, "Criado")
     return dict(zip(COLUNAS, linha))
 
 
@@ -115,6 +117,7 @@ def salvar_diagnostico(
     ]
     ws.append_row(linha)
     logger.info(f"Novo diagnóstico salvo: {nome or email or whatsapp} — índice {indice_geral}")
+    historico.registrar("Leads do site", nome or email or whatsapp, "Criado", para=f"Índice {indice_geral}")
     return dict(zip(COLUNAS, linha))
 
 
@@ -139,5 +142,22 @@ def atualizar_campo_lead(numero_linha: int, campo: str, valor: str) -> None:
     if campo not in CAMPOS_CRM_EDITAVEIS:
         raise ValueError(f"Campo não editável pelo CRM: {campo}")
     ws = _worksheet()
+    valor_anterior = ws.cell(numero_linha, _COL_INDEX[campo]).value or ""
+    nome_lead = ws.cell(numero_linha, _COL_INDEX["Nome"]).value or ""
     ws.update_cell(numero_linha, _COL_INDEX[campo], valor)
     logger.info(f"Lead linha {numero_linha}: {campo} = {valor!r}")
+    if valor_anterior != valor:
+        historico.registrar("Leads do site", nome_lead, "Campo alterado", campo, valor_anterior, valor)
+
+
+def criar_lead_manual(
+    nome: str, instituicao: str = "", cargo: str = "", email: str = "", whatsapp: str = "",
+    interesse: str = "", urgencia: str = "", mensagem: str = "",
+) -> dict[str, str]:
+    """Adição manual pela própria tela do CRM (não pelo formulário público) —
+    pra um lead que chegou por telefone, indicação, evento etc. `Origem` fica
+    fixa como "CRM interno" pra diferenciar de quem veio pelo site."""
+    return salvar_lead(
+        nome=nome, instituicao=instituicao, cargo=cargo, email=email, whatsapp=whatsapp,
+        interesse=interesse, origem="CRM interno", urgencia=urgencia, mensagem=mensagem,
+    )

@@ -10,170 +10,112 @@
 
 <div class="topbar">
   <div>
-    <div class="marca-crm"><span class="logo">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span> · CRM</div>
-    <h1>Leads e prospecção</h1>
-    <div class="sub">{{ leads|length }} lead(s) do site · {{ prospects|length }} prospect(s) · edição salva automaticamente na planilha</div>
+    <div class="marca-crm"><span class="logo">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span> · CRM de Leads</div>
+    <h1>Gestão de Leads</h1>
+    <div class="sub">Leads do site, prospecção outbound e evolução — num só lugar</div>
   </div>
 </div>
 
+<nav class="crm-tabs">
+  <button type="button" class="crm-tab" data-tab="site">Leads do site <span class="crm-tab-count">{{ leads_site|length }}</span></button>
+  <button type="button" class="crm-tab" data-tab="prospeccao">Prospecção <span class="crm-tab-count">{{ leads_prospeccao|length }}</span></button>
+  <button type="button" class="crm-tab" data-tab="dashboard">Dashboard</button>
+  <button type="button" class="crm-tab" data-tab="historico">Histórico</button>
+  <button type="button" class="crm-tab" data-tab="leiame">Leia-me</button>
+</nav>
+
 <main style="max-width:1400px;">
-  <div class="abas" role="tablist" aria-label="Listas do CRM">
-    <button type="button" role="tab" id="tab-leads" aria-controls="aba-leads" aria-selected="true">Leads do site <span>{{ leads|length }}</span></button>
-    <button type="button" role="tab" id="tab-prospeccao" aria-controls="aba-prospeccao" aria-selected="false">Prospecção <span>{{ prospects|length }}</span></button>
-  </div>
 
-  <section id="aba-leads" role="tabpanel" aria-labelledby="tab-leads">
-  {% if not leads %}
-  <p style="color:var(--ink-muted); margin-top:24px;">Nenhum lead registrado ainda.</p>
-  {% else %}
-  <div class="leads-table-wrap">
-    <table class="leads-table">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Nome</th>
-          <th>Instituição</th>
-          <th>Cargo</th>
-          <th>Contato</th>
-          <th>Interesse</th>
-          <th>Origem</th>
-          <th>Urgência</th>
-          <th>Mensagem</th>
-          <th>Índice geral</th>
-          <th>Maturidade digital</th>
-          <th>Controle de processos</th>
-          <th>Nível</th>
-          <th>Lacunas prioritárias</th>
-          <th>Respostas do diagnóstico</th>
-          <th>Status</th>
-          <th>Próximo retorno</th>
-          <th>Notas internas</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for lead in leads %}
-        <tr data-linha="{{ lead['_row'] }}">
-          <td class="nowrap">{{ lead['Data/Hora'] }}</td>
-          <td>{{ lead['Nome'] }}</td>
-          <td>{{ lead['Instituição'] }}</td>
-          <td>{{ lead['Cargo'] }}</td>
-          <td>
-            <div>{{ lead['E-mail'] }}</div>
-            <div class="dim">{{ lead['WhatsApp'] }}</div>
-          </td>
-          <td>{{ lead['Interesse'] }}</td>
-          <td>{{ lead['Origem'] }}</td>
-          <td>{{ lead['Urgência'] }}</td>
-          <td class="msg-cell">{{ lead['Mensagem'] }}</td>
-          <td class="nowrap">{{ lead['Índice Geral'] }}</td>
-          <td class="nowrap">{{ lead['Maturidade Digital'] }}</td>
-          <td class="nowrap">{{ lead['Controle de Processos'] }}</td>
-          <td class="nowrap">{{ lead['Nível'] }}</td>
-          <td class="msg-cell">{{ lead['Lacunas Prioritárias'] }}</td>
-          <td class="respostas-cell">
-            {% if lead['Respostas do Diagnóstico'] %}
-            <details>
-              <summary>Ver respostas</summary>
-              <div class="respostas-texto">{{ lead['Respostas do Diagnóstico'] }}</div>
-            </details>
-            {% endif %}
-          </td>
-          <td>
-            <select data-campo="Status" class="status-select status-{{ (lead['Status'] or 'novo')|lower|replace(' ', '-') }}">
-              {% for opcao in ["Novo", "Em contato", "Qualificado", "Proposta enviada", "Ganho", "Perdido"] %}
-              <option value="{{ opcao }}" {{ 'selected' if lead['Status']==opcao else '' }}>{{ opcao }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td><input type="date" data-campo="Próximo Retorno" value="{{ lead['Próximo Retorno'] }}"></td>
-          <td><textarea data-campo="Notas Internas" placeholder="Histórico de contato...">{{ lead['Notas Internas'] }}</textarea></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% endif %}
-  </section>
-
-  <section id="aba-prospeccao" role="tabpanel" aria-labelledby="tab-prospeccao" hidden>
-    {% if erro_prospeccao %}
-    <p class="aviso-erro">Não foi possível carregar a prospecção agora. Os dados estão na aba "Prospecção Clínicas Holísticas" da planilha.</p>
-    {% elif not prospects %}
-    <p style="color:var(--ink-muted); margin-top:24px;">Nenhum prospect cadastrado.</p>
-    {% else %}
-    <div class="filtros-p">
-      <label for="p-busca">Buscar<input type="text" id="p-busca" placeholder="nome, cidade ou categoria"></label>
-      <label for="p-etapa">Etapa<select id="p-etapa"><option value="">Todas</option>{% for o in opcoes_etapa %}<option>{{ o }}</option>{% endfor %}</select></label>
-      <label for="p-valid">Validação<select id="p-valid"><option value="">Todas</option>{% for o in opcoes_validacao %}<option>{{ o }}</option>{% endfor %}</select></label>
-      <label class="check"><input type="checkbox" id="p-vencido"> Próximo contato vencido</label>
-      <span class="p-contagem" id="p-contagem"></span>
+  <!-- ===================== TAB: Leads do site ===================== -->
+  <section id="tab-site" class="crm-panel" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Leads do site</h2>
+        <div class="panel-sub">{{ leads_site|length }} lead(s) registrados — edição salva automaticamente</div>
+      </div>
+      <div class="panel-head-actions">
+        <button type="button" class="btn-crm" data-abrir-modal="modal-site-novo">+ Novo lead</button>
+      </div>
     </div>
+
+    <div class="table-toolbar" data-escopo="site">
+      <input type="search" class="tb-search" placeholder="Buscar por nome, instituição, e-mail...">
+      <select class="tb-filter" data-campo="Status">
+        <option value="">Status — todos</option>
+        <option value="Novo">Novo</option>
+        <option value="Em contato">Em contato</option>
+        <option value="Qualificado">Qualificado</option>
+        <option value="Proposta enviada">Proposta enviada</option>
+        <option value="Ganho">Ganho</option>
+        <option value="Perdido">Perdido</option>
+      </select>
+      <span class="tb-count"></span>
+    </div>
+
+    {% if not leads_site %}
+    <p style="color:var(--ink-muted); margin-top:24px;">Nenhum lead registrado ainda.</p>
+    {% else %}
     <div class="leads-table-wrap">
-      <table class="leads-table prospect-table">
+      <table class="leads-table" data-endpoint="/assessment/leads/crm/salvar">
         <thead>
           <tr>
-            <th>Prospect</th>
+            <th>Data</th>
+            <th>Nome</th>
+            <th>Instituição</th>
+            <th>Cargo</th>
             <th>Contato</th>
-            <th>Validação</th>
-            <th>Etapa</th>
-            <th>Responsável / decisor</th>
-            <th>Último contato</th>
-            <th>Próximo contato</th>
-            <th>Resultado do último contato</th>
-            <th>Opt-out</th>
-            <th>Observações</th>
-            <th>Mensagem sugerida</th>
+            <th>Interesse</th>
+            <th>Origem</th>
+            <th>Urgência</th>
+            <th>Mensagem</th>
+            <th>Índice geral</th>
+            <th>Maturidade digital</th>
+            <th>Controle de processos</th>
+            <th>Nível</th>
+            <th>Lacunas prioritárias</th>
+            <th>Respostas do diagnóstico</th>
+            <th>Status</th>
+            <th>Próximo retorno</th>
+            <th>Notas internas</th>
           </tr>
         </thead>
         <tbody>
-          {% for p in prospects %}
-          <tr data-linha="{{ p['_row'] }}" data-empresa="{{ p['Empresa / Clínica'] }}" data-proximo="{{ p['_proximo_iso'] }}"
-              data-texto="{{ (p['Empresa / Clínica'] ~ ' ' ~ p['Cidade'] ~ ' ' ~ p['Região'] ~ ' ' ~ p['Categoria'])|lower }}">
-            <td class="prospect-nome">
-              <strong>{{ p['Empresa / Clínica'] }}</strong>
-              <div class="dim">{{ p['Categoria'] }}</div>
-              <div class="dim">{{ p['Cidade'] }}{% if p['Região'] %} · {{ p['Região'] }}{% endif %}</div>
-              <span class="score" title="Score comercial">score {{ p['_score'] }}</span>
-              {% if p['Prioridade comercial'] %}<span class="score">{{ p['Prioridade comercial'] }}</span>{% endif %}
-            </td>
-            <td class="links">
-              {% if p['_whatsapp'] %}<a href="{{ p['_whatsapp'] }}" target="_blank" rel="noopener">WhatsApp</a>{% endif %}
-              {% if p['Telefone comercial'] %}<span class="dim">{{ p['Telefone comercial'] }}</span>{% endif %}
-              {% if p['_email'] %}<a href="mailto:{{ p['_email'] }}">{{ p['_email'] }}</a>{% endif %}
-              {% if p['_site'] %}<a href="{{ p['_site'] }}" target="_blank" rel="noopener">Site</a>{% endif %}
-              {% if p['_instagram'] %}<a href="{{ p['_instagram'] }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
-              {% if p['_busca_instagram'] %}<a href="{{ p['_busca_instagram'] }}" target="_blank" rel="noopener">Buscar no Instagram</a>{% endif %}
-              {% if p['Canal primário'] %}<span class="dim">canal: {{ p['Canal primário'] }}</span>{% endif %}
-            </td>
+          {% for lead in leads_site %}
+          <tr data-linha="{{ lead['_row'] }}">
+            <td class="nowrap">{{ lead['Data/Hora'] }}</td>
+            <td>{{ lead['Nome'] }}</td>
+            <td>{{ lead['Instituição'] }}</td>
+            <td>{{ lead['Cargo'] }}</td>
             <td>
-              <select data-campo="Contato validado?" aria-label="Validação de {{ p['Empresa / Clínica'] }}">
-                {% if p['Contato validado?'] and p['Contato validado?'] not in opcoes_validacao %}<option selected>{{ p['Contato validado?'] }}</option>{% endif %}
-                {% for o in opcoes_validacao %}<option {{ 'selected' if o == p['Contato validado?'] }}>{{ o }}</option>{% endfor %}
-              </select>
+              <div>{{ lead['E-mail'] }}</div>
+              <div class="dim">{{ lead['WhatsApp'] }}</div>
             </td>
-            <td>
-              <select data-campo="Etapa do funil" aria-label="Etapa de {{ p['Empresa / Clínica'] }}">
-                {% if p['Etapa do funil'] and p['Etapa do funil'] not in opcoes_etapa %}<option selected>{{ p['Etapa do funil'] }}</option>{% endif %}
-                {% for o in opcoes_etapa %}<option {{ 'selected' if o == p['Etapa do funil'] }}>{{ o }}</option>{% endfor %}
-              </select>
-            </td>
-            <td><input type="text" data-campo="Responsável/decisor" value="{{ p['Responsável/decisor'] }}" placeholder="Nome e cargo"></td>
-            <td><input type="date" data-campo="Último contato" value="{{ p['_ultimo_iso'] }}"></td>
-            <td><input type="date" data-campo="Próximo contato" value="{{ p['_proximo_iso'] }}"></td>
-            <td><textarea data-campo="Resultado último contato" placeholder="O que aconteceu">{{ p['Resultado último contato'] }}</textarea></td>
-            <td>
-              <select data-campo="Opt-out" aria-label="Opt-out de {{ p['Empresa / Clínica'] }}">
-                <option value="" {{ 'selected' if not p['Opt-out'] }}>Não</option>
-                <option {{ 'selected' if p['Opt-out'] == 'Sim' }}>Sim</option>
-                {% if p['Opt-out'] and p['Opt-out'] != 'Sim' %}<option selected>{{ p['Opt-out'] }}</option>{% endif %}
-              </select>
-            </td>
-            <td><textarea data-campo="Observações comerciais" placeholder="Histórico, contexto">{{ p['Observações comerciais'] }}</textarea></td>
+            <td>{{ lead['Interesse'] }}</td>
+            <td>{{ lead['Origem'] }}</td>
+            <td>{{ lead['Urgência'] }}</td>
+            <td class="msg-cell">{{ lead['Mensagem'] }}</td>
+            <td class="nowrap">{{ lead['Índice Geral'] }}</td>
+            <td class="nowrap">{{ lead['Maturidade Digital'] }}</td>
+            <td class="nowrap">{{ lead['Controle de Processos'] }}</td>
+            <td class="nowrap">{{ lead['Nível'] }}</td>
+            <td class="msg-cell">{{ lead['Lacunas Prioritárias'] }}</td>
             <td class="respostas-cell">
-              {% if p['Mensagem personalizada'] %}
-              <details><summary>Ver mensagem</summary><div class="respostas-texto">{{ p['Mensagem personalizada'] }}</div></details>
+              {% if lead['Respostas do Diagnóstico'] %}
+              <details>
+                <summary>Ver respostas</summary>
+                <div class="respostas-texto">{{ lead['Respostas do Diagnóstico'] }}</div>
+              </details>
               {% endif %}
             </td>
+            <td>
+              <select data-campo="Status" class="status-select status-{{ (lead['Status'] or 'novo')|lower|replace(' ', '-') }}">
+                {% for opcao in ["Novo", "Em contato", "Qualificado", "Proposta enviada", "Ganho", "Perdido"] %}
+                <option value="{{ opcao }}" {{ 'selected' if lead['Status']==opcao else '' }}>{{ opcao }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td><input type="date" data-campo="Próximo Retorno" value="{{ lead['Próximo Retorno'] }}"></td>
+            <td><textarea data-campo="Notas Internas" placeholder="Histórico de contato...">{{ lead['Notas Internas'] }}</textarea></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -181,95 +123,725 @@
     </div>
     {% endif %}
   </section>
+
+  <!-- ===================== TAB: Prospecção ===================== -->
+  <section id="tab-prospeccao" class="crm-panel" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Prospecção — Clínicas Holísticas</h2>
+        <div class="panel-sub">{{ leads_prospeccao|length }} lead(s) de prospecção outbound — edição salva automaticamente</div>
+      </div>
+      <div class="panel-head-actions">
+        <a class="btn-crm-ghost" href="/assessment/leads/crm/prospeccao/modelo.csv" style="text-decoration:none; display:inline-flex; align-items:center; border-radius:999px; padding:8px 16px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13px;">Baixar modelo CSV</a>
+        <button type="button" class="btn-crm-ghost" data-abrir-modal="modal-prospeccao-importar">Importar CSV</button>
+        <button type="button" class="btn-crm" data-abrir-modal="modal-prospeccao-novo">+ Novo lead</button>
+      </div>
+    </div>
+
+    <div class="table-toolbar" data-escopo="prospeccao">
+      <input type="search" class="tb-search" placeholder="Buscar por empresa, categoria, cidade...">
+      <select class="tb-filter" data-campo="Etapa do funil">
+        <option value="">Etapa — todas</option>
+        {% for nome, slug in etapas %}
+        <option value="{{ nome }}">{{ nome }}</option>
+        {% endfor %}
+      </select>
+      <select class="tb-filter" data-campo="__prioridade">
+        <option value="">Prioridade — todas</option>
+        <option value="Alta">Alta</option>
+        <option value="Média">Média</option>
+        <option value="Baixa">Baixa</option>
+      </select>
+      <span class="tb-count"></span>
+    </div>
+
+    {% if not leads_prospeccao %}
+    <p style="color:var(--ink-muted); margin-top:24px;">Nenhum lead de prospecção carregado ainda.</p>
+    {% else %}
+    <div class="leads-table-wrap">
+      <table class="leads-table" data-endpoint="/assessment/leads/crm/prospeccao/salvar">
+        <thead>
+          <tr>
+            <th>Empresa / Clínica</th>
+            <th>Categoria</th>
+            <th>Cidade / Região</th>
+            <th>Contato</th>
+            <th>Prioridade</th>
+            <th>Score</th>
+            <th>Etapa</th>
+            <th>Canal de origem</th>
+            <th>Pontuação</th>
+            <th>Último sinal</th>
+            <th>Responsável</th>
+            <th>Próximo contato</th>
+            <th>Resultado último contato</th>
+            <th>Mensagem personalizada</th>
+            <th>Observações comerciais</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lead in leads_prospeccao %}
+          <tr data-linha="{{ lead['_row'] }}" data-prioridade="{{ lead['Prioridade comercial'] }}">
+            <td>
+              <div>{{ lead['Empresa / Clínica'] }}</div>
+              {% if lead['Instagram'] %}<div class="dim">{{ lead['Instagram'] }}</div>{% endif %}
+            </td>
+            <td class="msg-cell">{{ lead['Categoria'] }}</td>
+            <td class="nowrap">{{ lead['Cidade'] }}{% if lead['Região'] %} · {{ lead['Região'] }}{% endif %}</td>
+            <td>
+              <div>{{ lead['Telefone comercial'] }}</div>
+              {% if lead['Site'] %}<div class="dim">{{ lead['Site'] }}</div>{% endif %}
+            </td>
+            <td class="nowrap">{{ lead['Prioridade comercial'] }}</td>
+            <td class="nowrap">{{ lead['Score comercial'] }}</td>
+            <td>
+              <select data-campo="Etapa do funil" class="status-select status-{{ etapa_slug.get(lead['Etapa do funil'], 'novo') }}">
+                {% for nome, slug in etapas %}
+                <option value="{{ nome }}" {{ 'selected' if lead['Etapa do funil']==nome else '' }}>{{ nome }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <select data-campo="Canal de origem">
+                <option value="">—</option>
+                {% for canal in canais_origem %}
+                <option value="{{ canal }}" {{ 'selected' if lead['Canal de origem']==canal else '' }}>{{ canal }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td><input type="number" min="0" max="100" data-campo="Pontuação" value="{{ lead['Pontuação'] }}" style="width:70px;"></td>
+            <td><input type="text" data-campo="Último sinal" value="{{ lead['Último sinal'] }}" placeholder="Ex.: respondeu DM"></td>
+            <td><input type="text" data-campo="Responsável/decisor" value="{{ lead['Responsável/decisor'] }}" placeholder="Quem está cuidando"></td>
+            <td><input type="date" data-campo="Próximo contato" value="{{ lead['Próximo contato'] }}"></td>
+            <td><input type="text" data-campo="Resultado último contato" value="{{ lead['Resultado último contato'] }}" placeholder="Ex.: Não atendeu"></td>
+            <td class="msg-cell">{{ lead['Mensagem personalizada'] }}</td>
+            <td><textarea data-campo="Observações comerciais" placeholder="Histórico de contato...">{{ lead['Observações comerciais'] }}</textarea></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ===================== TAB: Dashboard ===================== -->
+  <section id="tab-dashboard" class="crm-panel" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Dashboard</h2>
+        <div class="panel-sub">Visão combinada — leads do site + prospecção outbound</div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ total_leads_site }}</div>
+        <div class="kpi-label">Leads do site (total)</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ leads_site_7d }}</div>
+        <div class="kpi-label">Leads do site — últimos 7 dias</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ total_prospeccao }}</div>
+        <div class="kpi-label">Prospecção (total carregado)</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ prospeccao_em_andamento }}</div>
+        <div class="kpi-label">Prospecção — em andamento</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ prospeccao_ganhos }}</div>
+        <div class="kpi-label">Prospecção — fechados (ganho)</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-value">{{ prospeccao_perdidos }}</div>
+        <div class="kpi-label">Prospecção — perdidos / opt-out</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Evolução — leads do site, últimos 30 dias</h2>
+      <div class="panel-sub">Por data de envio do formulário (contato ou diagnóstico)</div>
+      {% if max_serie_site == 0 %}
+      <p style="color:var(--ink-muted); font-size:13px;">Nenhum lead do site nos últimos 30 dias.</p>
+      {% else %}
+      <div class="chart-bars">
+        {% for dia in serie_site %}
+        <div class="bar-col" title="{{ dia.data_completa }}: {{ dia.total }} lead(s)">
+          <div class="bar" style="height:{{ (dia.total / max_serie_site * 100)|round(1) if dia.total else 2 }}%"></div>
+          {% if loop.index0 % 3 == 0 %}<div class="bar-label">{{ dia.data_curta }}</div>{% else %}<div class="bar-label"></div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="dash-grid-2">
+      <div class="panel">
+        <h2>Funil de prospecção, por etapa</h2>
+        <div class="panel-sub">{{ total_prospeccao }} lead(s) de prospecção outbound</div>
+        <div class="chart-hbars">
+          {% for nome, total, slug in etapas_prospeccao %}
+          <div class="hbar-row">
+            <span>{{ nome }}</span>
+            <div class="hbar-track">
+              <div class="hbar-fill status-{{ slug }}-fill" style="width:{{ (total / max_etapa_prospeccao * 100)|round(1) if total else 0 }}%"></div>
+            </div>
+            <span style="text-align:right; font-variant-numeric:tabular-nums;">{{ total }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Status, leads do site</h2>
+        <div class="panel-sub">{{ total_leads_site }} lead(s) no total</div>
+        <div class="chart-hbars">
+          {% for nome, total in status_site_lista %}
+          <div class="hbar-row">
+            <span>{{ nome }}</span>
+            <div class="hbar-track">
+              <div class="hbar-fill status-{{ status_site_slug[nome] }}-fill" style="width:{{ (total / max_status_site * 100)|round(1) if total else 0 }}%"></div>
+            </div>
+            <span style="text-align:right; font-variant-numeric:tabular-nums;">{{ total }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-grid-2">
+      <div class="panel">
+        <h2>Prioridade comercial — prospecção</h2>
+        <div class="panel-sub">Classificação herdada da base de prospecção</div>
+        <div class="pill-row">
+          {% for nome, total in prioridade_prospeccao %}
+          <div class="pill-stat"><b>{{ total }}</b> {{ nome }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Top categorias — prospecção</h2>
+        <div class="panel-sub">Nichos mais representados na base</div>
+        <ul class="mini-list">
+          {% for nome, total in top_categorias %}
+          <li><span>{{ nome }}</span><span>{{ total }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Top cidades — prospecção</h2>
+      <div class="panel-sub">Onde está concentrada a base atual</div>
+      <ul class="mini-list">
+        {% for nome, total in top_cidades %}
+        <li><span>{{ nome }}</span><span>{{ total }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== TAB: Histórico ===================== -->
+  <section id="tab-historico" class="crm-panel" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Histórico de atividade</h2>
+        <div class="panel-sub">Últimos {{ eventos_historico|length }} evento(s) — criação e mudança de campo, nos dois fluxos</div>
+      </div>
+    </div>
+    {% if not eventos_historico %}
+    <p style="color:var(--ink-muted); margin-top:24px;">Nenhum evento registrado ainda — toda criação ou edição de lead a partir de agora entra aqui.</p>
+    {% else %}
+    <div class="historico-table-wrap">
+      <table class="historico-table">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Origem</th>
+            <th>Lead</th>
+            <th>Evento</th>
+            <th>Campo</th>
+            <th>De</th>
+            <th>Para</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ev in eventos_historico %}
+          <tr>
+            <td class="nowrap">{{ ev['Data/Hora'] }}</td>
+            <td class="nowrap">{{ ev['Origem'] }}</td>
+            <td>{{ ev['Lead'] }}</td>
+            <td><span class="evento-pill {{ 'evento-criado' if 'Criado' in ev['Evento'] else 'evento-alterado' }}">{{ ev['Evento'] }}</span></td>
+            <td>{{ ev['Campo'] }}</td>
+            <td class="msg-cell">{{ ev['De'] }}</td>
+            <td class="msg-cell">{{ ev['Para'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ===================== TAB: Leia-me ===================== -->
+  <section id="tab-leiame" class="crm-panel" hidden>
+    <div class="panel-head">
+      <div>
+        <h2>Leia-me — como usar o CRM</h2>
+        <div class="panel-sub">O essencial pra operar essa tela sem depender de ninguém explicar de novo</div>
+      </div>
+    </div>
+
+    <div class="doc-grid">
+
+      <div class="panel doc-section">
+        <h3>O que é isso aqui</h3>
+        <p>Duas fontes de lead, num lugar só: quem preenche o formulário/diagnóstico do site (aba <b>Leads do site</b>) e quem a gente prospecta ativamente — hoje, clínicas e terapeutas holísticos (aba <b>Prospecção</b>). Cada aba guarda os campos que fazem sentido pra sua origem; não tentamos forçar as duas num formato único.</p>
+        <p>Toda edição é salva sozinha — não existe botão "Salvar" na tabela. Muda o campo, tira o foco (ou espera meio segundo), tá gravado na planilha.</p>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>As 5 abas</h3>
+        <ul class="doc-list">
+          <li><b>Leads do site</b> — quem veio pelo formulário de contato ou pelo Diagnóstico LUMEN. Edite Status, Próximo retorno e Notas internas direto na tabela.</li>
+          <li><b>Prospecção</b> — base de prospecção outbound (hoje: clínicas holísticas de SP). Edite Etapa, Canal de origem, Pontuação (0 a 100), Último sinal, Responsável, Próximo contato, Resultado do último contato e Observações.</li>
+          <li><b>Dashboard</b> — contagens e evolução combinada das duas fontes. É só leitura, pra visão rápida.</li>
+          <li><b>Histórico</b> — log de tudo que foi criado ou alterado, nos dois fluxos, mais recente primeiro. É a "evolução" de verdade — o Dashboard mostra snapshot de hoje, o Histórico mostra o que mudou e quando.</li>
+          <li><b>Leia-me</b> — esta aqui.</li>
+        </ul>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>Adicionar um lead manualmente</h3>
+        <p>Botão <b>"+ Novo lead"</b> no topo de "Leads do site" ou "Prospecção". Use pra quem chegou por telefone, indicação, evento — qualquer contato que não passou pelo formulário do site nem pela prospecção em massa.</p>
+        <p>Só o nome (site) ou a empresa/clínica (prospecção) é obrigatório. Preencha o resto que souber; o que faltar dá pra completar depois direto na tabela.</p>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>Importar uma lista (CSV)</h3>
+        <p>Só existe pra Prospecção — é onde faz sentido carregar várias dezenas de contatos de uma vez.</p>
+        <ol class="doc-list doc-list-num">
+          <li>Clique em <b>"Baixar modelo CSV"</b> — ele já vem com os cabeçalhos certos e uma linha de exemplo.</li>
+          <li>Preencha sua lista nesse modelo (pode apagar a linha de exemplo).</li>
+          <li>Clique em <b>"Importar CSV"</b> e arraste o arquivo, ou escolha pelo seletor.</li>
+          <li>Cada linha sem "Empresa / Clínica" preenchida é ignorada automaticamente — o sistema avisa quantas linhas entraram e quantas foram puladas.</li>
+        </ol>
+        <div class="doc-callout">Etapa do funil em branco vira "Novo" sozinho — não precisa preencher essa coluna se o lead ainda não foi trabalhado.</div>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>Buscar e filtrar</h3>
+        <p>Cada tabela tem uma barra de busca (procura em qualquer coluna visível) e filtros por Etapa/Status e Prioridade. Tudo roda na hora, sem recarregar a página — é só pra achar mais rápido, não esconde nada permanentemente.</p>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>As etapas do funil de prospecção</h3>
+        <ul class="doc-list">
+          {% for nome, slug in etapas %}
+          <li><span class="status-select status-{{ slug }}" style="display:inline-block; padding:2px 10px; margin-right:8px;">{{ nome }}</span>{{ etapa_descricoes.get(nome, "") }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>Boas práticas</h3>
+        <ul class="doc-list">
+          <li><b>Atualize a etapa assim que algo mudar</b> — não deixe pra fazer isso em lote no fim da semana. É o que alimenta o funil do Dashboard.</li>
+          <li><b>Sempre preencha "Próximo contato"</b> quando marcar um lead como em andamento — hoje a tela não avisa follow-up vencido, então esse campo é a sua própria agenda.</li>
+          <li><b>Use "Observações"/"Notas internas" como diário, não como resumo final</b> — vá acrescentando (data + o que aconteceu), não substitua o que já tinha.</li>
+          <li><b>Antes de importar um CSV novo, confira se a empresa já não está na base</b> — a importação não faz checagem de duplicado.</li>
+          <li><b>Dê uma olhada no Histórico de vez em quando</b> — é o jeito mais rápido de ver o que o time fez na semana sem perguntar pra ninguém.</li>
+        </ul>
+      </div>
+
+      <div class="panel doc-section">
+        <h3>Acesso</h3>
+        <p>O PIN de entrada é único pra equipe toda (sem login individual ainda) — a sessão dura 7 dias no navegador. Se o PIN vazar ou alguém sair do time, é só trocar no `.env` do servidor e redeployar.</p>
+      </div>
+
+    </div>
+  </section>
+
 </main>
-<div id="aviso-crm" role="status" aria-live="polite"></div>
 
 <footer class="rodape-marca">eloo.digital · CRM de Leads (uso interno)</footer>
 
+<!-- ===================== MODAL: Novo lead (site) ===================== -->
+<div class="modal-overlay" id="modal-site-novo">
+  <div class="modal-box">
+    <div class="modal-box-head">
+      <div>
+        <h3>Novo lead do site</h3>
+        <p>Pra um contato que chegou por telefone, indicação ou evento — não pelo formulário público.</p>
+      </div>
+      <button type="button" class="modal-close" data-fechar-modal>&times;</button>
+    </div>
+    <form class="modal-box-body" id="form-site-novo">
+      <div class="form-field">
+        <label for="site-novo-nome">Nome *</label>
+        <input type="text" id="site-novo-nome" name="nome" required>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="site-novo-instituicao">Instituição</label>
+          <input type="text" id="site-novo-instituicao" name="instituicao">
+        </div>
+        <div class="form-field">
+          <label for="site-novo-cargo">Cargo</label>
+          <input type="text" id="site-novo-cargo" name="cargo">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="site-novo-email">E-mail</label>
+          <input type="text" id="site-novo-email" name="email">
+        </div>
+        <div class="form-field">
+          <label for="site-novo-whatsapp">WhatsApp</label>
+          <input type="text" id="site-novo-whatsapp" name="whatsapp">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="site-novo-interesse">Interesse</label>
+          <input type="text" id="site-novo-interesse" name="interesse" placeholder="PACCE, Serviços...">
+        </div>
+        <div class="form-field">
+          <label for="site-novo-urgencia">Urgência</label>
+          <input type="text" id="site-novo-urgencia" name="urgencia">
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="site-novo-mensagem">Mensagem / contexto</label>
+        <textarea id="site-novo-mensagem" name="mensagem"></textarea>
+      </div>
+    </form>
+    <div class="modal-box-foot">
+      <button type="button" class="btn-crm-ghost" data-fechar-modal>Cancelar</button>
+      <button type="button" class="btn-crm" id="btn-salvar-site-novo">Salvar lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: Novo lead (prospecção) ===================== -->
+<div class="modal-overlay" id="modal-prospeccao-novo">
+  <div class="modal-box">
+    <div class="modal-box-head">
+      <div>
+        <h3>Novo lead de prospecção</h3>
+        <p>Entrada manual de um prospect pra base de outbound.</p>
+      </div>
+      <button type="button" class="modal-close" data-fechar-modal>&times;</button>
+    </div>
+    <form class="modal-box-body" id="form-prospeccao-novo">
+      <div class="form-field">
+        <label for="prosp-novo-empresa">Empresa / Clínica *</label>
+        <input type="text" id="prosp-novo-empresa" name="Empresa / Clínica" required>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-categoria">Categoria</label>
+          <input type="text" id="prosp-novo-categoria" name="Categoria">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-prioridade">Prioridade comercial</label>
+          <select id="prosp-novo-prioridade" name="Prioridade comercial">
+            <option value="">—</option>
+            <option value="Alta">Alta</option>
+            <option value="Média">Média</option>
+            <option value="Baixa">Baixa</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-cidade">Cidade</label>
+          <input type="text" id="prosp-novo-cidade" name="Cidade">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-regiao">Região</label>
+          <input type="text" id="prosp-novo-regiao" name="Região">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-telefone">Telefone comercial</label>
+          <input type="text" id="prosp-novo-telefone" name="Telefone comercial">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-email">E-mail público</label>
+          <input type="text" id="prosp-novo-email" name="E-mail público">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-site">Site</label>
+          <input type="text" id="prosp-novo-site" name="Site">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-instagram">Instagram</label>
+          <input type="text" id="prosp-novo-instagram" name="Instagram">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-fonte">Fonte</label>
+          <input type="text" id="prosp-novo-fonte" name="Fonte" placeholder="Indicação, Google Maps...">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-responsavel">Responsável</label>
+          <input type="text" id="prosp-novo-responsavel" name="Responsável/decisor">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-tipo">Tipo de Prospect</label>
+          <input type="text" id="prosp-novo-tipo" name="Tipo de Prospect">
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-proximo">Próximo contato</label>
+          <input type="date" id="prosp-novo-proximo" name="Próximo contato">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="prosp-novo-canal">Canal de origem</label>
+          <select id="prosp-novo-canal" name="Canal de origem">
+            <option value="">—</option>
+            {% for canal in canais_origem %}
+            <option value="{{ canal }}">{{ canal }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="prosp-novo-pontuacao">Pontuação (0 a 100)</label>
+          <input type="number" min="0" max="100" id="prosp-novo-pontuacao" name="Pontuação">
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="prosp-novo-mensagem">Mensagem personalizada</label>
+        <textarea id="prosp-novo-mensagem" name="Mensagem personalizada"></textarea>
+      </div>
+      <div class="form-field">
+        <label for="prosp-novo-obs">Observações comerciais</label>
+        <textarea id="prosp-novo-obs" name="Observações comerciais"></textarea>
+      </div>
+    </form>
+    <div class="modal-box-foot">
+      <button type="button" class="btn-crm-ghost" data-fechar-modal>Cancelar</button>
+      <button type="button" class="btn-crm" id="btn-salvar-prospeccao-novo">Salvar lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL: Importar CSV (prospecção) ===================== -->
+<div class="modal-overlay" id="modal-prospeccao-importar">
+  <div class="modal-box">
+    <div class="modal-box-head">
+      <div>
+        <h3>Importar leads via CSV</h3>
+        <p>Use o modelo (botão "Baixar modelo CSV") pra garantir que as colunas batem. "Empresa / Clínica" é obrigatório em cada linha.</p>
+      </div>
+      <button type="button" class="modal-close" data-fechar-modal>&times;</button>
+    </div>
+    <div class="modal-box-body">
+      <div class="drop-zone" id="drop-zone-importar">
+        Arraste um .csv aqui ou <label for="input-csv-importar">escolha o arquivo</label>
+        <input type="file" id="input-csv-importar" accept=".csv" style="display:none;">
+      </div>
+      <div id="importar-feedback"></div>
+    </div>
+    <div class="modal-box-foot">
+      <button type="button" class="btn-crm-ghost" data-fechar-modal>Fechar</button>
+    </div>
+  </div>
+</div>
+
 <script>
-(() => {
-  const aviso = document.getElementById("aviso-crm");
-  let timerAviso;
-  function avisar(texto, erro) {
-    aviso.textContent = texto;
-    aviso.className = "on" + (erro ? " erro" : "");
-    clearTimeout(timerAviso);
-    timerAviso = setTimeout(() => { aviso.className = ""; }, erro ? 5000 : 1500);
-  }
+window.ETAPA_SLUG = {
+  {% for nome, slug in etapas %}"{{ nome }}": "{{ slug }}"{{ "," if not loop.last }}
+  {% endfor %}
+};
 
-  async function postar(url, dados) {
-    const resp = await fetch(url, {
+function ativarTab(nome){
+  if(!["site", "prospeccao", "dashboard", "historico", "leiame"].includes(nome)) nome = "site";
+  document.querySelectorAll(".crm-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === nome));
+  document.querySelectorAll(".crm-panel").forEach(p => { p.hidden = p.id !== "tab-" + nome; });
+  history.replaceState(null, "", "#" + nome);
+}
+document.querySelectorAll(".crm-tab").forEach(b => b.addEventListener("click", () => ativarTab(b.dataset.tab)));
+ativarTab((location.hash || "#site").slice(1));
+
+function debounce(fn, ms){
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+/* ---------- Edição inline (Status/Etapa/Notas...) ---------- */
+async function salvarCampo(endpoint, row, campo, valor, onOk){
+  const linha = row.dataset.linha;
+  try{
+    const resp = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(dados),
-      credentials: "same-origin",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: new URLSearchParams({linha, campo, valor}),
     });
-    if (!resp.ok) {
-      let msg = "Não foi possível salvar — tente de novo.";
-      try { msg = (await resp.json()).detail || msg; } catch (e) {}
-      throw new Error(msg);
+    if(!resp.ok) throw new Error(await resp.text());
+    if(onOk) onOk();
+  }catch(e){
+    alert("Erro ao salvar — tente de novo.");
+  }
+}
+const salvarDebounced = debounce(salvarCampo, 500);
+
+document.querySelectorAll("table[data-endpoint]").forEach(table => {
+  const endpoint = table.dataset.endpoint;
+  table.querySelectorAll("tr[data-linha]").forEach(row => {
+    row.querySelectorAll("[data-campo]").forEach(el => {
+      const evento = (el.tagName === "SELECT" || el.type === "date") ? "change" : "input";
+      el.addEventListener(evento, () => {
+        const onOk = el.classList.contains("status-select")
+          ? () => {
+              const slug = window.ETAPA_SLUG[el.value] || el.value.toLowerCase().replace(/ /g, "-");
+              el.className = "status-select status-" + slug;
+            }
+          : null;
+        salvarDebounced(endpoint, row, el.dataset.campo, el.value, onOk);
+      });
+    });
+  });
+});
+
+/* ---------- Busca / filtro (client-side, sem reload) ---------- */
+document.querySelectorAll(".table-toolbar").forEach(toolbar => {
+  const painel = toolbar.closest(".crm-panel");
+  const tabela = painel.querySelector("table.leads-table");
+  if(!tabela) return;
+  const linhas = Array.from(tabela.querySelectorAll("tbody tr[data-linha]"));
+  const contagemEl = toolbar.querySelector(".tb-count");
+  const buscaEl = toolbar.querySelector(".tb-search");
+  const filtrosEls = Array.from(toolbar.querySelectorAll(".tb-filter"));
+
+  function aplicar(){
+    const termo = (buscaEl.value || "").toLowerCase().trim();
+    let visiveis = 0;
+    linhas.forEach(row => {
+      let ok = !termo || row.textContent.toLowerCase().includes(termo);
+      if(ok){
+        for(const sel of filtrosEls){
+          const valorFiltro = sel.value;
+          if(!valorFiltro) continue;
+          if(sel.dataset.campo === "__prioridade"){
+            if((row.dataset.prioridade || "") !== valorFiltro){ ok = false; break; }
+            continue;
+          }
+          const campoEl = row.querySelector(`[data-campo="${sel.dataset.campo}"]`);
+          const atual = campoEl ? campoEl.value : "";
+          if(atual !== valorFiltro){ ok = false; break; }
+        }
+      }
+      row.style.display = ok ? "" : "none";
+      if(ok) visiveis++;
+    });
+    if(contagemEl) contagemEl.textContent = visiveis + " de " + linhas.length;
+  }
+  buscaEl.addEventListener("input", debounce(aplicar, 150));
+  filtrosEls.forEach(sel => sel.addEventListener("change", aplicar));
+  tabela.addEventListener("change", (e) => {
+    if(e.target.dataset && e.target.dataset.campo) aplicar();
+  });
+  aplicar();
+});
+
+/* ---------- Modais ---------- */
+function abrirModal(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.add("open");
+}
+function fecharModal(el){
+  const overlay = el.closest(".modal-overlay");
+  if(overlay) overlay.classList.remove("open");
+}
+document.querySelectorAll("[data-abrir-modal]").forEach(btn => {
+  btn.addEventListener("click", () => abrirModal(btn.dataset.abrirModal));
+});
+document.querySelectorAll("[data-fechar-modal]").forEach(btn => {
+  btn.addEventListener("click", () => fecharModal(btn));
+});
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", (e) => { if(e.target === overlay) overlay.classList.remove("open"); });
+});
+
+/* ---------- Novo lead (site) ---------- */
+document.getElementById("btn-salvar-site-novo").addEventListener("click", async () => {
+  const form = document.getElementById("form-site-novo");
+  const nomeEl = document.getElementById("site-novo-nome");
+  if(!nomeEl.value.trim()){ nomeEl.focus(); return; }
+  const dados = new FormData(form);
+  const btn = document.getElementById("btn-salvar-site-novo");
+  btn.disabled = true;
+  try{
+    const resp = await fetch("/assessment/leads/crm/novo", { method: "POST", body: new URLSearchParams(dados) });
+    if(!resp.ok) throw new Error(await resp.text());
+    location.hash = "site";
+    location.reload();
+  }catch(e){
+    alert("Não foi possível salvar — confira os campos e tente de novo.");
+    btn.disabled = false;
+  }
+});
+
+/* ---------- Novo lead (prospecção) ---------- */
+document.getElementById("btn-salvar-prospeccao-novo").addEventListener("click", async () => {
+  const form = document.getElementById("form-prospeccao-novo");
+  const empresaEl = document.getElementById("prosp-novo-empresa");
+  if(!empresaEl.value.trim()){ empresaEl.focus(); return; }
+  const dados = new FormData(form);
+  const btn = document.getElementById("btn-salvar-prospeccao-novo");
+  btn.disabled = true;
+  try{
+    const resp = await fetch("/assessment/leads/crm/prospeccao/novo", { method: "POST", body: new URLSearchParams(dados) });
+    if(!resp.ok) throw new Error(await resp.text());
+    location.hash = "prospeccao";
+    location.reload();
+  }catch(e){
+    alert("Não foi possível salvar — confira os campos e tente de novo.");
+    btn.disabled = false;
+  }
+});
+
+/* ---------- Importar CSV (prospecção) ---------- */
+async function importarArquivoCsv(file){
+  const feedback = document.getElementById("importar-feedback");
+  feedback.innerHTML = '<div class="import-feedback">Importando...</div>';
+  const corpo = new FormData();
+  corpo.append("arquivo", file);
+  try{
+    const resp = await fetch("/assessment/leads/crm/prospeccao/importar", { method: "POST", body: corpo });
+    const json = await resp.json().catch(() => null);
+    if(!resp.ok){
+      const detalhe = (json && json.detail) ? json.detail : "Erro ao importar.";
+      feedback.innerHTML = '<div class="import-feedback erro">' + detalhe + '</div>';
+      return;
     }
+    feedback.innerHTML = '<div class="import-feedback ok">' + json.gravadas + ' lead(s) importado(s)' +
+      (json.ignoradas ? ', ' + json.ignoradas + ' linha(s) ignorada(s) sem Empresa / Clínica' : '') + '. Atualizando...</div>';
+    setTimeout(() => { location.hash = "prospeccao"; location.reload(); }, 1200);
+  }catch(e){
+    feedback.innerHTML = '<div class="import-feedback erro">Não foi possível importar — tente de novo.</div>';
   }
-
-  // Um temporizador por campo: editar dois campos seguidos não perde o primeiro.
-  function ligarCampos(tabela, montar) {
-    tabela.querySelectorAll("tr[data-linha]").forEach((row) => {
-      row.querySelectorAll("[data-campo]").forEach((el) => {
-        let t;
-        const salvar = async () => {
-          try { await postar(...montar(row, el)); avisar("Salvo na planilha"); if (el.tagName === "SELECT" && el.classList.contains("status-select")) el.className = "status-select status-" + el.value.toLowerCase().replace(/ /g, "-"); }
-          catch (e) { avisar(e.message, true); }
-        };
-        const imediato = el.tagName === "SELECT" || el.type === "date";
-        el.addEventListener(imediato ? "change" : "input", () => { clearTimeout(t); t = setTimeout(salvar, imediato ? 0 : 600); });
-      });
-    });
-  }
-
-  const tabelaLeads = document.querySelector("#aba-leads table");
-  if (tabelaLeads) ligarCampos(tabelaLeads, (row, el) => ["/assessment/leads/crm/salvar", { linha: row.dataset.linha, campo: el.dataset.campo, valor: el.value }]);
-  const tabelaP = document.querySelector("#aba-prospeccao table");
-  if (tabelaP) ligarCampos(tabelaP, (row, el) => ["/assessment/leads/crm/prospect/salvar", { linha: row.dataset.linha, empresa: row.dataset.empresa, campo: el.dataset.campo, valor: el.value }]);
-
-  // Abas (lembra a última pelo endereço: #prospeccao)
-  const abas = { leads: ["tab-leads", "aba-leads"], prospeccao: ["tab-prospeccao", "aba-prospeccao"] };
-  function mostrar(nome) {
-    Object.entries(abas).forEach(([k, [tab, painel]]) => {
-      const ativo = k === nome;
-      document.getElementById(tab).setAttribute("aria-selected", String(ativo));
-      document.getElementById(painel).hidden = !ativo;
-    });
-    history.replaceState(null, "", nome === "prospeccao" ? "#prospeccao" : location.pathname);
-  }
-  document.getElementById("tab-leads").addEventListener("click", () => mostrar("leads"));
-  document.getElementById("tab-prospeccao").addEventListener("click", () => mostrar("prospeccao"));
-  if (location.hash === "#prospeccao") mostrar("prospeccao");
-
-  // Filtros da prospecção (só na tela)
-  const busca = document.getElementById("p-busca");
-  if (busca) {
-    const etapa = document.getElementById("p-etapa"), valid = document.getElementById("p-valid"),
-          vencido = document.getElementById("p-vencido"), cont = document.getElementById("p-contagem");
-    const hoje = new Date().toISOString().slice(0, 10);
-    const filtrar = () => {
-      const b = busca.value.trim().toLowerCase();
-      let n = 0;
-      tabelaP.querySelectorAll("tr[data-linha]").forEach((row) => {
-        const et = row.querySelector('[data-campo="Etapa do funil"]').value;
-        const va = row.querySelector('[data-campo="Contato validado?"]').value;
-        const px = row.querySelector('[data-campo="Próximo contato"]').value;
-        const ok = (!b || row.dataset.texto.includes(b)) && (!etapa.value || et === etapa.value)
-          && (!valid.value || va === valid.value) && (!vencido.checked || (px && px < hoje));
-        row.hidden = !ok;
-        if (ok) n++;
-      });
-      cont.textContent = n + " de " + tabelaP.querySelectorAll("tr[data-linha]").length + " prospects";
-    };
-    busca.addEventListener("input", filtrar);
-    [etapa, valid, vencido].forEach((el) => el.addEventListener("change", filtrar));
-    tabelaP.addEventListener("change", filtrar);
-    filtrar();
-  }
-})();
+}
+const inputCsv = document.getElementById("input-csv-importar");
+inputCsv.addEventListener("change", () => { if(inputCsv.files[0]) importarArquivoCsv(inputCsv.files[0]); });
+const dropZone = document.getElementById("drop-zone-importar");
+dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("drag"); });
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag"));
+dropZone.addEventListener("drop", (e) => {
+  e.preventDefault(); dropZone.classList.remove("drag");
+  if(e.dataTransfer.files[0]) importarArquivoCsv(e.dataTransfer.files[0]);
+});
 </script>
 {% endblock %}
