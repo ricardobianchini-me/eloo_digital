@@ -14,10 +14,11 @@ class Settings(BaseSettings):
     # pra abrir a ferramenta de preenchimento ao vivo. Ver pin_auth.py.
     internal_pin: str = ""
 
-    # PIN da página oculta de gestão de leads (/assessment/leads/crm) —
-    # gate separado do internal_pin acima (público-alvo e equipe diferentes:
-    # comercial vs. quem preenche assessments). Ver leads_crm_auth.py.
-    leads_crm_pin: str = "2424"
+    # PIN do CRM de leads (/assessment/leads/crm). Sem padrão de propósito:
+    # o repositório é público, então um valor aqui seria um PIN conhecido por
+    # qualquer um. Vazio = CRM fechado. Em produção vem do mesmo secret da
+    # gestão (ELOO_GESTAO_PIN), ver deploy-assessment-forms.yml.
+    leads_crm_pin: str = ""
 
     # PIN da página de gestão da empresa (/gestao) — visão
     # administrativa dos sócios. Sem padrão de propósito: vazio = página
