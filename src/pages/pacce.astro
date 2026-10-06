@@ -74,7 +74,7 @@ const maturidade = [
   </head>
   <body>
     <nav class="topo" id="topo">
-      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span>.digital</span></a>
+      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span class="ponto">.</span><span>digital</span></a>
       <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
         <span></span><span></span><span></span>
       </button>
@@ -215,7 +215,7 @@ const maturidade = [
     <footer class="rodape">
       <div class="wrap rodape-grid">
         <div>
-          <a href="/" class="marca">eloo<span>.digital</span></a>
+          <a href="/" class="marca">eloo<span class="ponto">.</span><span>digital</span></a>
           <p>Tecnologia para transformar operações.</p>
         </div>
         <div>
@@ -304,6 +304,8 @@ const maturidade = [
   .topo { position: sticky; top: 0; z-index: var(--z-topo); display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.4rem; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
   .marca { font-family: var(--font-title); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
   .marca span { font-weight: 500; color: var(--ink-soft); }
+  /* Ponto vermelho do logo (identidade original), também no rodapé. */
+  .marca .ponto, .rodape .marca .ponto { color: var(--accent); font-weight: 800; }
   .menu { display: flex; gap: 1.5rem; font-size: .9rem; font-weight: 600; }
   .menu a { text-decoration: none; color: var(--ink-soft); }
   .menu a:hover { color: var(--accent); }

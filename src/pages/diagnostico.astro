@@ -391,7 +391,7 @@ const minutos = (n) => `≈ ${Math.max(2, Math.round((n * 15) / 60))} min`;
   </head>
   <body>
     <nav class="topo" id="topo">
-      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span>.digital</span></a>
+      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span class="ponto">.</span><span>digital</span></a>
       <div class="menu">
         <a href="/#capacidades">O que fazemos</a>
         <a href="/pacce">PACCE</a>
@@ -533,7 +533,7 @@ const minutos = (n) => `≈ ${Math.max(2, Math.round((n * 15) / 60))} min`;
     <footer class="rodape">
       <div class="wrap rodape-grid">
         <div>
-          <a href="/" class="marca">eloo<span>.digital</span></a>
+          <a href="/" class="marca">eloo<span class="ponto">.</span><span>digital</span></a>
           <p>Tecnologia para transformar operações.</p>
         </div>
         <div>
@@ -829,6 +829,8 @@ const minutos = (n) => `≈ ${Math.max(2, Math.round((n * 15) / 60))} min`;
   .topo { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1.4rem; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .marca { font-family: var(--font-title); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
   .marca span { font-weight: 500; color: var(--ink-soft); }
+  /* Ponto vermelho do logo (identidade original), também no rodapé. */
+  .marca .ponto, .rodape .marca .ponto { color: var(--accent); font-weight: 800; }
   .menu { display: flex; gap: 1.5rem; font-size: .9rem; font-weight: 600; }
   .menu a { text-decoration: none; color: var(--ink-soft); }
   .menu a:hover { color: var(--accent-claro); }
