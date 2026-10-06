@@ -60,7 +60,7 @@ jobs:
           GOOGLE_CREDENTIALS_FILE=/app/credentials/credentials.json
           SECRET_KEY=${{ secrets.ASSESSMENT_SECRET_KEY }}
           INTERNAL_PIN=${{ secrets.ASSESSMENT_INTERNAL_PIN }}
-          LEADS_CRM_PIN=${{ secrets.ASSESSMENT_LEADS_CRM_PIN || '2424' }}
+          LEADS_CRM_PIN=${{ secrets.ELOO_GESTAO_PIN }}
           GESTAO_PIN=${{ secrets.ELOO_GESTAO_PIN }}
           GMAIL_USER=${{ secrets.ASSESSMENT_GMAIL_USER }}
           GMAIL_APP_PASSWORD=${{ secrets.ASSESSMENT_GMAIL_APP_PASSWORD }}

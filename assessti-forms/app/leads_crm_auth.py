@@ -16,7 +16,9 @@ _MENSAGEM = b"acesso-leads-crm-ok"
 
 def _assinatura_esperada() -> str:
     chave = settings.secret_key.encode()
-    return hmac.new(chave, _MENSAGEM, hashlib.sha256).hexdigest()
+    # O PIN entra na assinatura: trocar o PIN derruba as sessões abertas
+    # (antes, quem entrou com um PIN antigo seguia logado por até 7 dias).
+    return hmac.new(chave, _MENSAGEM + settings.leads_crm_pin.encode(), hashlib.sha256).hexdigest()
 
 
 def pin_correto(pin: str) -> bool:
@@ -30,6 +32,6 @@ def valor_cookie() -> str:
 
 
 def cookie_valido(valor: str | None) -> bool:
-    if not valor:
+    if not valor or not settings.leads_crm_pin:
         return False
     return hmac.compare_digest(valor, _assinatura_esperada())

@@ -76,7 +76,7 @@ GitHub (fixos, não crescem por cliente):
 | `ASSESSMENT_SECRET_KEY` | chave dos tokens de todos os clientes/módulos (trocar invalida TODOS os links de TODOS os clientes de uma vez) |
 | `ASSESSMENT_INTERNAL_PIN` | PIN da tela de login interna (`/responder/entrar`), compartilhado entre clientes |
 | `ASSESSMENT_GOOGLE_CREDENTIALS_B64` | JSON da service account em base64 (`base64 -w0 credentials.json`) |
-| `ASSESSMENT_LEADS_CRM_PIN` | PIN da página oculta de gestão de leads (`/assessment/leads/crm`) — se não setado, cai no padrão `2424` do `config.py` |
+| `ELOO_GESTAO_PIN` (também para o CRM) | O CRM de leads (`/assessment/leads/crm`) usa o mesmo PIN da gestão. Sem padrão no código: se o secret não existir, o CRM fica fechado |
 | `ELOO_GESTAO_PIN` | PIN da página de gestão da empresa (`/gestao`) — sem padrão: se não setado, a página fica fechada |
 | `ASSESSMENT_GMAIL_USER` | conta Gmail usada para notificar novo lead por e-mail |
 | `ASSESSMENT_GMAIL_APP_PASSWORD` | senha de app do Gmail acima (myaccount.google.com/apppasswords — exige verificação em 2 etapas na conta) |
