@@ -55,35 +55,170 @@ textarea, select, input[type=text], input[type=password], input[type=date]{
   border-radius:6px; padding:8px 10px;
 }
 
+/* Etapas do funil de prospecção (/assessment/leads/crm/prospeccao) — mesmo
+   padrão visual dos .status-* de style.css, cobrindo os slugs que não
+   existem lá (o funil de prospecção tem mais estágios que o Status simples
+   dos leads do site). */
+.status-contato-validado{background:var(--amber-soft); color:var(--amber);}
+.status-abordagem-enviada{background:var(--amber-soft); color:var(--amber);}
+.status-em-conversa{background:var(--accent-soft); color:var(--accent);}
+.status-diagnostico-agendado{background:var(--accent-soft); color:var(--accent);}
+.status-fechado-ganho{background:var(--good-soft); color:var(--good);}
+.status-perdido-opt-out{background:var(--red-soft); color:var(--red);}
+
+/* Dashboard (/assessment/leads/crm/dashboard) — KPIs, barras e listas.
+   Cor semântica (bom/alerta/ruim) fica separada do --accent de marca, só
+   pra estado (igual às pills .status-*); as barras reaproveitam esses
+   mesmos tokens com fundo sólido (as .status-* são "soft", pensadas pra
+   texto sobre fundo claro, não pra preencher uma barra). */
+.kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:12px; margin-top:20px; }
+.kpi-tile{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+.kpi-tile .kpi-value{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size:26px; font-variant-numeric:tabular-nums; }
+.kpi-tile .kpi-label{ font-size:12px; color:var(--ink-muted); margin-top:2px; }
+
+.panel{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-top:20px; }
+.panel h2{ font-size:15px; margin:0 0 4px; }
+.panel .panel-sub{ font-size:12px; color:var(--ink-muted); margin-bottom:14px; }
+
+.dash-grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width: 860px){ .dash-grid-2{ grid-template-columns:1fr; } }
+
+.chart-bars{ display:flex; align-items:flex-end; gap:3px; height:130px; }
+.chart-bars .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:4px; }
+.chart-bars .bar{ width:100%; background:var(--accent-fill); border-radius:2px 2px 0 0; min-height:2px; }
+.chart-bars .bar-label{ font-size:9px; color:var(--ink-faint); margin-top:4px; height:14px; white-space:nowrap; }
+
+.chart-hbars{ display:flex; flex-direction:column; gap:10px; }
+.chart-hbars .hbar-row{ display:grid; grid-template-columns:150px 1fr 36px; align-items:center; gap:10px; font-size:13px; }
+.chart-hbars .hbar-track{ background:var(--surface-2); border-radius:6px; height:14px; overflow:hidden; }
+.chart-hbars .hbar-fill{ height:100%; border-radius:6px; background:var(--ink-faint); transition:width .3s ease; }
+.status-novo-fill{ background:var(--ink-faint); }
+.status-contato-validado-fill, .status-abordagem-enviada-fill, .status-em-contato-fill{ background:var(--amber); }
+.status-em-conversa-fill, .status-diagnostico-agendado-fill, .status-qualificado-fill, .status-proposta-enviada-fill{ background:var(--accent); }
+.status-fechado-ganho-fill, .status-ganho-fill{ background:var(--good); }
+.status-perdido-opt-out-fill, .status-perdido-fill{ background:var(--red); }
+
+.pill-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.pill-stat{ display:flex; align-items:center; gap:8px; background:var(--surface-2); border-radius:999px; padding:6px 14px; font-size:13px; }
+.pill-stat b{ font-family:'Bricolage Grotesque', sans-serif; }
+
+.mini-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+.mini-list li{ display:flex; justify-content:space-between; font-size:13px; padding:7px 0; border-bottom:1px solid var(--border); }
+.mini-list li:last-child{ border-bottom:none; }
+
+/* Abas (/assessment/leads/crm) — troca client-side entre Leads do site,
+   Prospecção e Dashboard, sem reload (ver script no fim do template). */
+.crm-tabs{ display:flex; gap:4px; margin-top:18px; border-bottom:1px solid var(--border); }
+.crm-tab{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:700; font-size:14px;
+  background:none; border:none; border-bottom:2px solid transparent;
+  color:var(--ink-muted); padding:10px 4px; margin-right:22px; cursor:pointer;
+  display:flex; align-items:center; gap:7px;
+}
+.crm-tab:hover{ color:var(--ink); }
+.crm-tab.active{ color:var(--ink); border-bottom-color:var(--accent-fill); }
+.crm-tab-count{
+  font-family:'IBM Plex Sans', sans-serif; font-weight:600; font-size:11px;
+  background:var(--surface-2); color:var(--ink-muted); border-radius:999px; padding:1px 8px;
+}
+.crm-tab.active .crm-tab-count{ background:var(--accent-soft); color:var(--accent); }
+.crm-panel[hidden]{ display:none; }
+.panel-head{ margin-top:22px; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.panel-head h2{ font-size:18px; margin:0; }
+.panel-head .panel-sub{ font-size:13px; color:var(--ink-muted); margin-top:3px; }
+.panel-head-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* Botões do CRM (distintos do .status-btn, que é o CTA de ação única da
+   tela de login) — ghost pra ações secundárias, cheio pra ação primária
+   de cada painel. */
+.btn-crm{
+  font-family:'Bricolage Grotesque', sans-serif; font-weight:700; font-size:13px;
+  border-radius:999px; padding:8px 16px; cursor:pointer; white-space:nowrap;
+  background:var(--accent-fill); color:var(--accent-ink); border:1px solid var(--accent-fill);
+}
+.btn-crm:hover{ background:color-mix(in srgb, var(--accent-fill) 88%, black); }
+.btn-crm-ghost{ background:var(--surface); color:var(--ink); border:1px solid var(--border-strong); }
+.btn-crm-ghost:hover{ background:var(--surface-2); }
+
+/* Barra de busca/filtro — acima de cada tabela. */
+.table-toolbar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; }
+.table-toolbar input[type="search"]{
+  flex:1 1 220px; min-width:0; padding:8px 12px; border-radius:8px;
+  border:1px solid var(--border); background:var(--surface); font-size:13px;
+}
+.table-toolbar select{
+  padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--surface); font-size:13px;
+}
+.table-toolbar .tb-count{ font-size:12px; color:var(--ink-faint); white-space:nowrap; margin-left:auto; }
+
+/* Modal (novo lead / importar CSV). */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(30,30,28,.45); display:none;
+  align-items:center; justify-content:center; z-index:50; padding:16px;
+}
+.modal-overlay.open{ display:flex; }
+.modal-box{
+  background:var(--surface); border-radius:14px; width:min(560px, 100%);
+  max-height:88vh; overflow-y:auto; box-shadow:0 24px 60px -20px rgba(0,0,0,.35);
+}
+.modal-box-head{ padding:20px 22px 6px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.modal-box-head h3{ font-size:17px; margin:0; }
+.modal-box-head p{ font-size:12.5px; color:var(--ink-muted); margin:6px 0 0; }
+.modal-close{ background:none; border:none; font-size:20px; line-height:1; color:var(--ink-muted); cursor:pointer; padding:2px; }
+.modal-box-body{ padding:10px 22px 4px; }
+.modal-box-foot{ display:flex; gap:10px; padding:16px 22px 22px; }
+.modal-box-foot .btn-crm, .modal-box-foot .btn-crm-ghost{ flex:1; text-align:center; }
+
+.form-field{ margin-bottom:12px; }
+.form-field label{ display:block; font-size:12.5px; font-weight:600; color:var(--ink-muted); margin-bottom:4px; }
+.form-field input, .form-field select, .form-field textarea{
+  width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border);
+  background:var(--bg); font-size:13.5px;
+}
+.form-field textarea{ min-height:64px; resize:vertical; }
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+
+.drop-zone{
+  border:1.5px dashed var(--border-strong); border-radius:10px; padding:26px 14px;
+  text-align:center; font-size:13px; color:var(--ink-muted); margin:12px 0;
+}
+.drop-zone.drag{ border-color:var(--accent); color:var(--accent); }
+.drop-zone label{ color:var(--accent); font-weight:600; cursor:pointer; }
+.import-feedback{ font-size:13px; border-radius:8px; padding:10px 12px; margin-top:10px; }
+.import-feedback.ok{ background:var(--good-soft); color:var(--good); }
+.import-feedback.erro{ background:var(--red-soft); color:var(--red); }
+
+/* Aba Histórico */
+.historico-table-wrap{ overflow-x:auto; margin-top:18px; border:1px solid var(--border); border-radius:8px; }
+.historico-table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--surface); }
+.historico-table th, .historico-table td{ padding:9px 11px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
+.historico-table tbody tr:last-child td{ border-bottom:none; }
+.historico-table .evento-pill{
+  display:inline-block; font-size:11px; font-weight:600; padding:2px 9px; border-radius:999px;
+  background:var(--surface-2); color:var(--ink-muted);
+}
+.historico-table .evento-criado{ background:var(--good-soft); color:var(--good); }
+.historico-table .evento-alterado{ background:var(--accent-soft); color:var(--accent); }
+
+/* Aba Leia-me */
+.doc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+@media (max-width:860px){ .doc-grid{ grid-template-columns:1fr; } }
+.doc-section{ margin-top:0; }
+.doc-section h3{ font-size:15px; margin:0 0 10px; }
+.doc-section p{ font-size:13.5px; line-height:1.6; color:var(--ink-muted); margin:0 0 10px; }
+.doc-section p:last-child{ margin-bottom:0; }
+.doc-list{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:8px; }
+.doc-list li{ font-size:13.5px; line-height:1.55; color:var(--ink-muted); }
+.doc-list li b{ color:var(--ink); }
+.doc-list-num{ padding-left:20px; }
+.doc-callout{
+  font-size:13px; background:var(--accent-soft); color:var(--accent); border-radius:8px;
+  padding:10px 12px; margin-top:10px;
+}
+
 /* Logo eloo.digital com o ponto vermelho (identidade). */
 .marca-crm{ font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:600; color:var(--ink-faint); }
 .marca-crm .logo{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size:16px; color:var(--ink); letter-spacing:-0.01em; }
 .marca-crm .ponto{ color:var(--accent-fill); }
 .marca-crm .sufixo{ font-weight:500; color:var(--ink-muted); }
-
-/* Abas Leads / Prospecção */
-.abas{ display:flex; gap:6px; margin-top:20px; border-bottom:1px solid var(--border); }
-.abas button{ font-family:'Bricolage Grotesque', sans-serif; font-weight:700; font-size:15px; background:none; border:0; border-bottom:3px solid transparent; padding:10px 14px; color:var(--ink-muted); cursor:pointer; }
-.abas button span{ font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:600; background:var(--surface-2); border-radius:999px; padding:1px 8px; margin-left:4px; }
-.abas button[aria-selected="true"]{ color:var(--ink); border-bottom-color:var(--accent-fill); }
-[hidden]{ display:none !important; }
-
-/* Prospecção */
-.filtros-p{ display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-top:18px; }
-.filtros-p label{ display:grid; gap:3px; font-size:11px; color:var(--ink-muted); font-weight:600; }
-.filtros-p label.check{ display:flex; gap:6px; align-items:center; font-size:12.5px; }
-.filtros-p input[type=text], .filtros-p select{ width:auto; margin:0; }
-.p-contagem{ font-size:12.5px; color:var(--ink-muted); }
-.prospect-table td{ min-width:120px; }
-.prospect-table .prospect-nome{ min-width:220px; }
-.prospect-table .prospect-nome strong{ display:block; font-size:13.5px; }
-.prospect-table .links{ min-width:170px; }
-.prospect-table .links a{ display:block; color:var(--accent); font-weight:600; text-decoration:none; font-size:12.5px; margin-bottom:3px; overflow-wrap:anywhere; }
-.prospect-table .links a:hover{ text-decoration:underline; }
-.prospect-table input[type=text], .prospect-table textarea, .prospect-table select{ width:100%; min-width:140px; margin:0; }
-.prospect-table textarea{ min-height:54px; resize:vertical; }
-.score{ display:inline-block; margin-top:5px; margin-right:4px; font-size:11px; font-weight:600; background:var(--surface-2); color:var(--ink-muted); border-radius:999px; padding:1px 8px; }
-.aviso-erro{ margin-top:20px; padding:12px 14px; border-radius:8px; background:var(--red-soft); color:var(--red); font-size:14px; }
-#aviso-crm{ position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none; }
-#aviso-crm.on{ opacity:1; }
-#aviso-crm.erro{ background:var(--red); }
