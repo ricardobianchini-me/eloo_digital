@@ -1,5 +1,5 @@
 """
-Gate de PIN da página de gestão da empresa (/assessment/leads/gestao) —
+Gate de PIN da página de gestão da empresa (/gestao) —
 mesmo padrão de `leads_crm_auth.py` (tela própria, cookie assinado), mas
 cookie e PIN separados: é a visão administrativa dos sócios (roadmap, metas,
 decisões), não o CRM comercial.

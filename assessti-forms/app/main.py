@@ -31,10 +31,11 @@ BASE_DIR = Path(__file__).parent
 STATIC_PATH = "/assessment/_shared/responder/static"
 LOGIN_PATH = "/assessment/_shared/responder/entrar"
 LEADS_CRM_LOGIN_PATH = "/assessment/leads/crm/entrar"
-# Gestão da empresa fica sob /assessment/leads/ pra reaproveitar o
-# `location /assessment/leads/` que o nginx do host já encaminha pra cá.
-GESTAO_PATH = "/assessment/leads/gestao"
-GESTAO_LOGIN_PATH = "/assessment/leads/gestao/entrar"
+# Gestão da empresa em /gestao (location próprio no nginx do host,
+# 2026-10-06). O endereço antigo, /assessment/leads/gestao, redireciona.
+GESTAO_PATH = "/gestao"
+GESTAO_LOGIN_PATH = "/gestao/entrar"
+GESTAO_PATH_ANTIGO = "/assessment/leads/gestao"
 
 app = FastAPI(title="eloo Assessment")
 app.mount(STATIC_PATH, StaticFiles(directory=BASE_DIR / "static"), name="static")
@@ -507,6 +508,12 @@ def _gestao_autenticado(request: Request) -> bool:
 def _exigir_gestao(request: Request) -> None:
     if not _gestao_autenticado(request):
         raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+
+
+@app.get(GESTAO_PATH_ANTIGO)
+@app.get(GESTAO_PATH_ANTIGO + "/{resto:path}")
+def gestao_endereco_antigo(resto: str = ""):
+    return RedirectResponse(url=GESTAO_PATH, status_code=301)
 
 
 @app.get(GESTAO_LOGIN_PATH, response_class=HTMLResponse)

@@ -1,5 +1,5 @@
 """
-Página de gestão da empresa (/assessment/leads/gestao) — roadmap, metas,
+Página de gestão da empresa (/gestao) — roadmap, metas,
 funil, visão e decisões dos sócios, lidos e gravados na mesma planilha do
 CRM de leads ("eloo.digital — CRM e Plano", ver `leads.LEADS_SPREADSHEET_ID`).
 

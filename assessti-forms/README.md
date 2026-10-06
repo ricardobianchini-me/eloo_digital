@@ -77,7 +77,7 @@ GitHub (fixos, não crescem por cliente):
 | `ASSESSMENT_INTERNAL_PIN` | PIN da tela de login interna (`/responder/entrar`), compartilhado entre clientes |
 | `ASSESSMENT_GOOGLE_CREDENTIALS_B64` | JSON da service account em base64 (`base64 -w0 credentials.json`) |
 | `ASSESSMENT_LEADS_CRM_PIN` | PIN da página oculta de gestão de leads (`/assessment/leads/crm`) — se não setado, cai no padrão `2424` do `config.py` |
-| `ELOO_GESTAO_PIN` | PIN da página de gestão da empresa (`/assessment/leads/gestao`) — sem padrão: se não setado, a página fica fechada |
+| `ELOO_GESTAO_PIN` | PIN da página de gestão da empresa (`/gestao`) — sem padrão: se não setado, a página fica fechada |
 | `ASSESSMENT_GMAIL_USER` | conta Gmail usada para notificar novo lead por e-mail |
 | `ASSESSMENT_GMAIL_APP_PASSWORD` | senha de app do Gmail acima (myaccount.google.com/apppasswords — exige verificação em 2 etapas na conta) |
 | `ASSESSMENT_LEADS_NOTIFY_EMAIL` | pra onde a notificação vai — se vazio, usa o próprio `ASSESSMENT_GMAIL_USER` |
@@ -96,7 +96,7 @@ automaticamente (mesmo padrão de UX do `modulo.html`). Nenhuma mudança de
 nginx foi necessária: `location /assessment/leads/` já era um prefixo
 (não regex), então já cobre qualquer sub-rota nova sob esse caminho.
 
-**Gestão da empresa:** `/assessment/leads/gestao` (`gestao.py`,
+**Gestão da empresa:** `/gestao` (`gestao.py`,
 `gestao_auth.py`, `templates/gestao.html`) — painel administrativo dos
 sócios sobre a mesma planilha do CRM: resumo com métricas (por sócio, área e
 mês, atrasados, vencendo em 7 dias, bloqueados), roadmap editável (abas
@@ -106,7 +106,9 @@ registro de decisões ("Decisões"). A planilha continua sendo a fonte de
 verdade — a aba "Painel" dela calcula as mesmas métricas por fórmula. Itens
 do roadmap são localizados pelo ID (coluna A), não pelo número da linha.
 PIN próprio (`GESTAO_PIN`, secret `ELOO_GESTAO_PIN`), sem valor padrão: sem
-o secret a página não abre. Mesmo prefixo `/assessment/leads/` do nginx.
+o secret a página não abre. Tem `location` próprio no nginx do host
+(`^/gestao(/|$)`, ver hlera-bot/nginx/vm2-apps/eloo-digital); o endereço antigo
+`/assessment/leads/gestao` redireciona para `/gestao`.
 
 **Acesso interno da equipe:** tela de login própria do app, em
 `/assessment/_shared/responder/entrar` — pede só o PIN (`INTERNAL_PIN`

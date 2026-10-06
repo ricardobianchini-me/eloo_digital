@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     # comercial vs. quem preenche assessments). Ver leads_crm_auth.py.
     leads_crm_pin: str = "2424"
 
-    # PIN da página de gestão da empresa (/assessment/leads/gestao) — visão
+    # PIN da página de gestão da empresa (/gestao) — visão
     # administrativa dos sócios. Sem padrão de propósito: vazio = página
     # fechada. Ver gestao_auth.py.
     gestao_pin: str = ""
