@@ -14,6 +14,7 @@ import gestao_auth
 import leads
 import leads_crm_auth
 import leads_notify
+import prospeccao
 from modulos import CAMPOS_ENTREVISTADO, CAMPOS_REVISOR, COL_STATUS, MODULOS_POR_ID
 import pin_auth
 import portal_auth
@@ -477,7 +478,40 @@ def leads_crm_painel(request: Request):
             {"request": request, "mensagem": "Não foi possível carregar os leads agora. Tente novamente em instantes."},
             status_code=502,
         )
-    return templates.TemplateResponse("leads_crm.html", {"request": request, "leads": registros})
+    # Prospecção é a segunda aba da página; se a leitura dela falhar, os leads
+    # do site continuam aparecendo (só a aba de prospecção mostra o aviso).
+    try:
+        dados_prospeccao = prospeccao.listar()
+        erro_prospeccao = False
+    except Exception:
+        logger.exception("Falha ao ler prospecção")
+        dados_prospeccao, erro_prospeccao = {"prospects": []}, True
+    return templates.TemplateResponse("leads_crm.html", {
+        "request": request,
+        "leads": registros,
+        "prospects": dados_prospeccao["prospects"],
+        "erro_prospeccao": erro_prospeccao,
+        "opcoes_validacao": prospeccao.OPCOES_VALIDACAO,
+        "opcoes_etapa": prospeccao.OPCOES_ETAPA,
+    })
+
+
+@app.post("/assessment/leads/crm/prospect/salvar")
+async def leads_crm_prospect_salvar(
+    request: Request, linha: int = Form(...), empresa: str = Form(...), campo: str = Form(...), valor: str = Form("")
+):
+    if not _leads_crm_autenticado(request):
+        raise HTTPException(status_code=401, detail="Sessão expirada — atualize a página e faça login de novo")
+    try:
+        prospeccao.atualizar(linha, empresa, campo, valor)
+    except KeyError as erro:
+        raise HTTPException(status_code=409, detail=str(erro.args[0]) if erro.args else "Atualize a página")
+    except ValueError as erro:
+        raise HTTPException(status_code=400, detail=str(erro))
+    except Exception:
+        logger.exception("Falha ao salvar campo do prospect")
+        raise HTTPException(status_code=502, detail="Não foi possível salvar agora — tente novamente")
+    return JSONResponse({"ok": True})
 
 
 @app.post("/assessment/leads/crm/salvar")
