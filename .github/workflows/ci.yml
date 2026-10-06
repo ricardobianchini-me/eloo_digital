@@ -1,0 +1,48 @@
+name: CI
+
+# Roda em todo pull request para a main: garante que o site compila e que o
+# app assessti-forms importa sem erro, antes de qualquer merge (e portanto
+# antes de qualquer deploy). Não publica nada.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  site:
+    name: Build do site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx astro build
+
+  app:
+    name: Checagem do app assessti-forms
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: assessti-forms/app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: assessti-forms/app/requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Compila todos os módulos
+        run: python -m compileall -q .
+      - name: Importa a aplicação (rotas e templates)
+        env:
+          SECRET_KEY: ci
+          GESTAO_PIN: ci
+        run: python -c "import main; print(len(main.app.routes), 'rotas')"
