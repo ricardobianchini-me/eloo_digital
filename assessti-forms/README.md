@@ -76,8 +76,7 @@ GitHub (fixos, não crescem por cliente):
 | `ASSESSMENT_SECRET_KEY` | chave dos tokens de todos os clientes/módulos (trocar invalida TODOS os links de TODOS os clientes de uma vez) |
 | `ASSESSMENT_INTERNAL_PIN` | PIN da tela de login interna (`/responder/entrar`), compartilhado entre clientes |
 | `ASSESSMENT_GOOGLE_CREDENTIALS_B64` | JSON da service account em base64 (`base64 -w0 credentials.json`) |
-| `ELOO_GESTAO_PIN` (também para o CRM) | O CRM de leads (`/assessment/leads/crm`) usa o mesmo PIN da gestão. Sem padrão no código: se o secret não existir, o CRM fica fechado |
-| `ELOO_GESTAO_PIN` | PIN da página de gestão da empresa (`/gestao`) — sem padrão: se não setado, a página fica fechada |
+| `ELOO_GESTAO_PIN` | PIN único da página de gestão (`/gestao`) e do CRM de leads (`/assessment/leads/crm`) — sem padrão no código: se não setado, as duas ficam fechadas |
 | `ASSESSMENT_GMAIL_USER` | conta Gmail usada para notificar novo lead por e-mail |
 | `ASSESSMENT_GMAIL_APP_PASSWORD` | senha de app do Gmail acima (myaccount.google.com/apppasswords — exige verificação em 2 etapas na conta) |
 | `ASSESSMENT_LEADS_NOTIFY_EMAIL` | pra onde a notificação vai — se vazio, usa o próprio `ASSESSMENT_GMAIL_USER` |
@@ -90,7 +89,7 @@ colunas de CRM básico (Status, Próximo Retorno, Notas Internas) editadas
 só pela equipe. A cada novo lead, tenta notificar por e-mail
 (`leads_notify.py`, Gmail SMTP com senha de app) — falha no e-mail nunca
 impede o lead de ser salvo, a planilha é a fonte de verdade. Página de
-gestão oculta em `/assessment/leads/crm`, PIN próprio (gate separado do
+gestão oculta em `/assessment/leads/crm`, mesmo PIN da gestão (gate separado do
 PIN interno do Assessment, `leads_crm_auth.py`) — edição inline salva
 automaticamente (mesmo padrão de UX do `modulo.html`). Nenhuma mudança de
 nginx foi necessária: `location /assessment/leads/` já era um prefixo
