@@ -137,6 +137,17 @@
   .frente .prio-tags{display:flex; gap:4px; flex-wrap:wrap; font-size:11px;}
   .frente .prio-tags span{padding:1px 7px; border-radius:999px; background:var(--surface-2); color:var(--ink-muted);}
   .frente .prio-tags span.alta{background:var(--red-soft); color:var(--red); font-weight:600;}
+  .marca-linha{display:flex; align-items:baseline; gap:.45rem; font-size:12px; color:var(--ink-faint);}
+  .marca-logo{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:16px; color:var(--ink); letter-spacing:-0.01em;}
+  .marca-logo .ponto{color:var(--accent-fill);}
+  .marca-logo .sufixo{font-weight:500; color:var(--ink-muted);}
+  nav.g-nav{align-items:center;}
+  .g-filtro{margin-left:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .g-filtro label{display:flex; gap:6px; align-items:center; font-size:12px; color:var(--ink-muted); font-weight:600;}
+  .g-filtro select{width:auto; margin:0;}
+  .link-meus{font:inherit; font-size:12px; font-weight:600; color:var(--accent); background:none; border:0; cursor:pointer; padding:4px 2px;}
+  .filtro-aviso{margin:-28px 0 0; font-size:13px; color:var(--ink); background:var(--accent-soft); border-radius:8px; padding:8px 12px;}
+  @media (max-width:760px){ .g-filtro{margin-left:0; width:100%;} }
   #aviso{position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none;}
   #aviso.on{opacity:1;}
   #aviso.erro{background:var(--red);}
@@ -155,7 +166,7 @@
 
   <header class="g-head">
     <div>
-      <div class="eyebrow"><span class="brandmark" style="color:var(--accent-fill); font-family:'Bricolage Grotesque',sans-serif; font-weight:800;">eloo</span> · gestão da empresa</div>
+      <div class="marca-linha"><span class="marca-logo">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span><span class="marca-sep">·</span>gestão da empresa</div>
       <h1>Plano Q4 2026</h1>
       <div class="sub">Dados da planilha "eloo.digital — CRM e Plano" · {{ g.total }} itens · hoje {{ hoje }}</div>
     </div>
@@ -173,24 +184,30 @@
 
   <nav class="g-nav" aria-label="Seções">
     <a href="#resumo">Resumo</a><a href="#frentes">Frentes</a><a href="#roadmap">Roadmap</a><a href="#linha">Linha do tempo</a><a href="#metas">Metas</a><a href="#funil">Funil</a><a href="#visao">Visão e nichos</a><a href="#decisoes">Decisões</a>
+    <span class="g-filtro">
+      <label for="g-dono">Sócio<select id="g-dono"><option value="">Todos os sócios</option>{% for d in donos if d != "Todos" %}<option>{{ d }}</option>{% endfor %}<option value="Todos">Coletivo (Todos)</option></select></label>
+      <label for="g-prio">Prioridade<select id="g-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
+      <button type="button" class="link-meus" id="g-meus">Só os meus</button>
+    </span>
   </nav>
+  <p class="filtro-aviso" id="g-aviso" hidden></p>
 
   <section id="resumo">
     <h2>Resumo</h2>
-    <div class="kpis">
-      <div class="kpi"><b>{{ g.pct }}%</b><span>concluído</span></div>
-      <div class="kpi"><b>{{ g.feito }}</b><span>feitos</span></div>
-      <div class="kpi"><b>{{ g.andamento }}</b><span>em andamento</span></div>
-      <div class="kpi {{ 'alerta' if g.bloqueado }}"><b>{{ g.bloqueado }}</b><span>bloqueados</span></div>
-      <div class="kpi"><b>{{ g.afazer }}</b><span>a fazer</span></div>
-      <div class="kpi {{ 'alerta' if g.atrasados }}"><b>{{ g.atrasados }}</b><span>atrasados</span></div>
-      <div class="kpi"><b>{{ g.vence_7d }}</b><span>vencem em 7 dias</span></div>
+    <div class="kpis" id="resumo-kpis">
+      <div class="kpi"><b id="k-pct">{{ g.pct }}%</b><span>concluído</span></div>
+      <div class="kpi"><b id="k-feito">{{ g.feito }}</b><span>feitos</span></div>
+      <div class="kpi"><b id="k-andamento">{{ g.andamento }}</b><span>em andamento</span></div>
+      <div class="kpi {{ 'alerta' if g.bloqueado }}" id="kc-bloqueado"><b id="k-bloqueado">{{ g.bloqueado }}</b><span>bloqueados</span></div>
+      <div class="kpi"><b id="k-afazer">{{ g.afazer }}</b><span>a fazer</span></div>
+      <div class="kpi {{ 'alerta' if g.atrasados }}" id="kc-atrasados"><b id="k-atrasados">{{ g.atrasados }}</b><span>atrasados</span></div>
+      <div class="kpi"><b id="k-vence">{{ g.vence_7d }}</b><span>vencem em 7 dias</span></div>
     </div>
-    <div class="barra" role="img" aria-label="{{ g.feito }} feitos, {{ g.andamento }} em andamento, {{ g.bloqueado }} bloqueados de {{ g.total }}">
+    <div class="barra" id="k-barra" role="img" aria-label="{{ g.feito }} feitos, {{ g.andamento }} em andamento, {{ g.bloqueado }} bloqueados de {{ g.total }}">
       {% if g.total %}<i class="c-feito" style="width:{{ 100*g.feito/g.total }}%"></i><i class="c-andamento" style="width:{{ 100*g.andamento/g.total }}%"></i><i class="c-bloqueado" style="width:{{ 100*g.bloqueado/g.total }}%"></i>{% endif %}
     </div>
 
-    <div class="grid3">
+    <div class="grid3" id="resumo-listas">
       {% for titulo, lista, vazio in [("Atrasados", metricas.atrasados, "Nada atrasado."), ("Vencem nos próximos 7 dias", metricas.vence_7d, "Nada vencendo."), ("Bloqueados", metricas.bloqueados, "Nada bloqueado.")] %}
       <div class="painel">
         <h3>{{ titulo }} ({{ lista|length }})</h3>
@@ -223,8 +240,6 @@
   <section id="frentes">
     <h2>Frentes</h2>
     <div class="filtros">
-      <label for="fr-dono">Sócio<select id="fr-dono"><option value="">Todos os sócios</option>{% for d in donos if d != "Todos" %}<option>{{ d }}</option>{% endfor %}<option value="Todos">Coletivo (Todos)</option></select></label>
-      <label for="fr-prio">Prioridade<select id="fr-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
       <label for="fr-saude">Situação<select id="fr-saude"><option value="">Todas</option><option value="critica">Atenção já</option><option value="atencao">Atenção</option><option value="ok">No ritmo</option></select></label>
       <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="fr-abertos"> Só itens não feitos</label>
       <span class="vazio" id="fr-contagem"></span>
@@ -238,9 +253,7 @@
     <h2>Roadmap</h2>
     <div class="filtros">
       <label for="f-area">Área<select id="f-area"><option value="">Todas</option>{% for a in areas %}<option>{{ a }}</option>{% endfor %}</select></label>
-      <label for="f-dono">Dono<select id="f-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
       <label for="f-mes">Mês<select id="f-mes"><option value="">Todos</option>{% for m in meses %}<option>{{ m }}</option>{% endfor %}</select></label>
-      <label for="f-prio">Prioridade<select id="f-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
       <label for="f-status">Status<select id="f-status"><option value="">Todos</option><option value="abertos">Não feitos</option>{% for s in status %}<option>{{ s }}</option>{% endfor %}</select></label>
       <label for="f-busca">Buscar<input type="text" id="f-busca" placeholder="palavra do item ou nota"></label>
       <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="f-atraso"> Só atrasados</label>
@@ -291,8 +304,6 @@
   <section id="linha">
     <h2>Linha do tempo</h2>
     <div class="filtros">
-      <label for="tl-dono">Dono<select id="tl-dono"><option value="">Todos</option>{% for d in donos %}<option>{{ d }}</option>{% endfor %}</select></label>
-      <label for="tl-prio">Prioridade<select id="tl-prio"><option value="">Todas</option>{% for p in prioridades %}<option>{{ p }}</option>{% endfor %}</select></label>
       <label style="display:flex; gap:6px; align-items:center; font-size:12px;"><input type="checkbox" id="tl-feitos"> Esconder feitos</label>
       <span class="tl-legenda"><i class="c-feito"></i>Feito <i class="c-andamento"></i>Em andamento <i class="c-bloqueado"></i>Bloqueado <i class="c-afazer"></i>A fazer <i class="c-semprazo"></i>Sem prazo (mês previsto) <b>◆</b> prazo</span>
     </div>
@@ -310,7 +321,7 @@
           <div class="tl-grupo-nome">{{ g.area }}</div>
           {% for l in g.linhas %}
           {% set i = l.item %}
-          <div class="tl-linha" data-dono="{{ i['Dono'] }}" data-prioridade="{{ i['Prioridade'] }}" data-status="{{ i['Status'] }}">
+          <div class="tl-linha" data-id="{{ i['ID'] }}" data-dono="{{ i['Dono'] }}" data-prioridade="{{ i['Prioridade'] }}" data-status="{{ i['Status'] }}">
             <div class="tl-rot" title="{{ i['Item'] }}">{{ i['Item'] }}<small>{{ i['Dono'] }}{% if i._prazo_curto %} · {{ i._prazo_curto }}{% endif %}</small></div>
             <div class="tl-trilho">
               {% for s in tl.semanas %}<i class="tl-grade" style="left:{{ s.pct }}%"></i>{% endfor %}
@@ -418,8 +429,11 @@
   const ITENS = JSON.parse(document.getElementById("dados-itens").textContent);
   const AREAS = JSON.parse(document.getElementById("dados-areas").textContent);
   const SAUDE = { critica: "Atenção já", atencao: "Atenção", ok: "No ritmo" };
-  const frDono = document.getElementById("fr-dono"), frPrio = document.getElementById("fr-prio"),
-        frSaude = document.getElementById("fr-saude"), frAbertos = document.getElementById("fr-abertos");
+  // Filtro global (menu fixo): vale para resumo, frentes, roadmap e linha do tempo.
+  const gDono = document.getElementById("g-dono"), gPrio = document.getElementById("g-prio");
+  try { gDono.value = localStorage.getItem("eloo_gestao_filtro_dono") || ""; gPrio.value = localStorage.getItem("eloo_gestao_filtro_prio") || ""; } catch (e) {}
+  const passaGlobal = (dono, prioridade) => (!gDono.value || dono === gDono.value) && (!gPrio.value || prioridade === gPrio.value);
+  const frSaude = document.getElementById("fr-saude"), frAbertos = document.getElementById("fr-abertos");
   const novo = (tag, cls, texto) => { const e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; };
 
   // Cards das frentes, recalculados no navegador a cada filtro.
@@ -429,8 +443,7 @@
     let nFrentes = 0, nItens = 0;
     AREAS.forEach((area) => {
       const itens = ITENS.filter((i) => i.area === area
-        && (!frDono.value || i.dono === frDono.value)
-        && (!frPrio.value || i.prioridade === frPrio.value)
+        && passaGlobal(i.dono, i.prioridade)
         && (!frAbertos.checked || i.status !== "Feito"));
       if (!itens.length) return;
       const conta = (st) => itens.filter((i) => i.status === st).length;
@@ -474,8 +487,35 @@
     document.getElementById("frentes-vazio").hidden = nFrentes > 0;
     document.getElementById("fr-contagem").textContent = nFrentes + " frente(s) · " + nItens + " item(ns)";
   }
-  [frDono, frPrio, frSaude, frAbertos].forEach((e) => e.addEventListener("change", desenharFrentes));
-  desenharFrentes();
+  [frSaude, frAbertos].forEach((e) => e.addEventListener("change", desenharFrentes));
+
+  // Resumo do topo recalculado com o filtro global.
+  function desenharResumo() {
+    const itens = ITENS.filter((i) => passaGlobal(i.dono, i.prioridade));
+    const conta = (st) => itens.filter((i) => i.status === st).length;
+    const total = itens.length, feito = conta("Feito"), andamento = conta("Em andamento"), bloqueado = conta("Bloqueado");
+    const atrasados = itens.filter((i) => i.atrasado), vence = itens.filter((i) => i.vence_7d);
+    const put = (id, v) => { document.getElementById(id).textContent = v; };
+    put("k-pct", (total ? Math.round(100 * feito / total) : 0) + "%"); put("k-feito", feito); put("k-andamento", andamento);
+    put("k-bloqueado", bloqueado); put("k-afazer", conta("A fazer")); put("k-atrasados", atrasados.length); put("k-vence", vence.length);
+    document.getElementById("kc-bloqueado").classList.toggle("alerta", bloqueado > 0);
+    document.getElementById("kc-atrasados").classList.toggle("alerta", atrasados.length > 0);
+    const barra = document.getElementById("k-barra"); barra.textContent = "";
+    if (total) [["c-feito", feito], ["c-andamento", andamento], ["c-bloqueado", bloqueado]].forEach(([k, n]) => { const i = novo("i", k); i.style.width = (100 * n / total) + "%"; barra.append(i); });
+    barra.setAttribute("aria-label", feito + " feitos, " + andamento + " em andamento, " + bloqueado + " bloqueados de " + total);
+    const porPrazo = (a, b) => (a.prazo || "9999").localeCompare(b.prazo || "9999");
+    const listas = [["Atrasados", atrasados.sort(porPrazo), "Nada atrasado."], ["Vencem nos próximos 7 dias", vence.sort(porPrazo), "Nada vencendo."], ["Bloqueados", itens.filter((i) => i.status === "Bloqueado"), "Nada bloqueado."]];
+    const caixa = document.getElementById("resumo-listas"); caixa.textContent = "";
+    listas.forEach(([titulo, lista, vazio]) => {
+      const painel = novo("div", "painel"); painel.append(novo("h3", "", titulo + " (" + lista.length + ")"));
+      if (lista.length) {
+        const ul = novo("ul");
+        lista.forEach((i) => { const li = novo("li"); li.append(novo("span", "", i.item), novo("small", "", i.dono + (i.prazo_curto ? " · " + i.prazo_curto : ""))); ul.append(li); });
+        painel.append(ul);
+      } else painel.append(novo("p", "vazio", vazio));
+      caixa.append(painel);
+    });
+  }
 
   const quemSel = document.getElementById("quem");
   try { quemSel.value = localStorage.getItem("eloo_gestao_quem") || ""; } catch (e) {}
@@ -508,7 +548,13 @@
           if (campo === "Status") dado.status = el.value;
           if (campo === "Dono") dado.dono = el.value;
           if (campo === "Prioridade") dado.prioridade = el.value;
-          desenharFrentes();
+          const linha = document.querySelector('.tl-linha[data-id="' + item.dataset.id + '"]');
+          if (linha) {
+            if (campo === "Status") linha.dataset.status = el.value;
+            if (campo === "Dono") linha.dataset.dono = el.value;
+            if (campo === "Prioridade") linha.dataset.prioridade = el.value;
+          }
+          aplicarFiltroGlobal();
         }
         avisar("Salvo na planilha");
       } catch (e) { avisar(e.message, true); }
@@ -543,8 +589,7 @@
   });
 
   // Filtros do roadmap (só na tela, nada é salvo).
-  const fPrio = document.getElementById("f-prio");
-  const fArea = document.getElementById("f-area"), fDono = document.getElementById("f-dono"),
+  const fArea = document.getElementById("f-area"),
         fMes = document.getElementById("f-mes"), fStatus = document.getElementById("f-status"),
         fBusca = document.getElementById("f-busca"), fAtraso = document.getElementById("f-atraso"),
         fCont = document.getElementById("f-contagem");
@@ -556,9 +601,8 @@
       area.querySelectorAll(".item").forEach((it) => {
         const st = it.dataset.status;
         const ok = (!fArea.value || area.dataset.area === fArea.value)
-          && (!fDono.value || it.dataset.dono === fDono.value)
+          && passaGlobal(it.dataset.dono, it.dataset.prioridade)
           && (!fMes.value || it.dataset.mes === fMes.value)
-          && (!fPrio.value || it.dataset.prioridade === fPrio.value)
           && (!fStatus.value || (fStatus.value === "abertos" ? st !== "Feito" : st === fStatus.value))
           && (!fAtraso.checked || it.dataset.atrasado === "1")
           && (!busca || it.dataset.texto.includes(busca));
@@ -570,35 +614,46 @@
     });
     fCont.textContent = visiveis + " item(ns)";
   }
-  [fArea, fDono, fMes, fStatus, fAtraso, fPrio].forEach((el) => el.addEventListener("change", filtrar));
+  [fArea, fMes, fStatus, fAtraso].forEach((el) => el.addEventListener("change", filtrar));
   fBusca.addEventListener("input", filtrar);
-  document.querySelectorAll("[data-filtro-dono]").forEach((a) => a.addEventListener("click", () => { fDono.value = a.dataset.filtroDono; fArea.value = ""; filtrar(); }));
+  document.querySelectorAll("[data-filtro-dono]").forEach((a) => a.addEventListener("click", () => { gDono.value = a.dataset.filtroDono; fArea.value = ""; aplicarFiltroGlobal(); }));
   document.addEventListener("click", (ev) => {
     const a = ev.target.closest("[data-filtro-area]");
     if (!a) return;
     fArea.value = a.dataset.filtroArea;
-    fDono.value = a.closest("#frentes") ? document.getElementById("fr-dono").value : "";
-    fPrio.value = a.closest("#frentes") ? document.getElementById("fr-prio").value : "";
     fStatus.value = a.closest("#frentes") && document.getElementById("fr-abertos").checked ? "abertos" : "";
     filtrar();
   });
-  filtrar();
 
   // Linha do tempo: filtro por dono e esconder feitos.
-  const tlDono = document.getElementById("tl-dono"), tlFeitos = document.getElementById("tl-feitos");
-  const tlPrio = document.getElementById("tl-prio");
+  const tlFeitos = document.getElementById("tl-feitos");
   function filtrarLinha() {
     document.querySelectorAll(".tl-grupo").forEach((g) => {
       let n = 0;
       g.querySelectorAll(".tl-linha").forEach((l) => {
-        const ok = (!tlDono.value || l.dataset.dono === tlDono.value) && (!tlPrio.value || l.dataset.prioridade === tlPrio.value) && !(tlFeitos.checked && l.dataset.status === "Feito");
+        const ok = passaGlobal(l.dataset.dono, l.dataset.prioridade) && !(tlFeitos.checked && l.dataset.status === "Feito");
         l.hidden = !ok;
         if (ok) n++;
       });
       g.hidden = n === 0;
     });
   }
-  [tlDono, tlFeitos, tlPrio].forEach((el) => el.addEventListener("change", filtrarLinha));
+  tlFeitos.addEventListener("change", filtrarLinha);
+
+  function aplicarFiltroGlobal() {
+    try { localStorage.setItem("eloo_gestao_filtro_dono", gDono.value); localStorage.setItem("eloo_gestao_filtro_prio", gPrio.value); } catch (e) {}
+    desenharResumo(); desenharFrentes(); filtrar(); filtrarLinha();
+    const aviso = document.getElementById("g-aviso");
+    const partes = [gDono.value && (gDono.value === "Todos" ? "itens coletivos" : "itens de " + gDono.value), gPrio.value && "prioridade " + gPrio.value.toLowerCase()].filter(Boolean);
+    aviso.hidden = !partes.length;
+    aviso.textContent = partes.length ? "Mostrando só " + partes.join(", ") + " em toda a página (resumo, frentes, roadmap e linha do tempo)." : "";
+  }
+  [gDono, gPrio].forEach((el) => el.addEventListener("change", aplicarFiltroGlobal));
+  document.getElementById("g-meus").addEventListener("click", () => {
+    if (!quemSel.value) { avisar("Escolha seu nome em \"Você é\" no topo primeiro.", true); quemSel.focus(); return; }
+    gDono.value = quemSel.value; aplicarFiltroGlobal();
+  });
+  aplicarFiltroGlobal();
 })();
 </script>
 {% endblock %}
