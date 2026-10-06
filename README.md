@@ -4,6 +4,10 @@ Site institucional da Eloo, feito em [Astro](https://astro.build), construído e
 
 **No ar:** https://eloo.digital
 
+> **Antes de mudar qualquer coisa, leia o [CONTRIBUTING.md](CONTRIBUTING.md).**
+> Toda mudança entra por branch e pull request; a `main` publica sozinha na
+> VM-2 e nada é editado direto no servidor.
+
 ## Páginas
 
 | Rota | Arquivo | O quê |
