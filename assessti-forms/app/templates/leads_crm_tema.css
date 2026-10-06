@@ -54,3 +54,36 @@ textarea, select, input[type=text], input[type=password], input[type=date]{
   max-width:340px; max-height:220px; overflow-y:auto; background:var(--surface-2);
   border-radius:6px; padding:8px 10px;
 }
+
+/* Logo eloo.digital com o ponto vermelho (identidade). */
+.marca-crm{ font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:600; color:var(--ink-faint); }
+.marca-crm .logo{ font-family:'Bricolage Grotesque', sans-serif; font-weight:800; font-size:16px; color:var(--ink); letter-spacing:-0.01em; }
+.marca-crm .ponto{ color:var(--accent-fill); }
+.marca-crm .sufixo{ font-weight:500; color:var(--ink-muted); }
+
+/* Abas Leads / Prospecção */
+.abas{ display:flex; gap:6px; margin-top:20px; border-bottom:1px solid var(--border); }
+.abas button{ font-family:'Bricolage Grotesque', sans-serif; font-weight:700; font-size:15px; background:none; border:0; border-bottom:3px solid transparent; padding:10px 14px; color:var(--ink-muted); cursor:pointer; }
+.abas button span{ font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:600; background:var(--surface-2); border-radius:999px; padding:1px 8px; margin-left:4px; }
+.abas button[aria-selected="true"]{ color:var(--ink); border-bottom-color:var(--accent-fill); }
+[hidden]{ display:none !important; }
+
+/* Prospecção */
+.filtros-p{ display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-top:18px; }
+.filtros-p label{ display:grid; gap:3px; font-size:11px; color:var(--ink-muted); font-weight:600; }
+.filtros-p label.check{ display:flex; gap:6px; align-items:center; font-size:12.5px; }
+.filtros-p input[type=text], .filtros-p select{ width:auto; margin:0; }
+.p-contagem{ font-size:12.5px; color:var(--ink-muted); }
+.prospect-table td{ min-width:120px; }
+.prospect-table .prospect-nome{ min-width:220px; }
+.prospect-table .prospect-nome strong{ display:block; font-size:13.5px; }
+.prospect-table .links{ min-width:170px; }
+.prospect-table .links a{ display:block; color:var(--accent); font-weight:600; text-decoration:none; font-size:12.5px; margin-bottom:3px; overflow-wrap:anywhere; }
+.prospect-table .links a:hover{ text-decoration:underline; }
+.prospect-table input[type=text], .prospect-table textarea, .prospect-table select{ width:100%; min-width:140px; margin:0; }
+.prospect-table textarea{ min-height:54px; resize:vertical; }
+.score{ display:inline-block; margin-top:5px; margin-right:4px; font-size:11px; font-weight:600; background:var(--surface-2); color:var(--ink-muted); border-radius:999px; padding:1px 8px; }
+.aviso-erro{ margin-top:20px; padding:12px 14px; border-radius:8px; background:var(--red-soft); color:var(--red); font-size:14px; }
+#aviso-crm{ position:fixed; right:16px; bottom:16px; padding:9px 14px; border-radius:8px; font-size:13px; background:var(--ink); color:var(--surface); opacity:0; transition:opacity .2s; pointer-events:none; }
+#aviso-crm.on{ opacity:1; }
+#aviso-crm.erro{ background:var(--red); }

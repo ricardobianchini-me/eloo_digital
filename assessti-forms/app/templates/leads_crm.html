@@ -10,13 +10,19 @@
 
 <div class="topbar">
   <div>
-    <div class="eyebrow"><span class="brandmark">eloo</span> · CRM de Leads</div>
-    <h1>Gestão de Leads</h1>
-    <div class="sub">{{ leads|length }} lead(s) registrados — edição salva automaticamente</div>
+    <div class="marca-crm"><span class="logo">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span> · CRM</div>
+    <h1>Leads e prospecção</h1>
+    <div class="sub">{{ leads|length }} lead(s) do site · {{ prospects|length }} prospect(s) · edição salva automaticamente na planilha</div>
   </div>
 </div>
 
-<main style="max-width:1280px;">
+<main style="max-width:1400px;">
+  <div class="abas" role="tablist" aria-label="Listas do CRM">
+    <button type="button" role="tab" id="tab-leads" aria-controls="aba-leads" aria-selected="true">Leads do site <span>{{ leads|length }}</span></button>
+    <button type="button" role="tab" id="tab-prospeccao" aria-controls="aba-prospeccao" aria-selected="false">Prospecção <span>{{ prospects|length }}</span></button>
+  </div>
+
+  <section id="aba-leads" role="tabpanel" aria-labelledby="tab-leads">
   {% if not leads %}
   <p style="color:var(--ink-muted); margin-top:24px;">Nenhum lead registrado ainda.</p>
   {% else %}
@@ -87,43 +93,183 @@
     </table>
   </div>
   {% endif %}
+  </section>
+
+  <section id="aba-prospeccao" role="tabpanel" aria-labelledby="tab-prospeccao" hidden>
+    {% if erro_prospeccao %}
+    <p class="aviso-erro">Não foi possível carregar a prospecção agora. Os dados estão na aba "Prospecção Clínicas Holísticas" da planilha.</p>
+    {% elif not prospects %}
+    <p style="color:var(--ink-muted); margin-top:24px;">Nenhum prospect cadastrado.</p>
+    {% else %}
+    <div class="filtros-p">
+      <label for="p-busca">Buscar<input type="text" id="p-busca" placeholder="nome, cidade ou categoria"></label>
+      <label for="p-etapa">Etapa<select id="p-etapa"><option value="">Todas</option>{% for o in opcoes_etapa %}<option>{{ o }}</option>{% endfor %}</select></label>
+      <label for="p-valid">Validação<select id="p-valid"><option value="">Todas</option>{% for o in opcoes_validacao %}<option>{{ o }}</option>{% endfor %}</select></label>
+      <label class="check"><input type="checkbox" id="p-vencido"> Próximo contato vencido</label>
+      <span class="p-contagem" id="p-contagem"></span>
+    </div>
+    <div class="leads-table-wrap">
+      <table class="leads-table prospect-table">
+        <thead>
+          <tr>
+            <th>Prospect</th>
+            <th>Contato</th>
+            <th>Validação</th>
+            <th>Etapa</th>
+            <th>Responsável / decisor</th>
+            <th>Último contato</th>
+            <th>Próximo contato</th>
+            <th>Resultado do último contato</th>
+            <th>Opt-out</th>
+            <th>Observações</th>
+            <th>Mensagem sugerida</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in prospects %}
+          <tr data-linha="{{ p['_row'] }}" data-empresa="{{ p['Empresa / Clínica'] }}" data-proximo="{{ p['_proximo_iso'] }}"
+              data-texto="{{ (p['Empresa / Clínica'] ~ ' ' ~ p['Cidade'] ~ ' ' ~ p['Região'] ~ ' ' ~ p['Categoria'])|lower }}">
+            <td class="prospect-nome">
+              <strong>{{ p['Empresa / Clínica'] }}</strong>
+              <div class="dim">{{ p['Categoria'] }}</div>
+              <div class="dim">{{ p['Cidade'] }}{% if p['Região'] %} · {{ p['Região'] }}{% endif %}</div>
+              <span class="score" title="Score comercial">score {{ p['_score'] }}</span>
+              {% if p['Prioridade comercial'] %}<span class="score">{{ p['Prioridade comercial'] }}</span>{% endif %}
+            </td>
+            <td class="links">
+              {% if p['_whatsapp'] %}<a href="{{ p['_whatsapp'] }}" target="_blank" rel="noopener">WhatsApp</a>{% endif %}
+              {% if p['Telefone comercial'] %}<span class="dim">{{ p['Telefone comercial'] }}</span>{% endif %}
+              {% if p['_email'] %}<a href="mailto:{{ p['_email'] }}">{{ p['_email'] }}</a>{% endif %}
+              {% if p['_site'] %}<a href="{{ p['_site'] }}" target="_blank" rel="noopener">Site</a>{% endif %}
+              {% if p['_instagram'] %}<a href="{{ p['_instagram'] }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+              {% if p['_busca_instagram'] %}<a href="{{ p['_busca_instagram'] }}" target="_blank" rel="noopener">Buscar no Instagram</a>{% endif %}
+              {% if p['Canal primário'] %}<span class="dim">canal: {{ p['Canal primário'] }}</span>{% endif %}
+            </td>
+            <td>
+              <select data-campo="Contato validado?" aria-label="Validação de {{ p['Empresa / Clínica'] }}">
+                {% if p['Contato validado?'] and p['Contato validado?'] not in opcoes_validacao %}<option selected>{{ p['Contato validado?'] }}</option>{% endif %}
+                {% for o in opcoes_validacao %}<option {{ 'selected' if o == p['Contato validado?'] }}>{{ o }}</option>{% endfor %}
+              </select>
+            </td>
+            <td>
+              <select data-campo="Etapa do funil" aria-label="Etapa de {{ p['Empresa / Clínica'] }}">
+                {% if p['Etapa do funil'] and p['Etapa do funil'] not in opcoes_etapa %}<option selected>{{ p['Etapa do funil'] }}</option>{% endif %}
+                {% for o in opcoes_etapa %}<option {{ 'selected' if o == p['Etapa do funil'] }}>{{ o }}</option>{% endfor %}
+              </select>
+            </td>
+            <td><input type="text" data-campo="Responsável/decisor" value="{{ p['Responsável/decisor'] }}" placeholder="Nome e cargo"></td>
+            <td><input type="date" data-campo="Último contato" value="{{ p['_ultimo_iso'] }}"></td>
+            <td><input type="date" data-campo="Próximo contato" value="{{ p['_proximo_iso'] }}"></td>
+            <td><textarea data-campo="Resultado último contato" placeholder="O que aconteceu">{{ p['Resultado último contato'] }}</textarea></td>
+            <td>
+              <select data-campo="Opt-out" aria-label="Opt-out de {{ p['Empresa / Clínica'] }}">
+                <option value="" {{ 'selected' if not p['Opt-out'] }}>Não</option>
+                <option {{ 'selected' if p['Opt-out'] == 'Sim' }}>Sim</option>
+                {% if p['Opt-out'] and p['Opt-out'] != 'Sim' %}<option selected>{{ p['Opt-out'] }}</option>{% endif %}
+              </select>
+            </td>
+            <td><textarea data-campo="Observações comerciais" placeholder="Histórico, contexto">{{ p['Observações comerciais'] }}</textarea></td>
+            <td class="respostas-cell">
+              {% if p['Mensagem personalizada'] %}
+              <details><summary>Ver mensagem</summary><div class="respostas-texto">{{ p['Mensagem personalizada'] }}</div></details>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
 </main>
+<div id="aviso-crm" role="status" aria-live="polite"></div>
 
 <footer class="rodape-marca">eloo.digital · CRM de Leads (uso interno)</footer>
 
 <script>
-function debounce(fn, ms){
-  let t;
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-}
-
-async function salvarCampo(row, campo, valor, onOk){
-  const linha = row.dataset.linha;
-  try{
-    const resp = await fetch("/assessment/leads/crm/salvar", {
-      method: "POST",
-      headers: {"Content-Type": "application/x-www-form-urlencoded"},
-      body: new URLSearchParams({linha, campo, valor}),
-    });
-    if(!resp.ok) throw new Error(await resp.text());
-    if(onOk) onOk();
-  }catch(e){
-    alert("Erro ao salvar — tente de novo.");
+(() => {
+  const aviso = document.getElementById("aviso-crm");
+  let timerAviso;
+  function avisar(texto, erro) {
+    aviso.textContent = texto;
+    aviso.className = "on" + (erro ? " erro" : "");
+    clearTimeout(timerAviso);
+    timerAviso = setTimeout(() => { aviso.className = ""; }, erro ? 5000 : 1500);
   }
-}
 
-const salvarDebounced = debounce(salvarCampo, 500);
-
-document.querySelectorAll("tr[data-linha]").forEach(row => {
-  row.querySelectorAll("[data-campo]").forEach(el => {
-    const evento = (el.tagName === "SELECT" || el.type === "date") ? "change" : "input";
-    el.addEventListener(evento, () => {
-      const onOk = el.tagName === "SELECT"
-        ? () => { el.className = "status-select status-" + el.value.toLowerCase().replace(/ /g, "-"); }
-        : null;
-      salvarDebounced(row, el.dataset.campo, el.value, onOk);
+  async function postar(url, dados) {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(dados),
+      credentials: "same-origin",
     });
-  });
-});
+    if (!resp.ok) {
+      let msg = "Não foi possível salvar — tente de novo.";
+      try { msg = (await resp.json()).detail || msg; } catch (e) {}
+      throw new Error(msg);
+    }
+  }
+
+  // Um temporizador por campo: editar dois campos seguidos não perde o primeiro.
+  function ligarCampos(tabela, montar) {
+    tabela.querySelectorAll("tr[data-linha]").forEach((row) => {
+      row.querySelectorAll("[data-campo]").forEach((el) => {
+        let t;
+        const salvar = async () => {
+          try { await postar(...montar(row, el)); avisar("Salvo na planilha"); if (el.tagName === "SELECT" && el.classList.contains("status-select")) el.className = "status-select status-" + el.value.toLowerCase().replace(/ /g, "-"); }
+          catch (e) { avisar(e.message, true); }
+        };
+        const imediato = el.tagName === "SELECT" || el.type === "date";
+        el.addEventListener(imediato ? "change" : "input", () => { clearTimeout(t); t = setTimeout(salvar, imediato ? 0 : 600); });
+      });
+    });
+  }
+
+  const tabelaLeads = document.querySelector("#aba-leads table");
+  if (tabelaLeads) ligarCampos(tabelaLeads, (row, el) => ["/assessment/leads/crm/salvar", { linha: row.dataset.linha, campo: el.dataset.campo, valor: el.value }]);
+  const tabelaP = document.querySelector("#aba-prospeccao table");
+  if (tabelaP) ligarCampos(tabelaP, (row, el) => ["/assessment/leads/crm/prospect/salvar", { linha: row.dataset.linha, empresa: row.dataset.empresa, campo: el.dataset.campo, valor: el.value }]);
+
+  // Abas (lembra a última pelo endereço: #prospeccao)
+  const abas = { leads: ["tab-leads", "aba-leads"], prospeccao: ["tab-prospeccao", "aba-prospeccao"] };
+  function mostrar(nome) {
+    Object.entries(abas).forEach(([k, [tab, painel]]) => {
+      const ativo = k === nome;
+      document.getElementById(tab).setAttribute("aria-selected", String(ativo));
+      document.getElementById(painel).hidden = !ativo;
+    });
+    history.replaceState(null, "", nome === "prospeccao" ? "#prospeccao" : location.pathname);
+  }
+  document.getElementById("tab-leads").addEventListener("click", () => mostrar("leads"));
+  document.getElementById("tab-prospeccao").addEventListener("click", () => mostrar("prospeccao"));
+  if (location.hash === "#prospeccao") mostrar("prospeccao");
+
+  // Filtros da prospecção (só na tela)
+  const busca = document.getElementById("p-busca");
+  if (busca) {
+    const etapa = document.getElementById("p-etapa"), valid = document.getElementById("p-valid"),
+          vencido = document.getElementById("p-vencido"), cont = document.getElementById("p-contagem");
+    const hoje = new Date().toISOString().slice(0, 10);
+    const filtrar = () => {
+      const b = busca.value.trim().toLowerCase();
+      let n = 0;
+      tabelaP.querySelectorAll("tr[data-linha]").forEach((row) => {
+        const et = row.querySelector('[data-campo="Etapa do funil"]').value;
+        const va = row.querySelector('[data-campo="Contato validado?"]').value;
+        const px = row.querySelector('[data-campo="Próximo contato"]').value;
+        const ok = (!b || row.dataset.texto.includes(b)) && (!etapa.value || et === etapa.value)
+          && (!valid.value || va === valid.value) && (!vencido.checked || (px && px < hoje));
+        row.hidden = !ok;
+        if (ok) n++;
+      });
+      cont.textContent = n + " de " + tabelaP.querySelectorAll("tr[data-linha]").length + " prospects";
+    };
+    busca.addEventListener("input", filtrar);
+    [etapa, valid, vencido].forEach((el) => el.addEventListener("change", filtrar));
+    tabelaP.addEventListener("change", filtrar);
+    filtrar();
+  }
+})();
 </script>
 {% endblock %}
