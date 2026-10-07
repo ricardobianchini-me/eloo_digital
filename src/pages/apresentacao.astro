@@ -34,6 +34,24 @@ const casos = [
   { nome: "Assessment de TI", desc: "Processos, sistemas e riscos mapeados, com roadmap priorizado.", foto: "comp-consultoria.jpg", alt: "Reunião de análise com documentos" },
 ];
 
+// Níveis de suporte por plano (definidos pelos sócios em 2026-10-07).
+const planos = [
+  { nome: "Ouro", itens: [
+    { valor: "24/7", desc: "monitoramento por telemetria e IA" },
+    { valor: "9h às 20h", desc: "suporte da equipe" },
+    { valor: "até 5 dias úteis", desc: "para análise e primeira resposta a requisições" },
+  ] },
+  { nome: "Diamante", destaque: true, itens: [
+    { valor: "24/7", desc: "monitoramento e suporte" },
+    { valor: "até 1h", desc: "para restabelecer um serviço interrompido" },
+    { valor: "até 2 dias úteis", desc: "para análise e primeira resposta a requisições" },
+  ] },
+];
+
+// WhatsApp oficial do site: quando definido (só dígitos, com DDI e DDD,
+// ex.: "5511999999999"), o botão aparece no slide final.
+const WHATSAPP = "";
+
 const TOTAL = 12;
 const n = (i: number) => String(i).padStart(2, "0");
 ---
@@ -161,18 +179,23 @@ const n = (i: number) => String(i).padStart(2, "0");
           <div class="faixa-texto">
             <p class="eyebrow claro-red">06 · Suporte e operação contínua</p>
             <h2>Suporte que <span class="branco">não dorme.</span></h2>
-            <p class="sub">Monitoramento contínuo e prazos de atendimento definidos.</p>
+            <p class="sub">Monitoramento 24/7 em todos os planos e prazos de atendimento definidos.</p>
             <ul class="bullets">
               <li>Telemetria e agentes de IA monitorando os produtos o tempo todo.</li>
               <li>Falhas corrigidas automaticamente (<em>self-healing</em>), com a equipe acompanhando de perto.</li>
               <li>Falhas e pedidos registrados direto pelo site.</li>
             </ul>
           </div>
-          <dl class="metricas">
-            <div><dt>24/7</dt><dd>monitoramento por telemetria e IA</dd></div>
-            <div><dt>até 1h</dt><dd>para restabelecer um serviço interrompido</dd></div>
-            <div><dt>2 dias úteis</dt><dd>para análise e primeira resposta a novas solicitações</dd></div>
-          </dl>
+          <div class="planos">
+            {planos.map((p) => (
+              <article class={`plano ${p.destaque ? "plano-destaque" : ""}`}>
+                <h3>PACCE {p.nome}</h3>
+                <dl>
+                  {p.itens.map((it) => <div><dt>{it.valor}</dt><dd>{it.desc}</dd></div>)}
+                </dl>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -290,6 +313,7 @@ const n = (i: number) => String(i).padStart(2, "0");
           <p class="callout callout-claro">Conte o problema. <strong>A tecnologia vem depois.</strong></p>
           <div class="acoes">
             <a class="btn btn-primario" href="/diagnostico">Agendar meu diagnóstico ↗</a>
+            {WHATSAPP && <a class="btn btn-ghost" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">Falar no WhatsApp ↗</a>}
             <a class="btn btn-ghost" href="/pacce">Conhecer o PACCE</a>
           </div>
         </div>
@@ -506,10 +530,18 @@ const n = (i: number) => String(i).padStart(2, "0");
   .vermelho .sub { color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
   .vermelho .bullets li { color: var(--accent-ink); }
   .vermelho .bullets li::before { background: #fff; }
-  .metricas { margin: 0; display: grid; gap: .9rem; }
-  .metricas div { background: rgba(255,255,255,.12); border-radius: 16px; padding: 1.2rem 1.4rem; }
-  .metricas dt { font-family: var(--font-title); font-weight: 800; font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1; color: #fff; margin-bottom: .35rem; }
-  .metricas dd { margin: 0; color: color-mix(in srgb, var(--accent-ink) 88%, transparent); font-size: .95rem; }
+  .planos { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .plano { background: rgba(255,255,255,.12); border-radius: 16px; padding: 1.3rem 1.3rem 1.1rem; }
+  .plano-destaque { background: #fff; color: var(--ink); }
+  .plano h3 { font-size: 1.1rem; color: #fff; margin-bottom: .8rem; }
+  .plano-destaque h3 { color: var(--accent); }
+  .plano dl { margin: 0; display: grid; gap: .75rem; }
+  .plano dl div { padding-top: .7rem; border-top: 1px solid rgba(255,255,255,.25); }
+  .plano-destaque dl div { border-color: var(--line); }
+  .plano dt { font-family: var(--font-title); font-weight: 800; font-size: clamp(1.3rem, 2.1vw, 1.75rem); line-height: 1.05; color: #fff; }
+  .plano-destaque dt { color: var(--ink); }
+  .plano dd { margin: .2rem 0 0; font-size: .86rem; line-height: 1.4; color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
+  .plano-destaque dd { color: var(--ink-soft); }
   .stack { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
   .stack li { background: #2a2a27; border: 1px solid #3a3a36; border-radius: 16px; padding: 1.2rem; border-top: 3px solid var(--accent); }
   .stack span { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #ff8a84; }
@@ -552,7 +584,7 @@ const n = (i: number) => String(i).padStart(2, "0");
   @media (max-width: 560px) {
     .cta-topo { padding: .5rem .9rem; font-size: .8rem; }
     .cards { grid-template-columns: 1fr; }
-    .stack { grid-template-columns: 1fr; }
+    .stack, .planos { grid-template-columns: 1fr; }
     .pontos { gap: .3rem; }
     .pontos button { width: 7px; height: 7px; }
     .pontos button[aria-current="true"] { width: 18px; }
