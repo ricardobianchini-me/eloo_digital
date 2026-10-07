@@ -1,0 +1,605 @@
+---
+// Apresentação comercial eloo.digital + PACCE (carrossel full-bleed, 12 slides).
+// Página fora do menu e marcada como noindex: link enviado só para prospects.
+// Mesmos tokens, fontes e logo da v2 (ver DESIGN.md). Roteiro em
+// Agentes/pacce-co/artefatos/Apresentação - eloo.digital.md.
+const B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (nome: string) => `${B}/img/${nome}`;
+
+const problemas = [
+  { nome: "Processos manuais", desc: "Horas em tarefas repetidas que uma máquina poderia fazer." },
+  { nome: "Sistemas que não conversam", desc: "A mesma informação digitada em vários lugares — e nunca coincide." },
+  { nome: "Falta de visibilidade", desc: "O problema aparece quando já chegou ao cliente." },
+  { nome: "Conhecimento preso às pessoas", desc: "Quando alguém sai, parte do processo vai junto." },
+];
+
+const capacidades = [
+  { nome: "Automação de processos", desc: "Workflows, integrações e APIs que eliminam trabalho repetido.", foto: "servico-solucoes.jpg" },
+  { nome: "Inteligência artificial aplicada", desc: "Agentes, leitura de documentos, triagem e classificação.", foto: "comp-tecnologia.jpg" },
+  { nome: "Software sob medida", desc: "Aplicações, portais e modernização de sistemas legados.", foto: "servico-sites.jpg" },
+  { nome: "Dados e assessment de TI", desc: "Dashboards, arquitetura, riscos e roadmap de evolução.", foto: "comp-consultoria.jpg" },
+];
+
+const stack = [
+  { camada: "Frontend", tec: "React + TypeScript", desc: "Componentes reutilizáveis, telas responsivas, tipos validados." },
+  { camada: "Backend", tec: "Go", desc: "Regras no servidor, transações, concorrência e idempotência." },
+  { camada: "Dados", tec: "PostgreSQL", desc: "Integridade referencial, constraints e migrations versionadas." },
+  { camada: "Entrega", tec: "Docker + CI", desc: "Testes automatizados e gates antes de cada versão." },
+];
+
+const casos = [
+  { nome: "Empresas e operações", desc: "Rotinas manuais viram fluxos automáticos entre sistemas.", foto: "servico-solucoes.jpg", alt: "Operação organizada em processos" },
+  { nome: "Atendimento recorrente", desc: "O PACCE organiza cadastro, histórico, filas e escalas.", foto: "pacce-prontuario.jpg", alt: "Ficha de atendimento com histórico" },
+  { nome: "Terceiro setor", desc: "Governança e prestação de contas a diretoria e financiadores.", foto: "sobre-acolhimento.jpg", alt: "Conversa de acolhimento entre duas pessoas" },
+  { nome: "Assessment de TI", desc: "Processos, sistemas e riscos mapeados, com roadmap priorizado.", foto: "comp-consultoria.jpg", alt: "Reunião de análise com documentos" },
+];
+
+// Níveis de suporte por plano (definidos pelos sócios em 2026-10-07).
+const planos = [
+  { nome: "Ouro", itens: [
+    { valor: "24/7", desc: "monitoramento por telemetria e IA" },
+    { valor: "9h às 20h", desc: "suporte da equipe" },
+    { valor: "até 5 dias úteis", desc: "para análise e primeira resposta a requisições" },
+  ] },
+  { nome: "Diamante", destaque: true, itens: [
+    { valor: "24/7", desc: "monitoramento e suporte" },
+    { valor: "até 1h", desc: "para restabelecer um serviço interrompido" },
+    { valor: "até 2 dias úteis", desc: "para análise e primeira resposta a requisições" },
+  ] },
+];
+
+// WhatsApp oficial do site: quando definido (só dígitos, com DDI e DDD,
+// ex.: "5511999999999"), o botão aparece no slide final.
+const WHATSAPP = "";
+
+const TOTAL = 12;
+const n = (i: number) => String(i).padStart(2, "0");
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Apresentação — eloo.digital & PACCE</title>
+    <meta name="description" content="Apresentação comercial da eloo.digital e do PACCE." />
+    <link rel="icon" type="image/svg+xml" href={`${B}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="topo">
+      <a href="/" class="marca" aria-label="eloo.digital, página inicial">eloo<span class="ponto">.</span><span>digital</span></a>
+      <div class="topo-dir">
+        <span class="contador" aria-live="polite"><b id="atual">01</b> / {n(TOTAL)}</span>
+        <a href="/diagnostico" class="cta-topo">Fazer o diagnóstico</a>
+      </div>
+    </header>
+
+    <main class="trilho" id="trilho" tabindex="-1" aria-roledescription="carrossel" aria-label="Apresentação eloo.digital e PACCE">
+
+      <!-- 01 CAPA -->
+      <section class="slide s-capa" id="s1" aria-label="Slide 1 de 12">
+        <img class="capa-img" src={img("hero-elo-maos.jpg")} alt="Mãos dadas em círculo, vistas de cima — o elo entre pessoas" />
+        <div class="scrim"></div>
+        <div class="capa-inner">
+          <p class="eyebrow claro">Apresentação comercial</p>
+          <h1><span class="logo-grande">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span> <span class="e">&amp;</span> PACCE</h1>
+          <p class="sub claro">Tecnologia que tira a operação do improviso e coloca sob controle.</p>
+          <ul class="bullets claro">
+            <li>Automação, IA e software sob medida para a operação real.</li>
+            <li>PACCE: atendimento recorrente organizado em uma plataforma.</li>
+            <li>Do diagnóstico à operação contínua, com o mesmo time.</li>
+          </ul>
+          <p class="callout callout-claro">Mais do que software: <strong>previsibilidade e controle.</strong></p>
+        </div>
+      </section>
+
+      <!-- 02 QUEM SOMOS -->
+      <section class="slide s-bleed escuro" id="s2" aria-label="Slide 2 de 12">
+        <img class="foto" src={img("metodologia-grupo.jpg")} alt="Roda de conversa — entender antes de propor" loading="lazy" />
+        <div class="texto">
+          <p class="eyebrow claro">02 · Quem somos</p>
+          <h2>Estratégia e execução <span class="destaque">no mesmo time.</span></h2>
+          <p class="sub claro">Uma empresa de tecnologia, automação e transformação digital.</p>
+          <ul class="bullets claro">
+            <li>Arquitetura, governança e desenvolvimento sob o mesmo teto.</li>
+            <li>De ponta a ponta: diagnóstico, construção e evolução.</li>
+            <li>Metodologia LUMEN: clareza sobre o problema antes da solução.</li>
+          </ul>
+          <div class="numero">
+            <b>25</b>
+            <p><strong>anos de jornada em tecnologia</strong>, 7 deles na linha de frente do atendimento.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 PROBLEMAS -->
+      <section class="slide s-bleed s-reverso" id="s3" aria-label="Slide 3 de 12">
+        <img class="foto" src={img("pacce-prontuario.jpg")} alt="Ficha de cadastro preenchida à mão — o trabalho manual de hoje" loading="lazy" />
+        <div class="texto">
+          <p class="eyebrow">03 · O que resolvemos</p>
+          <h2>O que trava <span class="destaque-ink">a operação.</span></h2>
+          <p class="sub">Crescer acumulando improvisos custa margem, tempo e reputação.</p>
+          <ol class="dores">
+            {problemas.map((p, i) => (
+              <li><span>{n(i + 1)}</span><div><b>{p.nome}</b><small>{p.desc}</small></div></li>
+            ))}
+          </ol>
+          <p class="callout">Tecnologia não deveria criar <strong>mais trabalho.</strong></p>
+        </div>
+      </section>
+
+      <!-- 04 PACCE -->
+      <section class="slide s-produto escuro" id="s4" aria-label="Slide 4 de 12">
+        <div class="produto-grid">
+          <div class="texto-solto">
+            <div class="produto-marca"><b>p</b><span><strong>PACCE</strong><small>um produto eloo.digital</small></span></div>
+            <h2>Gestão e atendimento em <span class="destaque">uma única plataforma.</span></h2>
+            <p class="sub claro">Para quem atende as mesmas pessoas semana após semana.</p>
+            <ul class="bullets claro">
+              <li>Cadastro e histórico que acompanham cada pessoa atendida.</li>
+              <li>Agenda, turnos e escalas da equipe num quadro só.</li>
+              <li>Fluxo de atendimento configurado do jeito da organização.</li>
+              <li>Indicadores prontos para prestar contas.</li>
+            </ul>
+            <p class="callout callout-claro">Não é protótipo: <strong>em produção em pacce.app.</strong></p>
+          </div>
+          <figure class="tela">
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app</span></div>
+            <img src={img("pacce-exemplo.svg")} alt="Tela de atendimentos do PACCE com dados de exemplo" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <!-- 05 O QUE OFERECEMOS -->
+      <section class="slide s-grade" id="s5" aria-label="Slide 5 de 12">
+        <div class="grade-inner">
+          <div class="grade-cabeca">
+            <p class="eyebrow">05 · O que oferecemos</p>
+            <h2>Capacidades certas <span class="destaque-ink">para o problema certo.</span></h2>
+            <p class="sub">Combinamos as frentes que a sua operação precisa — nem mais, nem menos.</p>
+          </div>
+          <div class="cards">
+            {capacidades.map((c, i) => (
+              <article class="card">
+                <div class="card-img"><img src={img(c.foto)} alt="" loading="lazy" /><span class="num">{n(i + 1)}</span></div>
+                <div class="card-corpo"><h3>{c.nome}</h3><p>{c.desc}</p></div>
+              </article>
+            ))}
+          </div>
+          <p class="callout">Serviços sob demanda e <strong>PACCE por assinatura</strong> — começa onde você está.</p>
+        </div>
+      </section>
+
+      <!-- 06 SUPORTE -->
+      <section class="slide s-faixa vermelho" id="s6" aria-label="Slide 6 de 12">
+        <div class="faixa-inner">
+          <div class="faixa-texto">
+            <p class="eyebrow claro-red">06 · Suporte e operação contínua</p>
+            <h2>Suporte que <span class="branco">não dorme.</span></h2>
+            <p class="sub">Monitoramento 24/7 em todos os planos e prazos de atendimento definidos.</p>
+            <ul class="bullets">
+              <li>Telemetria e agentes de IA monitorando os produtos o tempo todo.</li>
+              <li>Falhas corrigidas automaticamente (<em>self-healing</em>), com a equipe acompanhando de perto.</li>
+              <li>Falhas e pedidos registrados direto pelo site.</li>
+            </ul>
+          </div>
+          <div class="planos">
+            {planos.map((p) => (
+              <article class={`plano ${p.destaque ? "plano-destaque" : ""}`}>
+                <h3>PACCE {p.nome}</h3>
+                <dl>
+                  {p.itens.map((it) => <div><dt>{it.valor}</dt><dd>{it.desc}</dd></div>)}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 ARQUITETURA -->
+      <section class="slide s-faixa escuro" id="s7" aria-label="Slide 7 de 12">
+        <div class="faixa-inner">
+          <div class="faixa-texto">
+            <p class="eyebrow claro">07 · Arquitetura e tecnologia</p>
+            <h2>Engenharia para <span class="destaque">operação real.</span></h2>
+            <p class="sub claro">Arquitetura moderna, modular e pronta para evoluir.</p>
+            <ul class="bullets claro">
+              <li>Interface, regras, dados, autenticação e infraestrutura separados.</li>
+              <li>Regras de negócio executadas no servidor, nunca só na tela.</li>
+              <li>Cada mudança versionada e rastreável.</li>
+            </ul>
+            <p class="callout callout-claro">Nenhuma versão sai <strong>sem passar pela esteira de validação.</strong></p>
+          </div>
+          <ul class="stack" aria-label="Stack tecnológica">
+            {stack.map((s) => (
+              <li><span>{s.camada}</span><b>{s.tec}</b><small>{s.desc}</small></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <!-- 08 SEGURANÇA -->
+      <section class="slide s-bleed" id="s8" aria-label="Slide 8 de 12">
+        <div class="foto-tela">
+          <figure class="tela tela-clara">
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app · perfis de acesso</span></div>
+            <img src={img("pacce-perfis-acesso.jpg")} alt="Tela de perfis de acesso do PACCE: Admin Master, Dirigente, Operador e Colaborador" loading="lazy" />
+          </figure>
+        </div>
+        <div class="texto">
+          <p class="eyebrow">08 · Segurança e DevSecOps</p>
+          <h2>Segurança <span class="destaque-ink">por arquitetura.</span></h2>
+          <p class="sub">Não é uma camada adicionada no fim — nasce no desenho.</p>
+          <ul class="bullets">
+            <li>Isolamento entre instituições validado no backend, com testes negativos.</li>
+            <li>Acesso por perfil, permissão e papel, checado no servidor.</li>
+            <li>Sessões revogáveis e trilha de auditoria: quem, quando, o quê.</li>
+            <li>IA na revisão de código e em cenários de ataque — aceita só com teste reproduzível.</li>
+          </ul>
+          <p class="callout">Testes que <strong>provam que a proteção funciona</strong> — e acusam se ela sumir.</p>
+        </div>
+      </section>
+
+      <!-- 09 LGPD -->
+      <section class="slide s-bleed s-reverso escuro" id="s9" aria-label="Slide 9 de 12">
+        <img class="foto" src={img("pacce-seguranca.jpg")} alt="Pessoa trabalhando com atenção em informações protegidas" loading="lazy" />
+        <div class="texto">
+          <p class="eyebrow claro">09 · Conformidade e LGPD</p>
+          <h2>Privacidade <span class="destaque">desde o cadastro.</span></h2>
+          <p class="sub claro">LGPD tratada como requisito de produto, não como anexo.</p>
+          <ul class="bullets claro">
+            <li>Consentimento do atendido registrado no próprio cadastro.</li>
+            <li>Dados de cada instituição isolados; cada pessoa vê só o que o perfil permite.</li>
+            <li>Senhas, tokens e códigos nunca entram nos registros de auditoria.</li>
+            <li>Avaliação de impacto à privacidade feita sobre o fluxo de atendimento.</li>
+          </ul>
+          <p class="callout callout-claro"><em>Privacy by design</em>: <strong>menos risco jurídico e reputacional.</strong></p>
+        </div>
+      </section>
+
+      <!-- 10 CASOS DE USO -->
+      <section class="slide s-grade" id="s10" aria-label="Slide 10 de 12">
+        <div class="grade-inner">
+          <div class="grade-cabeca">
+            <p class="eyebrow">10 · Casos de uso</p>
+            <h2>Onde geramos <span class="destaque-ink">valor.</span></h2>
+            <p class="sub">A mesma capacidade, aplicada a contextos diferentes.</p>
+          </div>
+          <div class="cards">
+            {casos.map((c, i) => (
+              <article class="card">
+                <div class="card-img"><img src={img(c.foto)} alt={c.alt} loading="lazy" /><span class="num">{n(i + 1)}</span></div>
+                <div class="card-corpo"><h3>{c.nome}</h3><p>{c.desc}</p></div>
+              </article>
+            ))}
+          </div>
+          <p class="callout">Antes: e-mail, planilha e cópia. <strong>Depois: evento, regra e indicador.</strong></p>
+        </div>
+      </section>
+
+      <!-- 11 DIAGNÓSTICO -->
+      <section class="slide s-bleed" id="s11" aria-label="Slide 11 de 12">
+        <img class="foto" src={img("diagnostico-analise-noturna.jpg")} alt="Análise de indicadores da operação com atenção aos detalhes" loading="lazy" />
+        <div class="texto">
+          <p class="eyebrow">11 · O primeiro passo</p>
+          <p class="tempo">≈ 3 minutos</p>
+          <h2>Comece pelo <span class="destaque-ink">diagnóstico.</span></h2>
+          <p class="sub">Descubra onde a tecnologia gera mais impacto na sua operação.</p>
+          <ul class="bullets">
+            <li>Perguntas objetivas sobre como sua organização trabalha hoje.</li>
+            <li>Leitura das frentes com maior aderência ao seu cenário.</li>
+            <li>Nosso time retorna com a análise e os ganhos rápidos.</li>
+          </ul>
+          <p class="callout">Sem custo e <strong>sem compromisso.</strong></p>
+          <div class="acoes"><a class="btn btn-primario" href="/diagnostico">Começar o diagnóstico ↗</a></div>
+        </div>
+      </section>
+
+      <!-- 12 ENCERRAMENTO -->
+      <section class="slide s-capa s-final" id="s12" aria-label="Slide 12 de 12">
+        <img class="capa-img" src={img("comp-fluencia.jpg")} alt="Conversa entre duas pessoas — o próximo passo começa com uma conversa" loading="lazy" />
+        <div class="scrim"></div>
+        <div class="capa-inner">
+          <p class="eyebrow claro">12 · Próximos passos</p>
+          <h2>Qual processo você quer que funcione <span class="destaque">melhor amanhã?</span></h2>
+          <ul class="bullets claro">
+            <li>Faça o diagnóstico: <strong>eloo.digital/diagnostico</strong></li>
+            <li>Conheça o PACCE: <strong>pacce.app</strong></li>
+            <li>Converse com nosso time e veja a solução aplicada à sua operação.</li>
+          </ul>
+          <p class="callout callout-claro">Conte o problema. <strong>A tecnologia vem depois.</strong></p>
+          <div class="acoes">
+            <a class="btn btn-primario" href="/diagnostico">Agendar meu diagnóstico ↗</a>
+            {WHATSAPP && <a class="btn btn-ghost" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">Falar no WhatsApp ↗</a>}
+            <a class="btn btn-ghost" href="/pacce">Conhecer o PACCE</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="controles" aria-label="Navegação dos slides">
+      <button class="seta" id="ant" aria-label="Slide anterior">←</button>
+      <ol class="pontos" id="pontos">
+        {Array.from({ length: TOTAL }, (_, i) => (
+          <li><button data-ir={i} aria-label={`Ir para o slide ${i + 1}`}></button></li>
+        ))}
+      </ol>
+      <button class="seta" id="prox" aria-label="Próximo slide">→</button>
+    </nav>
+    <div class="progresso" aria-hidden="true"><span id="barra"></span></div>
+
+    <script is:inline>
+      const trilho = document.getElementById("trilho");
+      const slides = [...trilho.querySelectorAll(".slide")];
+      const pontos = [...document.querySelectorAll("#pontos button")];
+      const atual = document.getElementById("atual");
+      const barra = document.getElementById("barra");
+      let idx = 0;
+
+      const ir = (i, suave = true) => {
+        i = Math.max(0, Math.min(slides.length - 1, i));
+        trilho.scrollTo({ left: i * trilho.clientWidth, behavior: suave ? "smooth" : "auto" });
+      };
+      const marcar = (i) => {
+        if (i === idx && atual.textContent) return;
+        idx = i;
+        atual.textContent = String(i + 1).padStart(2, "0");
+        barra.style.width = `${((i + 1) / slides.length) * 100}%`;
+        pontos.forEach((p, k) => p.setAttribute("aria-current", k === i ? "true" : "false"));
+        history.replaceState(null, "", `#${i + 1}`);
+      };
+
+      trilho.addEventListener("scroll", () => {
+        marcar(Math.round(trilho.scrollLeft / trilho.clientWidth));
+      }, { passive: true });
+      document.getElementById("ant").addEventListener("click", () => ir(idx - 1));
+      document.getElementById("prox").addEventListener("click", () => ir(idx + 1));
+      pontos.forEach((p) => p.addEventListener("click", () => ir(Number(p.dataset.ir))));
+
+      document.addEventListener("keydown", (e) => {
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
+        if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); ir(idx + 1); }
+        else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); ir(idx - 1); }
+        else if (e.key === "Home") { e.preventDefault(); ir(0); }
+        else if (e.key === "End") { e.preventDefault(); ir(slides.length - 1); }
+      });
+      // Mantém o slide atual alinhado ao redimensionar a janela.
+      window.addEventListener("resize", () => ir(idx, false));
+
+      const inicial = parseInt(location.hash.slice(1), 10);
+      atual.textContent = "";
+      if (inicial > 1) ir(inicial - 1, false);
+      marcar(Number.isFinite(inicial) && inicial > 1 ? inicial - 1 : 0);
+      trilho.focus({ preventScroll: true });
+    </script>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg: #f4f2ed;
+    --bg-alt: #e6e4dd;
+    --card: #fbfaf7;
+    --ink: #1f1f1d;
+    --ink-soft: #55554f;
+    --line: #d8d6ce;
+    --accent: #e0201a;
+    --accent-deep: #b8160f;
+    --accent-ink: #fff3f2;
+    --font-title: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+    --topo: 64px;
+    --base: 72px;
+    --ease: cubic-bezier(.16,1,.3,1);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--ink); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; overflow: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: var(--font-title); letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  /* Topo e controles fixos */
+  .topo { position: fixed; top: 0; left: 0; right: 0; height: var(--topo); z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 1.4rem; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .marca { font-family: var(--font-title); font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); }
+  .marca span { font-weight: 500; color: var(--ink-soft); }
+  .marca .ponto, .logo-grande .ponto { color: var(--accent); font-weight: 800; }
+  .topo-dir { display: flex; align-items: center; gap: 1.2rem; }
+  .contador { font-family: var(--font-title); font-size: .9rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .contador b { color: var(--ink); }
+  .cta-topo { background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: .55rem 1.1rem; font-size: .85rem; font-weight: 700; text-decoration: none; transition: background .2s ease; }
+  .cta-topo:hover { background: var(--accent-deep); }
+
+  .controles { position: fixed; bottom: 0; left: 0; right: 0; height: var(--base); z-index: 30; display: flex; align-items: center; justify-content: center; gap: 1.2rem; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
+  .seta { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); font-size: 1.1rem; font-family: var(--font-title); font-weight: 700; cursor: pointer; transition: background .2s ease, color .2s ease, transform .2s var(--ease); }
+  .seta:hover { background: var(--ink); color: #fff; transform: translateY(-1px); }
+  .pontos { list-style: none; display: flex; gap: .45rem; margin: 0; padding: 0; }
+  .pontos button { width: 10px; height: 10px; padding: 0; border-radius: 999px; border: none; background: var(--line); cursor: pointer; transition: width .3s var(--ease), background .2s ease; }
+  .pontos button:hover { background: var(--ink-soft); }
+  .pontos button[aria-current="true"] { width: 28px; background: var(--accent); }
+  .progresso { position: fixed; left: 0; right: 0; bottom: var(--base); height: 3px; z-index: 31; background: transparent; }
+  .progresso span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .5s var(--ease); }
+
+  /* Trilho horizontal com snap: swipe no celular, setas e teclado no desktop */
+  .trilho { position: fixed; inset: var(--topo) 0 var(--base) 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; outline: none; overscroll-behavior-x: contain; }
+  .trilho::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; position: relative; overflow-y: auto; overflow-x: hidden; background: var(--bg); }
+
+  /* Tipografia comum dos slides */
+  .eyebrow { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .9rem; }
+  .eyebrow.claro { color: #ff8a84; }
+  .eyebrow.claro-red { color: var(--accent-ink); opacity: .85; }
+  .slide h2 { font-size: clamp(1.8rem, 3.4vw, 2.9rem); line-height: 1.08; margin-bottom: .9rem; max-width: 20ch; }
+  .destaque { color: #ff8a84; }
+  .destaque-ink { color: var(--accent); }
+  .branco { color: #fff; }
+  .sub { font-size: clamp(1rem, 1.3vw, 1.15rem); color: var(--ink-soft); max-width: 46ch; margin-bottom: 1.4rem; }
+  .sub.claro { color: rgba(255,255,255,.82); }
+  .bullets { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: .55rem; max-width: 52ch; }
+  .bullets li { position: relative; padding-left: 1.5rem; font-size: clamp(.95rem, 1.1vw, 1.02rem); }
+  .bullets li::before { content: ""; position: absolute; left: 0; top: .62em; width: .7rem; height: 2px; background: var(--accent); }
+  .bullets.claro li { color: rgba(255,255,255,.88); }
+  .bullets.claro li::before { background: #ff8a84; }
+  .bullets strong { color: inherit; }
+  .callout { font-family: var(--font-title); font-size: clamp(1.05rem, 1.5vw, 1.3rem); font-weight: 600; line-height: 1.3; padding-left: 1rem; border-left: 4px solid var(--accent); max-width: 40ch; color: var(--ink); }
+  .callout strong { color: var(--accent); font-weight: 700; }
+  .callout-claro { color: #fff; border-color: #ff8a84; }
+  .callout-claro strong { color: #ff8a84; }
+  .escuro { background: var(--ink); color: #fff; }
+  .escuro h2, .escuro h3 { color: #fff; }
+  .vermelho { background: var(--accent); color: var(--accent-ink); }
+
+  .btn { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .85rem 1.5rem; font-family: var(--font-title); font-weight: 700; font-size: .95rem; text-decoration: none; border: 1px solid transparent; transition: background .2s ease, transform .2s var(--ease); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primario { background: var(--accent); color: var(--accent-ink); }
+  .btn-primario:hover { background: var(--accent-deep); }
+  .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+  .acoes { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.6rem; }
+
+  /* Capa e encerramento: foto em tela cheia com scrim */
+  .s-capa { color: #fff; }
+  .capa-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(20,20,18,.94) 0%, rgba(20,20,18,.62) 48%, rgba(20,20,18,.2) 80%, rgba(20,20,18,.1) 100%); }
+  .capa-inner { position: relative; z-index: 1; min-height: 100%; max-width: 1120px; margin: 0 auto; padding: 3rem 1.4rem 2.6rem; display: flex; flex-direction: column; justify-content: flex-end; }
+  .s-capa h1 { font-size: clamp(2.4rem, 6vw, 4.8rem); line-height: 1; color: #fff; margin-bottom: 1.1rem; font-weight: 800; }
+  .logo-grande { white-space: nowrap; }
+  .logo-grande .sufixo { font-weight: 500; color: rgba(255,255,255,.75); }
+  .s-capa h1 .e { font-weight: 500; color: rgba(255,255,255,.6); }
+  .s-capa .sub { font-size: clamp(1.1rem, 1.8vw, 1.4rem); max-width: 40ch; }
+  .s-final h2 { font-size: clamp(2rem, 4.4vw, 3.6rem); max-width: 18ch; }
+
+  /* Full-bleed: foto em metade da largura, texto na outra */
+  .s-bleed { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .s-bleed .foto { width: 100%; height: 100%; object-fit: cover; }
+  .s-bleed .texto { padding: 2.6rem max(1.4rem, calc(50vw - 540px)) 2.6rem 3.2rem; display: flex; flex-direction: column; justify-content: center; }
+  .s-reverso .foto { order: 2; }
+  .s-reverso .texto { order: 1; padding: 2.6rem 3.2rem 2.6rem max(1.4rem, calc(50vw - 540px)); }
+  .foto-tela { background: var(--bg-alt); display: flex; align-items: center; justify-content: center; padding: 2.4rem; }
+  .numero { display: flex; gap: 1.2rem; align-items: center; padding-top: 1.3rem; border-top: 1px solid rgba(255,255,255,.2); max-width: 52ch; }
+  .numero b { font-family: var(--font-title); font-size: clamp(3rem, 5vw, 4.2rem); color: #ff8a84; line-height: 1; }
+  .numero p { color: rgba(255,255,255,.8); font-size: .95rem; }
+  .numero strong { color: #fff; }
+  .tempo { font-family: var(--font-title); color: var(--accent); font-weight: 700; margin-bottom: .4rem; }
+
+  .dores { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: .6rem; max-width: 54ch; }
+  .dores li { display: flex; gap: .9rem; align-items: baseline; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+  .dores li:last-child { border-bottom: none; }
+  .dores span { font-family: var(--font-title); font-weight: 700; font-size: .8rem; color: var(--accent); }
+  .dores b { display: block; font-family: var(--font-title); font-size: 1.05rem; }
+  .dores small { color: var(--ink-soft); font-size: .92rem; }
+
+  /* Produto (PACCE) */
+  .s-produto, .s-faixa, .s-grade { display: flex; align-items: center; }
+  .produto-grid { width: 100%; max-width: 1120px; margin: 0 auto; padding: 2.4rem 1.4rem; display: grid; grid-template-columns: 1fr 1.05fr; gap: 3rem; align-items: center; }
+  .produto-marca { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; }
+  .produto-marca b { width: 2.4rem; height: 2.4rem; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; font-family: var(--font-title); }
+  .produto-marca strong { font-family: var(--font-title); }
+  .produto-marca small { display: block; font-size: .7rem; letter-spacing: .06em; color: rgba(255,255,255,.6); }
+  .tela { margin: 0; background: #151514; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 70px -25px rgba(0,0,0,.7); border: 1px solid #3a3a36; }
+  .tela-barra { display: flex; align-items: center; gap: .4rem; padding: .6rem .9rem; background: #2a2a27; }
+  .tela-barra i { width: 9px; height: 9px; border-radius: 50%; background: #55554f; }
+  .tela-barra span { margin-left: .6rem; font-size: .75rem; color: rgba(255,255,255,.6); }
+  .tela img { width: 100%; }
+  .tela-clara { background: var(--card); border-color: var(--line); max-width: 560px; box-shadow: 0 26px 60px -25px rgba(0,0,0,.35); }
+  .tela-clara .tela-barra { background: var(--bg-alt); }
+  .tela-clara .tela-barra i { background: var(--line); }
+  .tela-clara .tela-barra span { color: var(--ink-soft); }
+
+  /* Grade de cards (oferta e casos) */
+  .grade-inner { width: 100%; max-width: 1120px; margin: 0 auto; padding: 2.2rem 1.4rem; }
+  .grade-cabeca { margin-bottom: 1.6rem; }
+  .grade-cabeca h2 { max-width: 24ch; }
+  .grade-cabeca .sub { margin-bottom: 0; max-width: 60ch; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; margin-bottom: 1.6rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform .3s var(--ease), box-shadow .3s ease, border-color .3s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 22px 44px -20px rgba(0,0,0,.3); border-color: var(--accent); }
+  .card-img { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .num { position: absolute; left: .7rem; bottom: .7rem; font-family: var(--font-title); font-size: .72rem; font-weight: 700; color: #fff; background: rgba(20,20,18,.6); border-radius: 999px; padding: .2rem .6rem; }
+  .card-corpo { padding: 1rem 1.1rem 1.2rem; }
+  .card-corpo h3 { font-size: 1.02rem; margin-bottom: .35rem; }
+  .card-corpo p { font-size: .88rem; color: var(--ink-soft); }
+
+  /* Faixas de cor (suporte e arquitetura) */
+  .faixa-inner { width: 100%; max-width: 1120px; margin: 0 auto; padding: 2.4rem 1.4rem; display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; }
+  .vermelho h2 { color: var(--accent-ink); }
+  .vermelho .sub { color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
+  .vermelho .bullets li { color: var(--accent-ink); }
+  .vermelho .bullets li::before { background: #fff; }
+  .planos { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .plano { background: rgba(255,255,255,.12); border-radius: 16px; padding: 1.3rem 1.3rem 1.1rem; }
+  .plano-destaque { background: #fff; color: var(--ink); }
+  .plano h3 { font-size: 1.1rem; color: #fff; margin-bottom: .8rem; }
+  .plano-destaque h3 { color: var(--accent); }
+  .plano dl { margin: 0; display: grid; gap: .75rem; }
+  .plano dl div { padding-top: .7rem; border-top: 1px solid rgba(255,255,255,.25); }
+  .plano-destaque dl div { border-color: var(--line); }
+  .plano dt { font-family: var(--font-title); font-weight: 800; font-size: clamp(1.3rem, 2.1vw, 1.75rem); line-height: 1.05; color: #fff; }
+  .plano-destaque dt { color: var(--ink); }
+  .plano dd { margin: .2rem 0 0; font-size: .86rem; line-height: 1.4; color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
+  .plano-destaque dd { color: var(--ink-soft); }
+  .stack { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .stack li { background: #2a2a27; border: 1px solid #3a3a36; border-radius: 16px; padding: 1.2rem; border-top: 3px solid var(--accent); }
+  .stack span { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #ff8a84; }
+  .stack b { display: block; font-family: var(--font-title); font-size: 1.25rem; margin: .25rem 0 .4rem; color: #fff; }
+  .stack small { color: rgba(255,255,255,.7); font-size: .86rem; line-height: 1.45; display: block; }
+
+  /* Entrada suave do conteúdo do slide atual */
+  @media (prefers-reduced-motion: no-preference) {
+    .trilho { scroll-behavior: smooth; }
+  }
+
+  /* Telas baixas (notebook 768px): compacta o ritmo vertical */
+  @media (max-height: 820px) and (min-width: 901px) {
+    .slide h2 { font-size: clamp(1.6rem, 2.8vw, 2.3rem); }
+    .sub { margin-bottom: 1rem; }
+    .bullets { gap: .35rem; margin-bottom: 1rem; }
+    .card-img { aspect-ratio: 16 / 8; }
+    .dores { gap: .2rem; margin-bottom: 1rem; }
+    .dores li { padding: .4rem 0; }
+    .s-bleed .texto, .s-reverso .texto { padding-top: 1.6rem; padding-bottom: 1.6rem; }
+    .grade-inner { padding-top: 1.4rem; padding-bottom: 1.4rem; }
+    .grade-cabeca { margin-bottom: 1.1rem; }
+    .cards { margin-bottom: 1.1rem; }
+  }
+
+  /* Tablet e celular: empilha foto e texto; cada slide rola na vertical */
+  @media (max-width: 900px) {
+    :root { --topo: 56px; --base: 64px; }
+    .contador { display: none; }
+    .s-bleed { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .s-bleed .foto { height: 34vh; min-height: 200px; }
+    .s-reverso .foto { order: 0; }
+    .s-bleed .texto, .s-reverso .texto { order: 1; padding: 2rem 1.4rem 2.4rem; justify-content: flex-start; }
+    .foto-tela { padding: 1.4rem; }
+    .s-produto, .s-faixa, .s-grade { align-items: flex-start; }
+    .produto-grid, .faixa-inner { grid-template-columns: 1fr; gap: 2rem; padding-top: 2rem; padding-bottom: 2.4rem; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .capa-inner { padding-bottom: 2rem; }
+  }
+  @media (max-width: 560px) {
+    .cta-topo { padding: .5rem .9rem; font-size: .8rem; }
+    .cards { grid-template-columns: 1fr; }
+    .stack, .planos { grid-template-columns: 1fr; }
+    .pontos { gap: .3rem; }
+    .pontos button { width: 7px; height: 7px; }
+    .pontos button[aria-current="true"] { width: 18px; }
+    .s-capa h1 { font-size: 2.3rem; }
+  }
+
+  /* Impressão / PDF: um slide por página, sem controles */
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    body { overflow: visible; background: none; }
+    .topo, .controles, .progresso { display: none; }
+    .trilho { position: static; display: block; overflow: visible; }
+    .slide { width: 1280px; height: 720px; overflow: hidden; page-break-after: always; break-after: page; }
+    .s-bleed .texto { padding: 2.4rem 3rem; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
