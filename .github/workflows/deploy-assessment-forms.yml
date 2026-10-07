@@ -1,4 +1,4 @@
-name: Deploy to VM-2 (eloo Assessment forms)
+name: Deploy to VM-1 (eloo Assessment forms)
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
           chmod 600 ~/.ssh/oci_key
           ssh-keyscan -H "${{ secrets.OCI_HOST }}" >> ~/.ssh/known_hosts
           cat >> ~/.ssh/config <<EOF
-          Host oci-vm2
+          Host oci-vm1
             HostName ${{ secrets.OCI_HOST }}
             User ${{ secrets.OCI_USER }}
             IdentityFile ~/.ssh/oci_key
@@ -42,7 +42,7 @@ jobs:
       # .env e credentials/ NUNCA vêm do repositório (gitignored dentro de
       # assessti-forms/) — são secrets do GitHub, escritos direto na VM a
       # cada deploy. O --exclude garante que o rsync --delete não os apague.
-      - name: Sync files to VM-2
+      - name: Sync files to VM-1
         run: |
           rsync -avz --delete \
             -e "ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -i ~/.ssh/oci_key" \
@@ -54,9 +54,9 @@ jobs:
       # verdade, e são as mesmas pra todos os clientes (não crescem por
       # engajamento novo). Reaproveita OCI_HOST/OCI_USER/OCI_SSH_KEY, já
       # configurados neste repositório para o deploy do site institucional.
-      - name: Write .env and credentials on VM-2
+      - name: Write .env and credentials on VM-1
         run: |
-          ssh oci-vm2 "cat > ~/eloo-assessment-forms/.env" <<EOF
+          ssh oci-vm1 "cat > ~/eloo-assessment-forms/.env" <<EOF
           GOOGLE_CREDENTIALS_FILE=/app/credentials/credentials.json
           SECRET_KEY=${{ secrets.ASSESSMENT_SECRET_KEY }}
           INTERNAL_PIN=${{ secrets.ASSESSMENT_INTERNAL_PIN }}
@@ -66,12 +66,12 @@ jobs:
           GMAIL_APP_PASSWORD=${{ secrets.ASSESSMENT_GMAIL_APP_PASSWORD }}
           LEADS_NOTIFY_EMAIL=${{ secrets.ASSESSMENT_LEADS_NOTIFY_EMAIL }}
           EOF
-          ssh oci-vm2 'mkdir -p ~/eloo-assessment-forms/credentials'
+          ssh oci-vm1 'mkdir -p ~/eloo-assessment-forms/credentials'
           echo "${{ secrets.ASSESSMENT_GOOGLE_CREDENTIALS_B64 }}" | base64 -d | \
-            ssh oci-vm2 'cat > ~/eloo-assessment-forms/credentials/credentials.json'
+            ssh oci-vm1 'cat > ~/eloo-assessment-forms/credentials/credentials.json'
 
       - name: Build container image
-        run: ssh oci-vm2 'cd ~/eloo-assessment-forms && sudo docker compose build'
+        run: ssh oci-vm1 'cd ~/eloo-assessment-forms && sudo docker compose build'
 
       - name: Restart container
-        run: ssh oci-vm2 'cd ~/eloo-assessment-forms && sudo docker compose up -d'
+        run: ssh oci-vm1 'cd ~/eloo-assessment-forms && sudo docker compose up -d'

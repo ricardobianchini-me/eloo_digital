@@ -56,7 +56,7 @@ Veja o [Guia de Instalação](INSTALACAO.md) para o passo a passo completo.
 
 ## Produção — um deployment, todos os clientes
 
-A partir de 2026-09-16, este app roda em produção na mesma VM-2 (OCI) do
+A partir de 2026-09-16, este app roda em produção na mesma VM-1 (OCI) do
 `eloo_digital` e do `hlera-bot`, como **container próprio** (porta `8001`),
 exposto via NGINX do host sob o mesmo domínio do portal estático:
 `https://eloo.digital/assessment/{cliente}/responder/...`. O `{cliente}`
@@ -106,7 +106,7 @@ verdade — a aba "Painel" dela calcula as mesmas métricas por fórmula. Itens
 do roadmap são localizados pelo ID (coluna A), não pelo número da linha.
 PIN próprio (`GESTAO_PIN`, secret `ELOO_GESTAO_PIN`), sem valor padrão: sem
 o secret a página não abre. Tem `location` próprio no nginx do host
-(`^/gestao(/|$)`, ver hlera-bot/nginx/vm2-apps/eloo-digital); o endereço antigo
+(`^/gestao(/|$)`, ver hlera-bot/nginx/vm1-apps/eloo-digital); o endereço antigo
 `/assessment/leads/gestao` redireciona para `/gestao`.
 
 **Acesso interno da equipe:** tela de login própria do app, em
@@ -118,7 +118,7 @@ digitar um PIN — ver `pin_auth.py`). Login bem-sucedido grava um cookie
 assinado (HMAC com `SECRET_KEY`), válido por 12h, compartilhado entre
 todos os clientes. Mesmo passando por esse PIN, cada módulo só abre com
 o token correto daquele cliente (`auth.py`) — duas camadas independentes.
-O `location` no host NGINX (mirror em `hlera-bot/nginx/vm2-apps/eloo-digital`)
+O `location` no host NGINX (mirror em `hlera-bot/nginx/vm1-apps/eloo-digital`)
 é hoje só um proxy_pass simples, regex genérico
 `^/assessment/[^/]+/responder/` — já cobre qualquer cliente futuro sem
 editar o nginx de novo.

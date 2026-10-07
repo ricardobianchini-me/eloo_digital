@@ -1,4 +1,4 @@
-name: Deploy to VM-2 (eloo.digital)
+name: Deploy to VM-1 (eloo.digital)
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           # connection timeout mid-command (silently leaves the container
           # "Created" but never started -- happened once, see commit history).
           cat >> ~/.ssh/config <<EOF
-          Host oci-vm2
+          Host oci-vm1
             HostName ${{ secrets.OCI_HOST }}
             User ${{ secrets.OCI_USER }}
             IdentityFile ~/.ssh/oci_key
@@ -39,7 +39,7 @@ jobs:
             ServerAliveCountMax 10
           EOF
 
-      - name: Sync files to VM-2
+      - name: Sync files to VM-1
         run: |
           rsync -avz --delete \
             -e "ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=10 -i ~/.ssh/oci_key" \
@@ -48,7 +48,7 @@ jobs:
             ./ "${{ secrets.OCI_USER }}@${{ secrets.OCI_HOST }}:~/eloo-digital/"
 
       - name: Build container image
-        run: ssh oci-vm2 'cd ~/eloo-digital && sudo docker compose build'
+        run: ssh oci-vm1 'cd ~/eloo-digital && sudo docker compose build'
 
       - name: Restart container
-        run: ssh oci-vm2 'cd ~/eloo-digital && sudo docker compose up -d'
+        run: ssh oci-vm1 'cd ~/eloo-digital && sudo docker compose up -d'
