@@ -6,7 +6,7 @@ Site institucional da Eloo, feito em [Astro](https://astro.build), construído e
 
 > **Antes de mudar qualquer coisa, leia o [CONTRIBUTING.md](CONTRIBUTING.md).**
 > Toda mudança entra por branch e pull request; a `main` publica sozinha na
-> VM-2 e nada é editado direto no servidor.
+> VM-1 e nada é editado direto no servidor.
 
 ## Páginas
 
@@ -42,7 +42,7 @@ mínimo, atualizar aqui e replicar depois na fonte.
 ficam atrás de um PIN por cliente, com a mesma UX da ferramenta interna de
 resposta ao vivo (tela própria, só um campo de PIN — nunca o popup nativo
 de usuário+senha do navegador do HTTP Basic Auth, que era confuso). O gate
-roda no **nginx do host** (`hlera-bot/nginx/vm2-apps/eloo-digital`), via
+roda no **nginx do host** (`hlera-bot/nginx/vm1-apps/eloo-digital`), via
 `auth_request` contra `GET /assessment/{cliente}/portal/check` no app
 `assessti-forms` (`app/portal_auth.py` + `app/clientes.py`, campo
 `portal_pin`) — o nginx *deste* repositório (`nginx.conf`, dentro do
@@ -73,19 +73,19 @@ push em main
       ▼
 GitHub Actions (.github/workflows/deploy.yml)
       │
-      ├─ 1. rsync do repo inteiro pra VM-2 (~/eloo-digital)
+      ├─ 1. rsync do repo inteiro pra VM-1 (~/eloo-digital)
       ├─ 2. docker compose build   (Astro build -> nginx:alpine servindo /dist)
       └─ 3. docker compose up -d  (recria o container eloo_digital)
       │
       ▼
-VM-2 (OCI, 163.176.228.252) — infra do hlera-bot
+VM-1 (OCI, 137.131.218.232) — infra do hlera-bot
       │
       container eloo_digital, porta 8082 (interna, não exposta direto)
       │
       ▼
 NGINX do host (não containerizado) — termina TLS, faz proxy_reverse
 pra localhost:8082, config em /etc/nginx/sites-enabled/eloo-digital
-(espelhada em hlera-bot/nginx/vm2-apps/eloo-digital)
+(espelhada em hlera-bot/nginx/vm1-apps/eloo-digital)
 ```
 
 Não tem servidor de aplicação — é um site 100% estático (`astro build` gera HTML/CSS/JS puro), o container só serve os arquivos via nginx interno. Sem banco de dados, sem backend.
@@ -94,10 +94,10 @@ Não tem servidor de aplicação — é um site 100% estático (`astro build` ge
 
 O site começou no GitHub Pages (deploy automático, zero infra própria). Foi migrado pra rodar na mesma VM que já hospeda o bot do HLERA_doBEM porque:
 - domínio próprio (`eloo.digital`) já registrado, precisava de hosting real de qualquer forma;
-- a VM-2 já está paga e operada pela equipe, com NGINX+Certbot já configurados pra outros domínios (`moocamor.duckdns.org`, `superacao-apps.duckdns.org`) — reaproveitar em vez de criar infra nova;
+- a VM-1 já está paga e operada pela equipe, com NGINX+Certbot já configurados pra outros domínios (`moocamor.duckdns.org`, `superacao-apps.duckdns.org`) — reaproveitar em vez de criar infra nova;
 - deploy automático via GitHub Actions preserva a mesma ergonomia do Pages (`git push` e pronto), só troca o destino.
 
-Contrapartida assumida conscientemente: depende da VM-2 ficar de pé (sem redundância/CDN como o Pages tinha).
+Contrapartida assumida conscientemente: depende da VM-1 ficar de pé (sem redundância/CDN como o Pages tinha).
 
 ## Infraestrutura — detalhes de acesso
 
@@ -105,18 +105,20 @@ Isso é **infra do hlera-bot**, não deste repositório. Documentação completa
 
 | Item | Valor |
 |---|---|
-| VM | VM-2 apps (OCI), IP `163.176.228.252` |
+| VM | VM-1 (OCI), IP `137.131.218.232` |
 | Container | `eloo_digital`, porta publicada `8082:80` |
 | Diretório na VM | `~/eloo-digital` (sincronizado via rsync a cada deploy — **não editar direto na VM**, qualquer mudança lá é sobrescrita no próximo push) |
 | NGINX (host, fora do Docker) | `/etc/nginx/sites-enabled/eloo-digital` — reverse proxy `eloo.digital`/`www.eloo.digital` → `localhost:8082`, TLS via Certbot |
 | Certificado TLS | Let's Encrypt, emitido 15/09/2026, expira 14/12/2026, renovação automática (mesmo cron/systemd timer do Certbot que já cuida dos outros domínios da VM) |
-| DNS | GoDaddy, registro `A @ → 163.176.228.252` e `CNAME www → eloo.digital` (painel: account.godaddy.com, domínio `eloo.digital`) |
+| DNS | GoDaddy, registro `A @ → 137.131.218.232` e `CNAME www → eloo.digital` (painel: account.godaddy.com, domínio `eloo.digital`) |
 
 ## Secrets do GitHub Actions (Settings → Secrets and variables → Actions)
 
+> **2026-10-07:** a infra migrou da VM-2 (`163.176.228.252`, hoje vazia) para a VM-1 em 06/10 (ver `hlera-bot/OCI_INFRA.md`). O `OCI_HOST` continuou apontando para a VM-2 e os deploys de 06 e 07/10 "passaram" lá sem chegar ao ar. Se um deploy fica verde e a mudança não aparece em eloo.digital, conferir primeiro este secret.
+
 | Secret | Valor | Pra quê |
 |---|---|---|
-| `OCI_HOST` | `163.176.228.252` | IP da VM-2 |
+| `OCI_HOST` | `137.131.218.232` | IP da VM-1 |
 | `OCI_USER` | `ubuntu` | usuário SSH |
 | `OCI_SSH_KEY` | conteúdo de `~/.ssh/oci_hlera_key` (chave privada) | autenticação SSH do workflow — **a chave em si só existe no computador de quem tem acesso à VM**, nunca commitada em lugar nenhum |
 
@@ -160,6 +162,6 @@ Qualquer alteração de conteúdo/estilo: editar a página relevante em `src/pag
 
 ## Troubleshooting
 
-- **Site fora do ar / 502 Bad Gateway**: o container provavelmente não está rodando. `ssh -i ~/.ssh/oci_hlera_key ubuntu@163.176.228.252 'sudo docker ps | grep eloo'` — se não aparecer nada, `cd ~/eloo-digital && sudo docker compose up -d` resolve na maioria dos casos.
+- **Site fora do ar / 502 Bad Gateway**: o container provavelmente não está rodando. `ssh -i ~/.ssh/oci_hlera_key ubuntu@137.131.218.232 'sudo docker ps | grep eloo'` — se não aparecer nada, `cd ~/eloo-digital && sudo docker compose up -d` resolve na maioria dos casos.
 - **Deploy falha no GitHub Actions**: ver o log do step que falhou em Actions. Já aconteceu uma vez (run #5, 15/09/2026) da conexão SSH cair bem na transição entre build e start, deixando o container criado mas nunca iniciado — o workflow atual já tem keepalive (`ServerAliveInterval`) pra isso não se repetir, mas se acontecer de novo, `docker compose up -d` manual na VM resolve na hora enquanto se investiga.
-- **Certificado TLS expirando**: não deveria acontecer (renovação automática), mas se acontecer, `sudo certbot renew` na VM-2 resolve.
+- **Certificado TLS expirando**: não deveria acontecer (renovação automática), mas se acontecer, `sudo certbot renew` na VM-1 resolve.

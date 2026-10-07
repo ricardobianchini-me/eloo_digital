@@ -6,7 +6,7 @@
 
 ## Por quê
 
-A `main` publica sozinha. Um push nela dispara o deploy na VM-2:
+A `main` publica sozinha. Um push nela dispara o deploy na VM-1:
 
 | Workflow | Quando roda | O que publica |
 |---|---|---|
@@ -45,8 +45,8 @@ no servidor.
 
 ## Infra fora deste repositório
 
-A configuração do nginx da VM-2 vive no repositório `hlera-bot`
-(`nginx/vm2-apps/eloo-digital`). Mudança de rota segue o mesmo fluxo lá:
+A configuração do nginx da VM-1 vive no repositório `hlera-bot`
+(`nginx/vm1-apps/eloo-digital`). Mudança de rota segue o mesmo fluxo lá:
 branch, PR, merge e só então aplicar na VM, com backup e `nginx -t` antes de
 recarregar.
 

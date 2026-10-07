@@ -62,9 +62,9 @@ python seed.py --cliente super-logistica --links-only --base-url "https://eloo.d
 
 Copie os links de **entrevistado** (opcional, pra quem for preencher sozinho antes da entrevista) e **revisor** (uso interno, pra preencher junto na chamada) de cada módulo e guarde em `pacce-co/assessment/{cliente}/projeto/links-internos.md` — nunca neste repositório.
 
-## 7. Hospedar (produção real: VM-2 compartilhada, via GitHub Actions)
+## 7. Hospedar (produção real: VM-1 compartilhada, via GitHub Actions)
 
-Em produção este app roda multi-cliente num único container na VM-2 que já
+Em produção este app roda multi-cliente num único container na VM-1 que já
 hospeda `eloo_digital` e `hlera-bot`, atrás do NGINX do host. Vive **dentro
 do repositório do site institucional** (`eloo_digital`, pasta
 `assessti-forms/`), com um workflow próprio
