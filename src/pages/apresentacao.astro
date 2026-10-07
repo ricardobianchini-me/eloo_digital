@@ -1,5 +1,6 @@
 ---
-// Apresentação comercial eloo.digital + PACCE (carrossel full-bleed, 12 slides).
+// Apresentação comercial da eloo.digital (carrossel full-bleed, 12 slides).
+// Institucional: o PACCE aparece como um dos produtos, não como co-marca.
 // Página fora do menu e marcada como noindex: link enviado só para prospects.
 // Mesmos tokens, fontes e logo da v2 (ver DESIGN.md). Roteiro em
 // Agentes/pacce-co/artefatos/Apresentação - eloo.digital.md.
@@ -29,7 +30,7 @@ const stack = [
 
 const casos = [
   { nome: "Empresas e operações", desc: "Rotinas manuais viram fluxos automáticos entre sistemas.", foto: "servico-solucoes.jpg", alt: "Operação organizada em processos" },
-  { nome: "Atendimento recorrente", desc: "O PACCE organiza cadastro, histórico, filas e escalas.", foto: "pacce-prontuario.jpg", alt: "Ficha de atendimento com histórico" },
+  { nome: "Atendimento recorrente", desc: "Plataforma própria organiza cadastro, histórico, filas e escalas.", foto: "pacce-prontuario.jpg", alt: "Ficha de atendimento com histórico" },
   { nome: "Terceiro setor", desc: "Governança e prestação de contas a diretoria e financiadores.", foto: "sobre-acolhimento.jpg", alt: "Conversa de acolhimento entre duas pessoas" },
   { nome: "Assessment de TI", desc: "Processos, sistemas e riscos mapeados, com roadmap priorizado.", foto: "comp-consultoria.jpg", alt: "Reunião de análise com documentos" },
 ];
@@ -62,8 +63,8 @@ const n = (i: number) => String(i).padStart(2, "0");
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Apresentação — eloo.digital & PACCE</title>
-    <meta name="description" content="Apresentação comercial da eloo.digital e do PACCE." />
+    <title>Apresentação — eloo.digital</title>
+    <meta name="description" content="Apresentação comercial da eloo.digital." />
     <link rel="icon" type="image/svg+xml" href={`${B}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -78,7 +79,7 @@ const n = (i: number) => String(i).padStart(2, "0");
       </div>
     </header>
 
-    <main class="trilho" id="trilho" tabindex="-1" aria-roledescription="carrossel" aria-label="Apresentação eloo.digital e PACCE">
+    <main class="trilho" id="trilho" tabindex="-1" aria-roledescription="carrossel" aria-label="Apresentação eloo.digital">
 
       <!-- 01 CAPA -->
       <section class="slide s-capa" id="s1" aria-label="Slide 1 de 12">
@@ -86,11 +87,11 @@ const n = (i: number) => String(i).padStart(2, "0");
         <div class="scrim"></div>
         <div class="capa-inner">
           <p class="eyebrow claro">Apresentação comercial</p>
-          <h1><span class="logo-grande">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span> <span class="e">&amp;</span> PACCE</h1>
+          <h1><span class="logo-grande">eloo<span class="ponto">.</span><span class="sufixo">digital</span></span></h1>
           <p class="sub claro">Tecnologia que tira a operação do improviso e coloca sob controle.</p>
           <ul class="bullets claro">
             <li>Automação, IA e software sob medida para a operação real.</li>
-            <li>PACCE: atendimento recorrente organizado em uma plataforma.</li>
+            <li>Produtos próprios por assinatura, prontos para cada segmento.</li>
             <li>Do diagnóstico à operação contínua, com o mesmo time.</li>
           </ul>
           <p class="callout callout-claro">Mais do que software: <strong>previsibilidade e controle.</strong></p>
@@ -132,33 +133,11 @@ const n = (i: number) => String(i).padStart(2, "0");
         </div>
       </section>
 
-      <!-- 04 PACCE -->
-      <section class="slide s-produto escuro" id="s4" aria-label="Slide 4 de 12">
-        <div class="produto-grid">
-          <div class="texto-solto">
-            <div class="produto-marca"><b>p</b><span><strong>PACCE</strong><small>um produto eloo.digital</small></span></div>
-            <h2>Gestão e atendimento em <span class="destaque">uma única plataforma.</span></h2>
-            <p class="sub claro">Para quem atende as mesmas pessoas semana após semana.</p>
-            <ul class="bullets claro">
-              <li>Cadastro e histórico que acompanham cada pessoa atendida.</li>
-              <li>Agenda, turnos e escalas da equipe num quadro só.</li>
-              <li>Fluxo de atendimento configurado do jeito da organização.</li>
-              <li>Indicadores prontos para prestar contas.</li>
-            </ul>
-            <p class="callout callout-claro">Não é protótipo: <strong>em produção em pacce.app.</strong></p>
-          </div>
-          <figure class="tela">
-            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app</span></div>
-            <img src={img("pacce-exemplo.svg")} alt="Tela de atendimentos do PACCE com dados de exemplo" loading="lazy" />
-          </figure>
-        </div>
-      </section>
-
-      <!-- 05 O QUE OFERECEMOS -->
-      <section class="slide s-grade" id="s5" aria-label="Slide 5 de 12">
+      <!-- 04 O QUE OFERECEMOS -->
+      <section class="slide s-grade" id="s4" aria-label="Slide 4 de 12">
         <div class="grade-inner">
           <div class="grade-cabeca">
-            <p class="eyebrow">05 · O que oferecemos</p>
+            <p class="eyebrow">04 · O que oferecemos</p>
             <h2>Capacidades certas <span class="destaque-ink">para o problema certo.</span></h2>
             <p class="sub">Combinamos as frentes que a sua operação precisa — nem mais, nem menos.</p>
           </div>
@@ -170,7 +149,33 @@ const n = (i: number) => String(i).padStart(2, "0");
               </article>
             ))}
           </div>
-          <p class="callout">Serviços sob demanda e <strong>PACCE por assinatura</strong> — começa onde você está.</p>
+          <p class="callout">Serviços sob demanda e <strong>produtos por assinatura</strong> — começa onde você está.</p>
+        </div>
+      </section>
+
+      <!-- 05 PRODUTOS -->
+      <section class="slide s-produto escuro" id="s5" aria-label="Slide 5 de 12">
+        <div class="produto-grid">
+          <div class="texto-solto">
+            <p class="eyebrow claro">05 · Produtos eloo.digital</p>
+            <h2>Produtos próprios, <span class="destaque">prontos para operar.</span></h2>
+            <p class="sub claro">Plataformas por assinatura, com a mesma engenharia, segurança e suporte.</p>
+            <ul class="bullets claro">
+              <li>Base comum: acesso por perfil, auditoria, isolamento de dados e LGPD.</li>
+              <li>Adaptados a cada segmento, sem começar do zero.</li>
+              <li>Planos Ouro e Diamante, com níveis de suporte definidos.</li>
+            </ul>
+            <ul class="linha-produtos" aria-label="Linha de produtos">
+              <li><b>PACCE</b><span>Gestão de atendimento recorrente</span><em>Em produção</em></li>
+              <li><b>Novos produtos</b><span>Versões para outros segmentos</span><em class="em-breve">Em preparação</em></li>
+            </ul>
+            <p class="callout callout-claro">Produto pronto quando serve; <strong>sob medida quando precisa.</strong></p>
+          </div>
+          <figure class="tela">
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>produto eloo.digital</span></div>
+            <img src={img("pacce-exemplo.svg")} alt="Tela de um produto eloo.digital (PACCE) com dados de exemplo" loading="lazy" />
+            <figcaption>PACCE, o primeiro da linha. Tela com dados de exemplo.</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -190,7 +195,7 @@ const n = (i: number) => String(i).padStart(2, "0");
           <div class="planos">
             {planos.map((p) => (
               <article class={`plano ${p.destaque ? "plano-destaque" : ""}`}>
-                <h3>PACCE {p.nome}</h3>
+                <h3>Plano {p.nome}</h3>
                 <dl>
                   {p.itens.map((it) => <div><dt>{it.valor}</dt><dd>{it.desc}</dd></div>)}
                 </dl>
@@ -226,8 +231,8 @@ const n = (i: number) => String(i).padStart(2, "0");
       <section class="slide s-bleed" id="s8" aria-label="Slide 8 de 12">
         <div class="foto-tela">
           <figure class="tela tela-clara">
-            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>pacce.app · perfis de acesso</span></div>
-            <img src={img("pacce-perfis-acesso.jpg")} alt="Tela de perfis de acesso do PACCE: Admin Master, Dirigente, Operador e Colaborador" loading="lazy" />
+            <div class="tela-barra" aria-hidden="true"><i></i><i></i><i></i><span>produto eloo.digital · perfis de acesso</span></div>
+            <img src={img("pacce-perfis-acesso.jpg")} alt="Tela de perfis de acesso de um produto eloo.digital: Admin Master, Dirigente, Operador e Colaborador" loading="lazy" />
           </figure>
         </div>
         <div class="texto">
@@ -308,14 +313,14 @@ const n = (i: number) => String(i).padStart(2, "0");
           <h2>Qual processo você quer que funcione <span class="destaque">melhor amanhã?</span></h2>
           <ul class="bullets claro">
             <li>Faça o diagnóstico: <strong>eloo.digital/diagnostico</strong></li>
-            <li>Conheça o PACCE: <strong>pacce.app</strong></li>
+            <li>Conheça nossos serviços e produtos: <strong>eloo.digital</strong></li>
             <li>Converse com nosso time e veja a solução aplicada à sua operação.</li>
           </ul>
           <p class="callout callout-claro">Conte o problema. <strong>A tecnologia vem depois.</strong></p>
           <div class="acoes">
             <a class="btn btn-primario" href="/diagnostico">Agendar meu diagnóstico ↗</a>
             {WHATSAPP && <a class="btn btn-ghost" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">Falar no WhatsApp ↗</a>}
-            <a class="btn btn-ghost" href="/pacce">Conhecer o PACCE</a>
+            <a class="btn btn-ghost" href="/">Conhecer a eloo.digital</a>
           </div>
         </div>
       </section>
@@ -469,7 +474,6 @@ const n = (i: number) => String(i).padStart(2, "0");
   .s-capa h1 { font-size: clamp(2.4rem, 6vw, 4.8rem); line-height: 1; color: #fff; margin-bottom: 1.1rem; font-weight: 800; }
   .logo-grande { white-space: nowrap; }
   .logo-grande .sufixo { font-weight: 500; color: rgba(255,255,255,.75); }
-  .s-capa h1 .e { font-weight: 500; color: rgba(255,255,255,.6); }
   .s-capa .sub { font-size: clamp(1.1rem, 1.8vw, 1.4rem); max-width: 40ch; }
   .s-final h2 { font-size: clamp(2rem, 4.4vw, 3.6rem); max-width: 18ch; }
 
@@ -493,7 +497,14 @@ const n = (i: number) => String(i).padStart(2, "0");
   .dores b { display: block; font-family: var(--font-title); font-size: 1.05rem; }
   .dores small { color: var(--ink-soft); font-size: .92rem; }
 
-  /* Produto (PACCE) */
+  /* Produtos */
+  .linha-produtos { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: .5rem; max-width: 52ch; }
+  .linha-produtos li { display: grid; grid-template-columns: auto 1fr auto; gap: .2rem .9rem; align-items: baseline; padding: .7rem .9rem; border: 1px solid #3a3a36; border-radius: 12px; background: #2a2a27; }
+  .linha-produtos b { font-family: var(--font-title); color: #fff; }
+  .linha-produtos span { color: rgba(255,255,255,.72); font-size: .9rem; }
+  .linha-produtos em { font-style: normal; font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #ff8a84; }
+  .linha-produtos em.em-breve { color: rgba(255,255,255,.5); }
+  .tela figcaption { padding: .6rem .9rem; font-size: .78rem; color: rgba(255,255,255,.55); }
   .s-produto, .s-faixa, .s-grade { display: flex; align-items: center; }
   .produto-grid { width: 100%; max-width: 1120px; margin: 0 auto; padding: 2.4rem 1.4rem; display: grid; grid-template-columns: 1fr 1.05fr; gap: 3rem; align-items: center; }
   .produto-marca { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; }
